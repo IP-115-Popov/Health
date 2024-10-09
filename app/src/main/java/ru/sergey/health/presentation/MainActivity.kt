@@ -3,6 +3,7 @@ package ru.sergey.health.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -13,9 +14,14 @@ import ru.sergey.health.presentation.screens.TasksScreen
 import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
 import ru.sergey.health.presentation.screens.AddTasksScreen
 class MainActivity : ComponentActivity() {
+
+    private val tasksViewModel : TasksViewModel by viewModels()
+    private val addTasksViewModel : AddTasksViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
+            Main(tasksViewModel, addTasksViewModel)
         }
     }
 }
