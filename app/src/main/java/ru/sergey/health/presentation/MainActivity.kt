@@ -10,7 +10,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import ru.sergey.health.presentation.screens.TasksScreen
-
+import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
+import ru.sergey.health.presentation.screens.AddTasksScreen
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -19,17 +20,19 @@ class MainActivity : ComponentActivity() {
     }
 }
 @Composable
-fun Main(vm : TasksViewModel) {
+fun Main(tasksViewModel : TasksViewModel, addTasksViewModel: AddTasksViewModel ) {
     val navController = rememberNavController()
     Column {
         NavHost(
             navController = navController,
             startDestination  = NavRoutes.TasksScreen.route,
             ) {
-            composable(NavRoutes.TasksScreen.route) { TasksScreen(vm) }
+            composable(NavRoutes.TasksScreen.route) { TasksScreen(tasksViewModel) }
+            composable(NavRoutes.AddTasksScreen.route) { AddTasksScreen(addTasksViewModel) }
         }
     }
 }
 sealed class NavRoutes(val route: String) {
     object TasksScreen : NavRoutes("TasksScreen")
+    object AddTasksScreen : NavRoutes("AddTasksScreen")
 }
