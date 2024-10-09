@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Text
@@ -65,6 +66,7 @@ fun TaskView(task: Task = Task(1,"a,j,f","dsgpsdkgpoksdkg"))
                     ), RoundedCornerShape(10.dp)
                 )
                 .padding(10.dp)
+                .height(Random.nextInt(50, 200).dp)
         ) {
             val textModifier = Modifier.padding(5.dp)
             Text(text = task.title, textModifier)
