@@ -21,4 +21,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "Health"
 include(":app")
- 
+include(":data")
+include(":domain")

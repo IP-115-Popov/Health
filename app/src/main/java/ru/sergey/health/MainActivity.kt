@@ -24,17 +24,7 @@ import ru.sergey.health.ui.theme.HealthTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContent {
-
-           /*HealthTheme {
-                Scaffold( modifier = Modifier.fillMaxSize() ) { innerPadding ->
-                    Greeting(
-                        name = "Android",
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-            }*/
         }
     }
 }
@@ -55,18 +45,4 @@ fun test()
         }
     }
 
-}
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-@Composable
-fun GreetingPreview() {
-    Text(text = "Hello METANIT.COM!", fontSize = 28.sp)
-    //HealthTheme {
-    ////    Greeting("Android")
-    //}
 }
