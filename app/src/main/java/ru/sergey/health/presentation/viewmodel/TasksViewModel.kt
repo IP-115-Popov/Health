@@ -12,6 +12,9 @@ class TasksViewModel @Inject constructor(
 )
     : ViewModel() {
         val tasks = mutableListOf<Task>()
+    init {
+        updateTasks()
+    }
         fun updateTasks() {
             tasks.clear()
             tasks.addAll(downloadTasksUseCase.exectute())
