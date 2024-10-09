@@ -9,10 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import ru.sergey.health.presentation.screens.TasksScreen
 import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
 import ru.sergey.health.presentation.screens.AddTasksScreen
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
     private val tasksViewModel : TasksViewModel by viewModels()
