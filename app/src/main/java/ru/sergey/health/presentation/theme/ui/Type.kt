@@ -1,4 +1,4 @@
-package ru.sergey.health.ui.theme
+package ru.sergey.health.presentation.theme.ui
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
