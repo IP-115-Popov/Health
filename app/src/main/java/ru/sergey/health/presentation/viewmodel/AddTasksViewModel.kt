@@ -11,7 +11,14 @@ class AddTasksViewModel  @Inject constructor(
     val addTaskUseCase: AddTaskUseCase
 )
     : ViewModel() {
-        fun addTask(task : Task) {
-            addTaskUseCase.exectute(task)
+        fun addTask(titleText : String, descriptionText : String, targetPointsText : String) {
+            addTaskUseCase.exectute(
+                Task(
+                    id = 0,
+                    title = titleText,
+                    description = descriptionText,
+                    points = 0,
+                    targetPoints = targetPointsText.toInt()
+                ))
         }
 }

@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Health</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
+    <string name="TargetPoints">TargetPoints</string>
+    <string name="addTask">Add</string>
 </resources>

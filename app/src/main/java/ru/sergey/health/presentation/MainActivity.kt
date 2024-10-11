@@ -59,7 +59,7 @@ fun Main(tasksViewModel : TasksViewModel, addTasksViewModel: AddTasksViewModel )
             startDestination  = NavRoutes.TasksScreen.route,
             modifier = Modifier.fillMaxHeight(0.9f)
         ) {
-            composable(NavRoutes.TasksScreen.route) { TasksScreen(tasksViewModel) }
+            composable(NavRoutes.TasksScreen.route) { TasksScreen(tasksViewModel); tasksViewModel.updateTasks() }
             composable(NavRoutes.AddTasksScreen.route) { AddTasksScreen(addTasksViewModel) }
         }
         BottomNavigationBar(navController = navController, modifier = Modifier

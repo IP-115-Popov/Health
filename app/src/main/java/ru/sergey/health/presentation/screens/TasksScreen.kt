@@ -71,7 +71,7 @@ fun TaskView(task: Task = Task(1,"a,j,f","dsgpsdkgpoksdkg"))
             val textModifier = Modifier.padding(5.dp)
             Text(text = task.title, textModifier)
             Text(text = task.description, textModifier)
-            Text(text = task.points.toString(), textModifier)
+            Text(text = task.points.toString()+" / "+task.targetPoints.toString(), textModifier)
         }
     }
 }
