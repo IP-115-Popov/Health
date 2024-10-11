@@ -46,10 +46,12 @@
 
 
 
+
 ## Диаграмма Use Case
 
 ![Alt text](https://github.com/user-attachments/assets/44fe7477-e025-4a67-9c62-216c36bd8daa?raw=true)
 
+![Alt text](https://github.com/user-attachments/assets/c831d3fa-72d1-4ce0-b810-58ff6e0293c3?raw=true)
 
 ## Установка и настройка
 
