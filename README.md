@@ -44,14 +44,11 @@
 ## Скриншоты
 ![Alt text](https://github.com/user-attachments/assets/b8eb9258-856e-4138-8885-8015b7c34006?raw=true)
 
-
-
+![Alt text](https://github.com/user-attachments/assets/c831d3fa-72d1-4ce0-b810-58ff6e0293c3?raw=true)
 
 ## Диаграмма Use Case
 
 ![Alt text](https://github.com/user-attachments/assets/44fe7477-e025-4a67-9c62-216c36bd8daa?raw=true)
-
-![Alt text](https://github.com/user-attachments/assets/c831d3fa-72d1-4ce0-b810-58ff6e0293c3?raw=true)
 
 ## Установка и настройка
 
