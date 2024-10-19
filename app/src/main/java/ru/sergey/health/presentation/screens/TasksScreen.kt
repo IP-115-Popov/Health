@@ -80,7 +80,7 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                     ), RoundedCornerShape(10.dp)
                 )
                 .padding(10.dp)
-                .height(Random.nextInt(90, 150).dp)
+                .height(Random.nextInt(120, 200).dp)
         ) {
             val textModifier = Modifier.padding(5.dp)
             Row(
