@@ -1,5 +1,6 @@
 package ru.sergey.health.presentation.viewmodel
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,7 +16,7 @@ class TasksViewModel @Inject constructor(
     val downloadTasksUseCase: DownloadTasksUseCase
 ) : ViewModel() {
 
-    val tasks = mutableListOf<Task>()
+    val tasks = mutableStateListOf<Task>()
 
     init {
         updateTasks()
