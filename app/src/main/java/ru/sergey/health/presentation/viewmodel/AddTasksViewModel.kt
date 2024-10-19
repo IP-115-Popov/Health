@@ -15,7 +15,7 @@ class AddTasksViewModel  @Inject constructor(
 )
     : ViewModel() {
 
-        fun addTask(titleText : String, descriptionText : String, targetPointsText : String) {
+        fun addTask(titleText : String, descriptionText : String, targetPointsText : String, measureUnitText : String) {
             viewModelScope.launch(Dispatchers.IO) {
                 addTaskUseCase.exectute(
                     Task(
@@ -23,7 +23,8 @@ class AddTasksViewModel  @Inject constructor(
                         title = titleText,
                         description = descriptionText,
                         points = 0,
-                        targetPoints = targetPointsText.toInt()
+                        targetPoints = targetPointsText.toInt(),
+                        measureUnit =  measureUnitText
                     )
                 )
             }

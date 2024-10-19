@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
@@ -51,14 +52,13 @@ fun AddTasksScreen
         "Заполните поля", Toast.LENGTH_SHORT
     )
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-        val (tfTitle, tfDescription, tfTargetPoints, bthAdd) = createRefs()
+        val (tfTitle, tfDescription, tfTargetPoints, tfMeasureUnitText, bthAdd) = createRefs()
 
         val titleText = remember{mutableStateOf("")}
         val descriptionText = remember{mutableStateOf("")}
         val targetPointsText = remember{mutableStateOf("")}
+        val measureUnitText = remember{mutableStateOf("")}
 
-        createVerticalChain(tfTitle, tfDescription, tfTargetPoints, bthAdd,
-            chainStyle = ChainStyle.Packed)
 
         StyledTextField( modifier = Modifier.constrainAs(tfTitle) {
             top.linkTo(parent.top, margin = 16.dp)
@@ -84,9 +84,18 @@ fun AddTasksScreen
             stringResource(R.string.TargetPoints),
             KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done))
 
+
+        StyledTextField( modifier = Modifier.constrainAs(tfMeasureUnitText) {
+            top.linkTo(tfTargetPoints.bottom, margin = 16.dp)
+            centerHorizontallyTo(parent)
+        },
+            measureUnitText,
+            stringResource(R.string.measure_unit),
+            KeyboardOptions(keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done))
+
         Button(onClick = {
             if (titleText.value != "" && descriptionText.value != "" && targetPointsText.value != "") {
-                vm.addTask(titleText.value, descriptionText.value, targetPointsText.value)
+                vm.addTask(titleText.value, descriptionText.value, targetPointsText.value, measureUnitText.value)
                 toastAdded.show()
             } else {
 
@@ -94,7 +103,7 @@ fun AddTasksScreen
         },
             Modifier
                 .constrainAs(bthAdd) {
-                    top.linkTo(tfTargetPoints.bottom, margin = 16.dp)
+                    top.linkTo(tfMeasureUnitText.bottom, margin = 16.dp)
                     centerHorizontallyTo(tfTargetPoints)
                 }
                 .size(150.dp, height = 120.dp)
@@ -110,6 +119,7 @@ fun AddTasksScreen
     }
 
 }
+
 @Composable
 fun  StyledTextField(
     modifier: Modifier,
