@@ -30,6 +30,6 @@ class TaskRepositoryImp(context: Context) : TasksRepository {
     }
 
     companion object {
-        private const val DATABASE_NAME = "task_database.db"
+        private const val DATABASE_NAME = "task_database_1.db"
     }
 }
