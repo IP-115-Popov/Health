@@ -16,7 +16,8 @@ class TaskStorage (
     val title: String,
     val description: String = "",
     val points: Int = 0,
-    val targetPoints: Int = 100
+    val targetPoints: Int = 100,
+    val measureUnit : String = ""
 ) {
     companion object {
         const val TABLE_NAME = "tasks"
@@ -25,6 +26,6 @@ class TaskStorage (
         const val Description = "description"
         const val POINTS = "points"
         const val TARGET_POINTS = "targetPoints"
-
+        const val MEASURE_UNIT = "measureUnit"
     }
 }

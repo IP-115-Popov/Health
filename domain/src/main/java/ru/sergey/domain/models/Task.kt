@@ -5,5 +5,6 @@ data class Task(
     val title : String,
     val description: String = "",
     val points : Int = 0,
-    val targetPoints : Int = 100
+    val targetPoints : Int = 100,
+    val measureUnit : String = ""
 )
