@@ -44,7 +44,11 @@ fun AddTasksScreen
 {
     val toastAdded = Toast.makeText(
         LocalContext.current,
-        "Запись добавленна", Toast.LENGTH_SHORT
+        "Запись добавлена", Toast.LENGTH_SHORT
+    )
+    val toastNotAdded = Toast.makeText(
+        LocalContext.current,
+        "Заполните поля", Toast.LENGTH_SHORT
     )
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (tfTitle, tfDescription, tfTargetPoints, bthAdd) = createRefs()
@@ -81,8 +85,12 @@ fun AddTasksScreen
             KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done))
 
         Button(onClick = {
-            vm.addTask(titleText.value, descriptionText.value, targetPointsText.value)
-            toastAdded.show()
+            if (titleText.value != "" && descriptionText.value != "" && targetPointsText.value != "") {
+                vm.addTask(titleText.value, descriptionText.value, targetPointsText.value)
+                toastAdded.show()
+            } else {
+
+            }
         },
             Modifier
                 .constrainAs(bthAdd) {
