@@ -56,13 +56,13 @@ fun TasksScreen(vm : TasksViewModel) {
         verticalItemSpacing = 8.dp
     ) {
         items(vm.tasks) {item ->
-            TaskView(item)
+            TaskView(item, vm)
         }
     }
 }
-@Preview(showSystemUi = true)
+//@Preview(showSystemUi = true)
 @Composable
-fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10 км", 0, 100, "Дней"))
+fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10 км", 0, 100, "Дней"), vm : TasksViewModel)
 {
     Surface(modifier = Modifier
         .shadow(5.dp)
@@ -102,7 +102,10 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                 Text(text = task.points.toString()+" / "+task.targetPoints.toString(), textModifier)
                 Text(text = task.measureUnit)
                 Spacer(modifier = Modifier.width(10.dp))
-                Button(onClick = {},
+                Button(onClick = {
+                    vm.addPointsToTask(task.id)
+                    vm.updateTasks()
+                },
                 ){
                     Image(
                         imageVector = Icons.Filled.Add,

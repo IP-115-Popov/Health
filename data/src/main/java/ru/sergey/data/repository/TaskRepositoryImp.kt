@@ -29,6 +29,10 @@ class TaskRepositoryImp(context: Context) : TasksRepository {
         return rez
     }
 
+    override suspend fun updateTaskPoints(task: Task) {
+        taskDao.updateTask(dataTaskDomainTaskConverter.DomainTaskToDataTask(task))
+    }
+
     companion object {
         private const val DATABASE_NAME = "task_database_1.db"
     }
