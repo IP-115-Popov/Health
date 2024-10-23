@@ -69,7 +69,7 @@ fun TasksScreen(vm : TasksViewModel) {
 }
 @Preview(showSystemUi = true)
 @Composable
-fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10 км", 0, 100, "Дней"))//, vm : TasksViewModel)
+fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10Бегать каждый день по 10 кмБегать каждый день по 10 км кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 км", 0, 100, "Дней"))//, vm : TasksViewModel)
 {
     val textModifier = Modifier.padding(5.dp)
 
@@ -85,7 +85,6 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
             )
             .padding(10.dp)
             .height(Random.nextInt(142, 200).dp)
-            //
             .fillMaxWidth()
     ) {
         val (tvTitle, tvDescription, tvPoint, bthEdit, dthAddPoint) = createRefs()
@@ -96,7 +95,7 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
         }))
         Text(text = task.description,
             textModifier.then(Modifier.constrainAs(tvDescription){
-            top.linkTo(bthEdit.bottom, margin = 12.dp)
+            top.linkTo(bthEdit.bottom)
             start.linkTo(parent.start, margin = 20.dp)
             end.linkTo(bthEdit.start, margin = 8.dp)
             }),
@@ -113,11 +112,12 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
             //vm.updateTasks()
         },
             modifier = Modifier
-                .size(20.dp)
+                .size(40.dp)
                 .background(Pink80, shape = CircleShape)
+                .padding()
                 .constrainAs(bthEdit){
-                top.linkTo(parent.top, margin = 10.dp)
-                end.linkTo(parent.end, margin = 10.dp)
+                top.linkTo(parent.top)
+                end.linkTo(parent.end)
             }
         ){
             Image(
@@ -130,11 +130,12 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
             //vm.updateTasks()
         },
             modifier = Modifier
-                .size(20.dp)
+                .size(40.dp)
                 .background(Pink80, shape = CircleShape)
+                .padding()
                 .constrainAs(dthAddPoint){
-                bottom.linkTo(parent.bottom, margin = 10.dp)
-                end.linkTo(parent.end, margin = 10.dp)
+                bottom.linkTo(parent.bottom)
+                end.linkTo(parent.end)
             }
         ){
             Image(
