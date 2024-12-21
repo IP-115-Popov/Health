@@ -25,20 +25,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.font.Font
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.domain.models.Task
@@ -46,13 +41,13 @@ import ru.sergey.health.R
 import ru.sergey.health.presentation.NavRoutes
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.theme.ui.Pink80
-import ru.sergey.health.presentation.theme.ui.Purple40
-import ru.sergey.health.presentation.theme.ui.Purple80
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import kotlin.random.Random
 
 @Composable
 fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {
+val tasks = vm.tasksUiState.collectAsState()
+
     Scaffold(
         topBar = { taskTopBar(navController)},
     ) { innerPadding ->
@@ -63,7 +58,7 @@ fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {
                 .padding(innerPadding),
             contentPadding = PaddingValues(8.dp),
         ) {
-            items(vm.tasks) { item ->
+            items(tasks.value.tasks) { item ->
                 TaskView(item)
             }
         }

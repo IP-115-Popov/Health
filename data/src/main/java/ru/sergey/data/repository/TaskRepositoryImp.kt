@@ -1,6 +1,8 @@
 package ru.sergey.data.repository
 
 import android.content.Context
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import ru.sergey.data.storage.DataTaskDomainTaskConverter
 import ru.sergey.data.storage.TaskDao
 import ru.sergey.data.storage.TaskRoomDatabase
@@ -11,7 +13,7 @@ class TaskRepositoryImp(context: Context) : TasksRepository {
 
     private val database: TaskRoomDatabase = TaskRoomDatabase.buildDatabase(context, DATABASE_NAME)
 
-    private val taskDao : TaskDao = database.TaskDao()
+    private val taskDao: TaskDao = database.TaskDao()
 
     val dataTaskDomainTaskConverter = DataTaskDomainTaskConverter()
 
@@ -19,8 +21,10 @@ class TaskRepositoryImp(context: Context) : TasksRepository {
         taskDao.insertTask(dataTaskDomainTaskConverter.DomainTaskToDataTask(task))
     }
 
-    override suspend fun downloadTasks(): List<Task> {
-        val rez = taskDao.getTasks().map { it -> dataTaskDomainTaskConverter.DataTaskToDomainTask(it)}
+    override suspend fun downloadTasks(): Flow<List<Task>> {
+        val rez = taskDao.getTasks().map {
+            it.map { task -> dataTaskDomainTaskConverter.DataTaskToDomainTask(task) }
+        }
         return rez
     }
 
