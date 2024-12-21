@@ -1,6 +1,5 @@
 package ru.sergey.data.storage
 
-import android.util.EventLogTags.Description
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity

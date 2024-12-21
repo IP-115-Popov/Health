@@ -6,8 +6,6 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.sergey.data.repository.TaskRepositoryImp
-import ru.sergey.data.storage.TaskDao
-import ru.sergey.data.storage.TaskRoomDatabase
 import ru.sergey.domain.repository.TasksRepository
 import javax.inject.Singleton
 

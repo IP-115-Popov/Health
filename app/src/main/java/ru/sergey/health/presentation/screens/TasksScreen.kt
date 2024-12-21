@@ -1,72 +1,127 @@
 package ru.sergey.health.presentation.screens
 
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import ru.sergey.domain.models.Task
-import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.LineBreak
+import androidx.compose.ui.graphics.Color.Companion.White
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import ru.sergey.domain.models.Task
 import ru.sergey.health.R
+import ru.sergey.health.presentation.NavRoutes
+import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.theme.ui.Pink80
+import ru.sergey.health.presentation.theme.ui.Purple40
 import ru.sergey.health.presentation.theme.ui.Purple80
+import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import kotlin.random.Random
 
 @Composable
-fun TasksScreen(vm : TasksViewModel) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),  // 3 столбца
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Purple80),
-        contentPadding = PaddingValues(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalItemSpacing = 8.dp
-    ) {
-        items(vm.tasks) {item ->
-            TaskView(item)//, vm)
+fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {
+    Scaffold(
+        topBar = { taskTopBar(navController)},
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(HealthTheme.colors.primaryBackground)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(8.dp),
+        ) {
+            items(vm.tasks) { item ->
+                TaskView(item)
+            }
         }
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun taskTopBar(navController: NavHostController) {
+    CenterAlignedTopAppBar(title = {
+        Box(
+            modifier = Modifier.fillMaxHeight(),
+        ) {
+            Text(
+                text = "Задачи",
+                style = HealthTheme.typography.h1,
+                modifier = Modifier.align(Alignment.Center),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }, navigationIcon = {
+        Box(
+            modifier = Modifier.fillMaxHeight(),
+        ) {
+            IconButton(
+                onClick = {},
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_24),
+                    contentDescription = "Back"
+                )
+            }
+        }
+    },actions = {
+        Box(
+            modifier = Modifier.fillMaxHeight(),
+        ) {
+            IconButton(
+                onClick = {navController.navigate(NavRoutes.AddTasksScreen.route)},
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    imageVector =  ImageVector.vectorResource(R.drawable.ic_add_24),
+                    contentDescription = "Add"
+                )
+            }
+        }
+    },
+    colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = HealthTheme.colors.topBarContainerColor,
+        titleContentColor = HealthTheme.colors.titleContentColor,
+        navigationIconContentColor = HealthTheme.colors.iconColor,
+        actionIconContentColor = HealthTheme.colors.iconColor,
+    ), modifier = Modifier.height(56.dp)
+    )
+}
+
 @Preview(showSystemUi = true)
 @Composable
 fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10Бегать каждый день по 10 кмБегать каждый день по 10 км кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 км", 0, 100, "Дней"))//, vm : TasksViewModel)
@@ -76,12 +131,8 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
     ConstraintLayout(
         modifier = Modifier
             .background(
-                Color(
-                    Random.nextInt(255),
-                    Random.nextInt(255),
-                    Random.nextInt(255),
-                    255
-                ), RoundedCornerShape(10.dp)
+                HealthTheme.colors.cardColor,
+                RoundedCornerShape(10.dp)
             )
             .padding(10.dp)
             .height(Random.nextInt(142, 200).dp)
@@ -143,69 +194,5 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                 contentDescription = "Значок редактирования задачи",
             )
         }
-
-
     }
-    /*Surface(modifier = Modifier
-        .shadow(5.dp)
-        .clip(RoundedCornerShape(10.dp))) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceAround,
-            modifier = Modifier
-                .background(
-                    Color(
-                        Random.nextInt(255),
-                        Random.nextInt(255),
-                        Random.nextInt(255),
-                        255
-                    ), RoundedCornerShape(10.dp)
-                )
-                .padding(10.dp)
-                .height(Random.nextInt(120, 200).dp)
-        ) {
-            val textModifier = Modifier.padding(5.dp)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = task.title, textModifier)
-                IconButton(onClick = {},
-                    modifier = Modifier
-                        .size(20.dp)
-                        .background(Pink80, shape = CircleShape)
-                ){
-                    Image(
-                        imageVector = Icons.Filled.Create,
-                        contentDescription = "Значок увеличения очков",
-                    )
-                }
-            }
-            Text(text = task.description, textModifier)
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
-                Text(text = task.points.toString() + "/" + task.targetPoints + "   " + task.measureUnit, textModifier)
-
-                IconButton(onClick = {
-                    //vm.addPointsToTask(task.id)
-                    //vm.updateTasks()
-                },
-                    modifier = Modifier
-                        .size(20.dp)
-                        .background(Pink80, shape = CircleShape)
-                ){
-                    Image(
-                        imageVector = Icons.Filled.Add,
-                        contentDescription = "Значок увеличения очков",
-                    )
-                }
-                Spacer(modifier = Modifier.width(10.dp))
-            }
-
-        }
-    }*/
 }
