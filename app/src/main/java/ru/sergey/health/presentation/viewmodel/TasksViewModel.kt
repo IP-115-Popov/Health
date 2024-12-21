@@ -37,16 +37,19 @@ class TasksViewModel @Inject constructor(
             }.launchIn(viewModelScope)
         }
     }
-//    fun addPointsToTask(id : Int) {
-//        var updateTask = tasks.find{it.id == id}
-//
-//        if (updateTask != null)
-//        {
-//            updateTask = updateTask.newBuilder().setPoints(updateTask.points + 1).build()
-//
-//            viewModelScope.launch(Dispatchers.IO) {
-//                updateTaskUseCase.exectute(updateTask)
-//            }
-//        }
-//    }
+    fun addPointsToTask(id : Int) {
+        var updateTask = tasksUiState.value.tasks.find{it.id == id}
+
+        if (updateTask != null)
+        {
+            val updatedPoints: Int =
+                if ( updateTask.points < updateTask.targetPoints) updateTask.points + 1
+                else updateTask.points
+            updateTask = updateTask.newBuilder().setPoints(updatedPoints).build()
+
+            viewModelScope.launch(Dispatchers.IO) {
+                updateTaskUseCase.exectute(updateTask)
+            }
+        }
+    }
 }

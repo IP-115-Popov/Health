@@ -66,7 +66,7 @@ val tasks = vm.tasksUiState.collectAsState()
             contentPadding = PaddingValues(8.dp),
         ) {
             items(tasks.value.tasks) { item ->
-                TaskView(item)
+                TaskView(item, vm)
             }
         }
     }
@@ -125,9 +125,8 @@ fun taskTopBar(navController: NavHostController) {
     )
 }
 
-@Preview(showSystemUi = true)
 @Composable
-fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10Бегать каждый день по 10 кмБегать каждый день по 10 км кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 км", 0, 100, "Дней"))//, vm : TasksViewModel)
+fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10Бегать каждый день по 10 кмБегать каждый день по 10 км кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 км", 0, 100, "Дней"), vm : TasksViewModel)
 {
     val textModifier = Modifier.padding(5.dp)
 
@@ -141,7 +140,7 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                 RoundedCornerShape(10.dp)
             )
             .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
-            .height(Random.nextInt(142, 200).dp)
+            .height(142.dp)
             .fillMaxWidth()
     ) {
         val (tvTitle, tvDescription, tvPoint, bthEdit, dthAddPoint, dropdownMenu) = createRefs()
@@ -181,7 +180,7 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
             Icon(imageVector = Icons.Filled.List, contentDescription = "Меню задач")
         }
         IconButton(onClick = {
-            //vm.addPointsToTask(task.id)
+            vm.addPointsToTask(task.id)
             //vm.updateTasks()
         },
             modifier = Modifier
