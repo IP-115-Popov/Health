@@ -54,7 +54,6 @@ fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel) {
         ) {
             composable(NavRoutes.TasksScreen.route) {
                 TasksScreen(tasksViewModel, navController)
-                tasksViewModel.updateTasks()
             }
             composable(NavRoutes.AddTasksScreen.route) {
                 AddTasksScreen(addTasksViewModel, navController)
