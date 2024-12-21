@@ -5,4 +5,6 @@
     <string name="TargetPoints">TargetPoints</string>
     <string name="addTask">Add</string>
     <string name="measure_unit">Measure Unit</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
 </resources>

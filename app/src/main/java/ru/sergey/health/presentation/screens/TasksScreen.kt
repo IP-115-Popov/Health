@@ -30,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -77,7 +78,7 @@ fun taskTopBar(navController: NavHostController) {
             modifier = Modifier.fillMaxHeight(),
         ) {
             Text(
-                text = "Задачи",
+                text = stringResource(R.string.tasks),
                 style = HealthTheme.typography.h1,
                 modifier = Modifier.align(Alignment.Center),
                 maxLines = 1,
@@ -130,11 +131,12 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
 
     ConstraintLayout(
         modifier = Modifier
+            .padding(4.dp)
             .background(
                 HealthTheme.colors.cardColor,
                 RoundedCornerShape(10.dp)
             )
-            .padding(10.dp)
+            .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
             .height(Random.nextInt(142, 200).dp)
             .fillMaxWidth()
     ) {
@@ -166,10 +168,10 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                 .size(40.dp)
                 .background(Pink80, shape = CircleShape)
                 .padding()
-                .constrainAs(bthEdit){
-                top.linkTo(parent.top)
-                end.linkTo(parent.end)
-            }
+                .constrainAs(bthEdit) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }
         ){
             Image(
                 imageVector = Icons.Filled.Create,
@@ -184,10 +186,10 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                 .size(40.dp)
                 .background(Pink80, shape = CircleShape)
                 .padding()
-                .constrainAs(dthAddPoint){
-                bottom.linkTo(parent.bottom)
-                end.linkTo(parent.end)
-            }
+                .constrainAs(dthAddPoint) {
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                }
         ){
             Image(
                 imageVector = Icons.Filled.Add,

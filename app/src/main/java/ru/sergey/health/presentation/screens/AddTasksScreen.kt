@@ -2,6 +2,7 @@ package ru.sergey.health.presentation.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,7 +67,10 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController) {
             LocalContext.current,
             "Заполните поля", Toast.LENGTH_SHORT
         )
-        ConstraintLayout(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+        ConstraintLayout(modifier = Modifier
+            .background(HealthTheme.colors.primaryBackground)
+            .padding(innerPadding)
+            .fillMaxSize()) {
             val (tfTitle, tfDescription, tfTargetPoints, tfMeasureUnitText, bthAdd) = createRefs()
 
             val titleText = remember { mutableStateOf("") }
@@ -157,7 +161,7 @@ fun taskAddTopBar(navController: NavHostController) {
             modifier = Modifier.fillMaxHeight(),
         ) {
             Text(
-                text = "Задачи",
+                text = stringResource(R.string.add_task),
                 style = HealthTheme.typography.h1,
                 modifier = Modifier.align(Alignment.Center),
                 maxLines = 1,
