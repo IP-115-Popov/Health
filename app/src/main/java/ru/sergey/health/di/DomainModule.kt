@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
 import ru.sergey.domain.UseCase.AddTaskUseCase
+import ru.sergey.domain.UseCase.DeleteTaskUseCase
 import ru.sergey.domain.UseCase.DownloadTasksUseCase
 import ru.sergey.domain.UseCase.GetTaskUseCase
 import ru.sergey.domain.UseCase.UpdateTaskUseCase
@@ -28,5 +29,9 @@ class DomainModule {
     @Provides
     fun provideGetTaskUseCase(tasksRepository: TasksRepository) : GetTaskUseCase {
         return GetTaskUseCase(tasksRepository = tasksRepository)
+    }
+    @Provides
+    fun provideDeleteTaskUseCase(tasksRepository: TasksRepository) : DeleteTaskUseCase {
+        return DeleteTaskUseCase(tasksRepository = tasksRepository)
     }
 }

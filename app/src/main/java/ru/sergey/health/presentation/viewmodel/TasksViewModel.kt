@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.sergey.domain.UseCase.DeleteTaskUseCase
 import ru.sergey.domain.UseCase.DownloadTasksUseCase
 import ru.sergey.domain.UseCase.UpdateTaskUseCase
 import ru.sergey.domain.models.Task
@@ -20,7 +21,8 @@ import javax.inject.Inject
 @HiltViewModel
 class TasksViewModel @Inject constructor(
     val downloadTasksUseCase: DownloadTasksUseCase,
-    val updateTaskUseCase : UpdateTaskUseCase
+    val updateTaskUseCase: UpdateTaskUseCase,
+    val deleteTaskUseCase: DeleteTaskUseCase
 ) : ViewModel() {
 
     private val _tasksUiState = MutableStateFlow(TasksUIState())
@@ -37,19 +39,25 @@ class TasksViewModel @Inject constructor(
             }.launchIn(viewModelScope)
         }
     }
-    fun addPointsToTask(id : Int) {
-        var updateTask = tasksUiState.value.tasks.find{it.id == id}
 
-        if (updateTask != null)
-        {
+    fun addPointsToTask(id: Int) {
+        var updateTask = tasksUiState.value.tasks.find { it.id == id }
+
+        if (updateTask != null) {
             val updatedPoints: Int =
-                if ( updateTask.points < updateTask.targetPoints) updateTask.points + 1
+                if (updateTask.points < updateTask.targetPoints) updateTask.points + 1
                 else updateTask.points
             updateTask = updateTask.newBuilder().setPoints(updatedPoints).build()
 
             viewModelScope.launch(Dispatchers.IO) {
                 updateTaskUseCase.exectute(updateTask)
             }
+        }
+    }
+
+    fun deleteTaskById(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteTaskUseCase.execute(id)
         }
     }
 }

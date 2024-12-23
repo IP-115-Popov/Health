@@ -34,6 +34,10 @@ class TaskRepositoryImp(context: Context) : TasksRepository {
         return res
     }
 
+    override suspend fun deleteTask(id: Int) {
+        taskDao.deleteById(id)
+    }
+
     override suspend fun updateTaskPoints(task: Task) {
         taskDao.updateTask(dataTaskDomainTaskConverter.DomainTaskToDataTask(task))
     }

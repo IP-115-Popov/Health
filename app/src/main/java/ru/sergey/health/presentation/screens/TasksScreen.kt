@@ -227,6 +227,7 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
                 DropdownMenuItem(
                     onClick = {
                         expanded = false
+                        vm.deleteTaskById(task.id)
                     },
                     text = { Text("Удалить") }
                 )

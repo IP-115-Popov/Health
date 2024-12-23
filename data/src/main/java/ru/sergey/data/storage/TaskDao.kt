@@ -22,4 +22,6 @@ interface TaskDao {
     @Query("SELECT * FROM ${TaskStorage.TABLE_NAME} WHERE taskId = :taskId LIMIT 1")
     fun getTaskById(taskId: Int): TaskStorage?
 
+    @Query("DELETE FROM ${TaskStorage.TABLE_NAME} WHERE taskId = :id")
+    fun deleteById(id: Int)
 }
