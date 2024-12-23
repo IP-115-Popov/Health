@@ -66,7 +66,13 @@ val tasks = vm.tasksUiState.collectAsState()
             contentPadding = PaddingValues(8.dp),
         ) {
             items(tasks.value.tasks) { item ->
-                TaskView(item, vm)
+                TaskView(item, vm,
+                    edit = {
+                        val navRoute: String =
+                            NavRoutes.AddTasksScreen.route.replace("{taskId}", "${item.id}")
+                        navController.navigate(navRoute)
+                    }
+                )
             }
         }
     }
@@ -106,7 +112,11 @@ fun taskTopBar(navController: NavHostController) {
             modifier = Modifier.fillMaxHeight(),
         ) {
             IconButton(
-                onClick = {navController.navigate(NavRoutes.AddTasksScreen.route)},
+                onClick = {
+                    val navRoute: String =
+                        NavRoutes.AddTasksScreen.route.replace("{taskId}", "0")
+                    navController.navigate(navRoute)
+                          },
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
                 Icon(
@@ -126,7 +136,7 @@ fun taskTopBar(navController: NavHostController) {
 }
 
 @Composable
-fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день по 10Бегать каждый день по 10 кмБегать каждый день по 10 км кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 кмБегать каждый день по 10 км", 0, 100, "Дней"), vm : TasksViewModel)
+fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
 {
     val textModifier = Modifier.padding(5.dp)
 
@@ -210,7 +220,7 @@ fun TaskView(task: Task = Task(1,"Бег","Бегать каждый день п
                 DropdownMenuItem(
                     onClick = {
                         expanded = false
-
+                        edit()
                     },
                     text = { Text("Редактировать") }
                 )

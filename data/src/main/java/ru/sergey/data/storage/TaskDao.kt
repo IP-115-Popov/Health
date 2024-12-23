@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -12,10 +13,13 @@ interface TaskDao {
     @Query("SELECT * FROM ${TaskStorage.TABLE_NAME}")
     fun getTasks(): Flow<List<TaskStorage>>
 
-    @Insert
+    @Upsert
     fun insertTask(taskStorage : TaskStorage)
 
     @Update
     suspend fun updateTask(task: TaskStorage)
+
+    @Query("SELECT * FROM ${TaskStorage.TABLE_NAME} WHERE taskId = :taskId LIMIT 1")
+    fun getTaskById(taskId: Int): TaskStorage?
 
 }

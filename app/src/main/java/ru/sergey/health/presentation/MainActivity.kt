@@ -55,8 +55,9 @@ fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel) {
             composable(NavRoutes.TasksScreen.route) {
                 TasksScreen(tasksViewModel, navController)
             }
-            composable(NavRoutes.AddTasksScreen.route) {
-                AddTasksScreen(addTasksViewModel, navController)
+            composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
+                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
+                AddTasksScreen(addTasksViewModel, navController, taskId)
             }
         }
         BottomNavigationBar(
@@ -99,5 +100,5 @@ object NavBarItems {
 
 sealed class NavRoutes(val route: String) {
     object TasksScreen : NavRoutes("TasksScreen")
-    object AddTasksScreen : NavRoutes("AddTasksScreen")
+    object AddTasksScreen : NavRoutes("AddTasksScreen/{taskId}")
 }

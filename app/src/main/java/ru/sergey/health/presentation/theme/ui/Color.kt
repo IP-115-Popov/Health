@@ -13,8 +13,12 @@ val Pink40 = Color(0xFF7D5260)
 
 val baseDarkPalette = HealthColors(
     primaryBackground = White,
+    primary = Color(0xff004D40),
     iconColor = White,
-    topBarContainerColor = Color(0xFF6650a4),
+    topBarContainerColor =  Color(0xff004D40),
     titleContentColor = White,
     cardColor = Color(0xFFD0BCFF),
+    placeholderText =  Color.Gray,
+    darkText =  Color.Black,
+    lightText =  White,
 )

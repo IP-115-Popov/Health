@@ -10,7 +10,11 @@ data class HealthColors(
     val iconColor: Color,
     val topBarContainerColor: Color,
     val titleContentColor: Color,
-    val cardColor: Color
+    val cardColor: Color,
+    val primary: Color,
+    val placeholderText: Color,
+    val darkText: Color,
+    val lightText: Color,
 )
 
 data class HealthTypography(
