@@ -5,6 +5,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,8 +31,8 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -62,25 +63,20 @@ import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
 
 @Composable
 fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: Int = 0) {
-    val state = vm.tasksUiState.collectAsState().value
+    val state by vm.tasksUiState.collectAsState()
 
     // Toasts
     val toastAdded = Toast.makeText(
-        LocalContext.current,
-        "Запись добавлена", Toast.LENGTH_SHORT
+        LocalContext.current, "Запись добавлена", Toast.LENGTH_SHORT
     )
     val toastNotAdded = Toast.makeText(
-        LocalContext.current,
-        "Заполните поля", Toast.LENGTH_SHORT
+        LocalContext.current, "Заполните поля", Toast.LENGTH_SHORT
     )
-
 
     LaunchedEffect(id) {
         vm.getTask(id)
-
     }
 
-    if (!state.isLoading)
     Scaffold(
         topBar = { taskAddTopBar(navController) },
     ) { innerPadding ->
@@ -90,52 +86,79 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
-            val (tfTitle, tfDescription, tfTargetPoints, tfMeasureUnitText, bthAdd) = createRefs()
+            val (tfTitle, tfDescription, tfTargetPoints, tfMeasureUnitText, bthAdd, points) = createRefs()
 
             // Используем состояние ViewModel для отображения данных
-            StyledTextField(
-                modifier = Modifier.constrainAs(tfTitle) {
-                    top.linkTo(parent.top, margin = 16.dp)
-                    centerHorizontallyTo(parent)
-                },
-                text = remember { mutableStateOf(state.titleText) },
+            StyledTextField(modifier = Modifier.constrainAs(tfTitle) {
+                top.linkTo(parent.top, margin = 16.dp)
+                centerHorizontallyTo(parent)
+            },
+                text = state.titleText,
                 placeholderText = stringResource(R.string.title),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done),
-                onValueChange = { vm.updateTitle(it) }
-            )
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done
+                ),
+                onValueChange = { vm.updateTitle(it) })
 
-            StyledTextField(
-                modifier = Modifier.constrainAs(tfDescription) {
-                    top.linkTo(tfTitle.bottom, margin = 16.dp)
-                    centerHorizontallyTo(parent)
-                },
-                text = remember { mutableStateOf(state.descriptionText) },
+            StyledTextField(modifier = Modifier.constrainAs(tfDescription) {
+                top.linkTo(tfTitle.bottom, margin = 16.dp)
+                centerHorizontallyTo(parent)
+            },
+                text = state.descriptionText,
                 placeholderText = stringResource(R.string.description),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done),
-                onValueChange = { vm.updateDescription(it) }
-            )
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done
+                ),
+                onValueChange = { vm.updateDescription(it) })
 
-            StyledTextField(
-                modifier = Modifier.constrainAs(tfTargetPoints) {
+
+            if (id != 0) { //Редактирование
+                Row(modifier = Modifier.constrainAs(tfTargetPoints) {
+                    top.linkTo(tfDescription.bottom, margin = 16.dp)
+                    centerHorizontallyTo(parent)
+                }) {
+                    StyledTextField(modifier = Modifier.fillMaxWidth(0.5f),
+                        text = state.points.toString(),
+                        placeholderText = stringResource(R.string.points),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                        ),
+                        onValueChange = { vm.updatePoints(it) })
+                    StyledTextField(modifier = Modifier,
+                        text = state.targetPointsText.toString(),
+                        placeholderText = stringResource(R.string.TargetPoints),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                        ),
+                        onValueChange = { vm.updateTargetPoints(it) })
+                }
+            } else {
+                StyledTextField(modifier = Modifier.constrainAs(tfTargetPoints) {
                     top.linkTo(tfDescription.bottom, margin = 16.dp)
                     centerHorizontallyTo(parent)
                 },
-                text = remember { mutableStateOf(state.targetPointsText.toString()) },
-                placeholderText = stringResource(R.string.TargetPoints),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Done),
-                onValueChange = { vm.updateTargetPoints(it) }
-            )
+                    text = state.targetPointsText.toString(),
+                    placeholderText = stringResource(R.string.TargetPoints),
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Number, imeAction = ImeAction.Done
+                    ),
+                    onValueChange = { vm.updateTargetPoints(it) })
+            }
 
-            StyledTextField(
-                modifier = Modifier.constrainAs(tfMeasureUnitText) {
-                    top.linkTo(tfTargetPoints.bottom, margin = 16.dp)
-                    centerHorizontallyTo(parent)
-                },
-                text = remember { mutableStateOf(state.measureUnitText) },
+
+
+            StyledTextField(modifier = Modifier.constrainAs(tfMeasureUnitText) {
+                top.linkTo(tfTargetPoints.bottom, margin = 16.dp)
+                centerHorizontallyTo(parent)
+            },
+                text = state.measureUnitText,
                 placeholderText = stringResource(R.string.measure_unit),
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done),
-                onValueChange = { vm.updateMeasureUnit(it) }
-            )
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Ascii, imeAction = ImeAction.Done
+                ),
+                onValueChange = { vm.updateMeasureUnit(it) })
+
+
 
             Button(
                 onClick = {
@@ -155,12 +178,18 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
                     .padding(top = 50.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = HealthTheme.colors.lightText,  // Цвет текста
-                    containerColor =  HealthTheme.colors.primary  // Акцентный цвет
+                    containerColor = HealthTheme.colors.primary  // Акцентный цвет
                 ),
                 border = BorderStroke(2.dp, HealthTheme.colors.primary), // Цвет границы
                 shape = RoundedCornerShape(12.dp), // Скругленные углы
             ) {
-                Text(stringResource(R.string.addTask), fontSize = 20.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = if (id == 0) {
+                        stringResource(R.string.addTask)
+                    } else {
+                        stringResource(R.string.Save)
+                    }, fontSize = 20.sp, fontWeight = FontWeight.Bold
+                )
             }
         }
     }
@@ -187,7 +216,7 @@ fun taskAddTopBar(navController: NavHostController) {
             modifier = Modifier.fillMaxHeight(),
         ) {
             IconButton(
-                onClick = {navController.navigateUp()},
+                onClick = { navController.navigateUp() },
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
                 Icon(
@@ -196,8 +225,7 @@ fun taskAddTopBar(navController: NavHostController) {
                 )
             }
         }
-    },
-    colors = TopAppBarDefaults.topAppBarColors(
+    }, colors = TopAppBarDefaults.topAppBarColors(
         containerColor = HealthTheme.colors.topBarContainerColor,
         titleContentColor = HealthTheme.colors.titleContentColor,
         navigationIconContentColor = HealthTheme.colors.iconColor,
@@ -209,7 +237,7 @@ fun taskAddTopBar(navController: NavHostController) {
 @Composable
 fun StyledTextField(
     modifier: Modifier,
-    text: MutableState<String>,
+    text: String,
     placeholderText: String,
     keyboardOptions: KeyboardOptions,
     onValueChange: (String) -> Unit
@@ -218,16 +246,17 @@ fun StyledTextField(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    OutlinedTextField(
-        value = text.value,
+    OutlinedTextField(value = text,
         onValueChange = { newText ->
-            if (newText != text.value) {
-                text.value = newText
+            if (newText != text) {
                 onValueChange(newText)
             }
         },
         placeholder = {
-            Text(placeholderText, style = TextStyle(color = HealthTheme.colors.placeholderText, fontSize = 18.sp))
+            Text(
+                placeholderText,
+                style = TextStyle(color = HealthTheme.colors.placeholderText, fontSize = 18.sp)
+            )
         },
         keyboardOptions = keyboardOptions,
         singleLine = true,
@@ -236,22 +265,30 @@ fun StyledTextField(
             Icon(
                 imageVector = Icons.Filled.Check,
                 contentDescription = "Проверено",
-                tint =  if (isFocused.value) { HealthTheme.colors.iconColor} else { HealthTheme.colors.primary}
+                tint = if (isFocused.value) {
+                    HealthTheme.colors.iconColor
+                } else {
+                    HealthTheme.colors.primary
+                }
             )
         },
         trailingIcon = {
             Icon(
                 imageVector = Icons.Filled.Info,
                 contentDescription = "Дополнительная информация",
-                tint = if (isFocused.value) { HealthTheme.colors.iconColor} else { HealthTheme.colors.primary}
+                tint = if (isFocused.value) {
+                    HealthTheme.colors.iconColor
+                } else {
+                    HealthTheme.colors.primary
+                }
             )
         },
         colors = TextFieldDefaults.colors(
             unfocusedContainerColor = Color(0xfff3f3f3),
-            focusedContainerColor =  HealthTheme.colors.primary,  // Акцент на фоне при фокусе
+            focusedContainerColor = HealthTheme.colors.primary,  // Акцент на фоне при фокусе
             unfocusedTextColor = Color.Gray,
             focusedTextColor = Color.Black,
-            cursorColor =  HealthTheme.colors.primary,  // Цвет курсора
+            cursorColor = HealthTheme.colors.primary,  // Цвет курсора
         ),
         modifier = modifier
             .padding(16.dp)
@@ -265,8 +302,6 @@ fun StyledTextField(
                 // Следим за фокусом
                 isFocused.value = focusState.isFocused
             },
-        keyboardActions = KeyboardActions(
-            onDone = { keyboardController?.hide() }
-        )
+        keyboardActions = KeyboardActions(onDone = { keyboardController?.hide() })
     )
 }

@@ -2,7 +2,6 @@ package ru.sergey.data.repository
 
 import android.content.Context
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import ru.sergey.data.storage.DataTaskDomainTaskConverter
 import ru.sergey.data.storage.TaskDao

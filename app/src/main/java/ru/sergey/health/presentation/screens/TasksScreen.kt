@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.List
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -39,7 +38,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
@@ -49,7 +47,6 @@ import ru.sergey.health.presentation.NavRoutes
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.theme.ui.Pink80
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
-import kotlin.random.Random
 
 @Composable
 fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {

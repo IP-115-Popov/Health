@@ -1,6 +1,5 @@
 package ru.sergey.health.presentation.viewmodel
 
-import androidx.annotation.Nullable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,9 +24,9 @@ class AddTasksViewModel @Inject constructor(
     private val _tasksUiState = MutableStateFlow(AddTaskUIState())
     val tasksUiState: StateFlow<AddTaskUIState> = _tasksUiState.asStateFlow()
 
+
     fun getTask(id: Int) {
         if (id != 0) {
-            _tasksUiState.update { it.copy(isLoading = true) }
             viewModelScope.launch(Dispatchers.IO) {
                 val updatedTask = getTaskUseCase.execute(id)
                 if (updatedTask != null) {
@@ -37,19 +36,24 @@ class AddTasksViewModel @Inject constructor(
                                 id = updatedTask.id,
                                 titleText = updatedTask.title,
                                 descriptionText = updatedTask.description,
+                                points = updatedTask.points,
                                 targetPointsText = updatedTask.targetPoints,
                                 measureUnitText = updatedTask.measureUnit,
-                                isLoading = false
                             )
                         }
                     }
-                } else {
-                    withContext(Dispatchers.Main) {
-                        _tasksUiState.update {
-                            it.copy(isLoading = false)
-                        }
-                    }
                 }
+            }
+        } else {
+            _tasksUiState.update {
+                it.copy(
+                    id = 0,
+                    titleText = "",
+                    descriptionText = "",
+                    points = 0,
+                    targetPointsText = 0,
+                    measureUnitText = "",
+                )
             }
         }
     }
@@ -81,12 +85,16 @@ class AddTasksViewModel @Inject constructor(
                         id = state.id,
                         title = state.titleText,
                         description = state.descriptionText,
-                        points = 0,
+                        points = state.points,
                         targetPoints = state.targetPointsText,
                         measureUnit = state.measureUnitText
                     )
                 )
             }
         }
+    }
+
+    fun updatePoints(points: String) {
+        _tasksUiState.update { it.copy(points = points.toIntOrNull() ?: 0) }
     }
 }
