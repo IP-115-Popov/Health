@@ -53,12 +53,12 @@ fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {
 val tasks = vm.tasksUiState.collectAsState()
 
     Scaffold(
-        topBar = { taskTopBar(navController)},
+        topBar = { TaskTopBar(navController)},
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .background(HealthTheme.colors.primaryBackground)
+                .background(HealthTheme.colors.background)
                 .padding(innerPadding),
             contentPadding = PaddingValues(8.dp),
         ) {
@@ -77,7 +77,7 @@ val tasks = vm.tasksUiState.collectAsState()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun taskTopBar(navController: NavHostController) {
+fun TaskTopBar(navController: NavHostController) {
     CenterAlignedTopAppBar(title = {
         Box(
             modifier = Modifier.fillMaxHeight(),
@@ -124,8 +124,8 @@ fun taskTopBar(navController: NavHostController) {
         }
     },
     colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = HealthTheme.colors.topBarContainerColor,
-        titleContentColor = HealthTheme.colors.titleContentColor,
+        containerColor = HealthTheme.colors.primary,
+        titleContentColor = HealthTheme.colors.primary,
         navigationIconContentColor = HealthTheme.colors.iconColor,
         actionIconContentColor = HealthTheme.colors.iconColor,
     ), modifier = Modifier.height(56.dp)
@@ -143,7 +143,7 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
         modifier = Modifier
             .padding(4.dp)
             .background(
-                HealthTheme.colors.cardColor,
+                HealthTheme.colors.card,
                 RoundedCornerShape(10.dp)
             )
             .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
@@ -152,12 +152,17 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
     ) {
         val (tvTitle, tvDescription, tvPoint, bthEdit, dthAddPoint, dropdownMenu) = createRefs()
 
-        Text(text = task.title, textModifier.then(Modifier.constrainAs(tvTitle){
+        Text(
+            text = task.title,
+            style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+            modifier = textModifier.then(Modifier.constrainAs(tvTitle){
             top.linkTo(parent.top)
             start.linkTo(parent.start, margin = 20.dp)
         }))
-        Text(text = task.description,
-            textModifier.then(Modifier.constrainAs(tvDescription){
+        Text(
+            text = task.description,
+            style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+            modifier = textModifier.then(Modifier.constrainAs(tvDescription){
             top.linkTo(bthEdit.bottom)
             start.linkTo(parent.start, margin = 20.dp)
             end.linkTo(bthEdit.start, margin = 8.dp)
@@ -165,7 +170,10 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
             maxLines = 3, // Установите максимальное количество строк
             overflow = TextOverflow.Ellipsis // Если текст превышает, будет добавлено
         )
-        Text(text = task.points.toString() + "/" + task.targetPoints + "   " + task.measureUnit, textModifier.then(Modifier.constrainAs(tvPoint){
+        Text(
+            text = task.points.toString() + "/" + task.targetPoints + "   " + task.measureUnit,
+            style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+            modifier = textModifier.then(Modifier.constrainAs(tvPoint){
             bottom.linkTo(parent.bottom)
             start.linkTo(parent.start, margin = 20.dp)
         }))
@@ -177,7 +185,6 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
         },
             modifier = Modifier
                 .size(40.dp)
-                .background(Pink80, shape = CircleShape)
                 .padding()
                 .constrainAs(bthEdit) {
                     top.linkTo(parent.top)
@@ -192,7 +199,6 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
         },
             modifier = Modifier
                 .size(40.dp)
-                .background(Pink80, shape = CircleShape)
                 .padding()
                 .constrainAs(dthAddPoint) {
                     bottom.linkTo(parent.bottom)

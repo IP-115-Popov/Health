@@ -14,8 +14,35 @@ val SimpleTypography = HealthTypography(
         color = White,
         fontSize = 18.sp,
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        //fontWeight = FontWeight(500),
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.15.sp,
+        lineHeight = 22.sp,
+    ),
+    body1 = TextStyle(
+        color = White,
+        fontSize = 16.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
         fontWeight = FontWeight(500),
         letterSpacing = 0.15.sp,
         lineHeight = 22.sp,
-    )
+    ),
+    button= TextStyle(
+        color = White,
+        fontSize = 18.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        //fontWeight = FontWeight(500),
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.15.sp,
+        lineHeight = 22.sp,
+    ),
+    navigation = TextStyle(
+       color = White,
+       fontSize = 10.sp,
+       fontFamily = FontFamily(Font(R.font.roboto_regular)),
+       fontWeight = FontWeight(500),
+       letterSpacing = 0.15.sp,
+       lineHeight = 22.sp,
+   ),
+
 )

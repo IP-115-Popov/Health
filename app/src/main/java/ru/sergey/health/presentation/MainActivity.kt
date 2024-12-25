@@ -68,20 +68,36 @@ fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel) {
 
 @Composable
 fun BottomNavigationBar(navController: NavController, modifier: Modifier = Modifier) {
-    NavigationBar(modifier) {
+    NavigationBar(
+        modifier = modifier,
+        containerColor = HealthTheme.colors.primary,
+    ) {
         val backStackEntry = navController.currentBackStackEntryAsState()
         val currentRoute = backStackEntry.value?.destination?.route
 
         NavBarItems.BarItems.forEach { navItem ->
-            NavigationBarItem(selected = currentRoute == navItem.route, onClick = {
-                navController.navigate(navItem.route)
-            }, icon = {
-                Icon(
-                    imageVector = navItem.image, contentDescription = navItem.title
-                )
-            }, label = {
-                Text(text = navItem.title)
-            })
+            NavigationBarItem(
+                selected = currentRoute == navItem.route,
+                onClick = {
+                    navController.navigate(navItem.route)
+                },
+                icon = {
+                    Icon(
+                        imageVector = navItem.image,
+                        contentDescription = navItem.title,
+                        tint =
+                        if (currentRoute == navItem.route) HealthTheme.colors.iconColor
+                        else HealthTheme.colors.placeholderText
+                    )
+                }, label = {
+                    Text(
+                        text = navItem.title,
+                        style = HealthTheme.typography.navigation, // Используем стиль из темы
+                        color = if (currentRoute == navItem.route) HealthTheme.colors.iconColor else HealthTheme.colors.placeholderText
+                    )
+
+                }
+            )
         }
     }
 }

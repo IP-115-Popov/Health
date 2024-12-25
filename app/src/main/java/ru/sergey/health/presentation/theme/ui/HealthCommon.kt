@@ -6,19 +6,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 
 data class HealthColors(
-    val primaryBackground: Color,
+    val background: Color,
     val iconColor: Color,
-    val topBarContainerColor: Color,
-    val titleContentColor: Color,
-    val cardColor: Color,
     val primary: Color,
     val placeholderText: Color,
-    val darkText: Color,
-    val lightText: Color,
+    val text: Color,
+    val card: Color
 )
 
 data class HealthTypography(
-    val h1: TextStyle
+    val h1: TextStyle,
+    val body1: TextStyle,
+    val button: TextStyle,
+    val navigation: TextStyle
 )
 
 object HealthTheme {

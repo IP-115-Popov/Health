@@ -78,11 +78,11 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
     }
 
     Scaffold(
-        topBar = { taskAddTopBar(navController) },
+        topBar = { TaskAddTopBar(navController) },
     ) { innerPadding ->
         ConstraintLayout(
             modifier = Modifier
-                .background(HealthTheme.colors.primaryBackground)
+                .background(HealthTheme.colors.background)
                 .padding(innerPadding)
                 .fillMaxSize()
         ) {
@@ -177,7 +177,7 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
                     .size(150.dp, height = 120.dp)
                     .padding(top = 50.dp),
                 colors = ButtonDefaults.buttonColors(
-                    contentColor = HealthTheme.colors.lightText,  // Цвет текста
+                    contentColor = HealthTheme.colors.background,  // Цвет текста
                     containerColor = HealthTheme.colors.primary  // Акцентный цвет
                 ),
                 border = BorderStroke(2.dp, HealthTheme.colors.primary), // Цвет границы
@@ -188,7 +188,8 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
                         stringResource(R.string.addTask)
                     } else {
                         stringResource(R.string.Save)
-                    }, fontSize = 20.sp, fontWeight = FontWeight.Bold
+                    },
+                    style = HealthTheme.typography.button,
                 )
             }
         }
@@ -198,7 +199,7 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun taskAddTopBar(navController: NavHostController) {
+fun TaskAddTopBar(navController: NavHostController) {
     CenterAlignedTopAppBar(title = {
         Box(
             modifier = Modifier.fillMaxHeight(),
@@ -226,8 +227,8 @@ fun taskAddTopBar(navController: NavHostController) {
             }
         }
     }, colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = HealthTheme.colors.topBarContainerColor,
-        titleContentColor = HealthTheme.colors.titleContentColor,
+        containerColor = HealthTheme.colors.primary,
+        titleContentColor = HealthTheme.colors.primary,
         navigationIconContentColor = HealthTheme.colors.iconColor,
         actionIconContentColor = HealthTheme.colors.iconColor,
     ), modifier = Modifier.height(56.dp)
@@ -255,12 +256,12 @@ fun StyledTextField(
         placeholder = {
             Text(
                 placeholderText,
-                style = TextStyle(color = HealthTheme.colors.placeholderText, fontSize = 18.sp)
+                style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.placeholderText),// TextStyle(color = HealthTheme.colors.placeholderText, fontSize = 18.sp)
             )
         },
         keyboardOptions = keyboardOptions,
         singleLine = true,
-        textStyle = TextStyle(fontSize = 18.sp, color = HealthTheme.colors.darkText),
+        textStyle = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),//TextStyle(fontSize = 18.sp, color = HealthTheme.colors.text),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Check,
