@@ -20,7 +20,7 @@ class TaskStorage (
 ) {
     companion object {
         const val TABLE_NAME = "tasks"
-        const val ID = "id"
+        const val ID = "taskId"
         const val TITLE = "title"
         const val Description = "description"
         const val POINTS = "points"

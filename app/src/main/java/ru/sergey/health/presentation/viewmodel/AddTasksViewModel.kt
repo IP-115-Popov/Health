@@ -12,12 +12,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sergey.domain.UseCase.AddTaskUseCase
 import ru.sergey.domain.UseCase.GetTaskUseCase
+import ru.sergey.domain.UseCase.UpdateTaskUseCase
 import ru.sergey.domain.models.Task
 import javax.inject.Inject
 
 @HiltViewModel
 class AddTasksViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
+    private val updateTaskUseCase: UpdateTaskUseCase,
     private val getTaskUseCase: GetTaskUseCase
 ) : ViewModel() {
 
@@ -81,6 +83,23 @@ class AddTasksViewModel @Inject constructor(
         if (state.titleText.isNotBlank() && state.descriptionText.isNotBlank() && state.targetPointsText > 0) {
             viewModelScope.launch(Dispatchers.IO) {
                 addTaskUseCase.exectute(
+                    Task(
+                        id = state.id,
+                        title = state.titleText,
+                        description = state.descriptionText,
+                        points = state.points,
+                        targetPoints = state.targetPointsText,
+                        measureUnit = state.measureUnitText
+                    )
+                )
+            }
+        }
+    }
+    fun updateTask() {
+        val state = _tasksUiState.value
+        if (state.titleText.isNotBlank() && state.descriptionText.isNotBlank() && state.targetPointsText > 0) {
+            viewModelScope.launch(Dispatchers.IO) {
+                updateTaskUseCase.execute(
                     Task(
                         id = state.id,
                         title = state.titleText,

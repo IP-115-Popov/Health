@@ -23,15 +23,15 @@ class DomainModule {
         return DownloadTasksUseCase(tasksRepository = tasksRepository)
     }
     @Provides
-    fun provideUpdateTaskUseCase(tasksRepository: TasksRepository) : UpdateTaskUseCase {
-        return UpdateTaskUseCase(tasksRepository = tasksRepository)
-    }
-    @Provides
     fun provideGetTaskUseCase(tasksRepository: TasksRepository) : GetTaskUseCase {
         return GetTaskUseCase(tasksRepository = tasksRepository)
     }
     @Provides
     fun provideDeleteTaskUseCase(tasksRepository: TasksRepository) : DeleteTaskUseCase {
         return DeleteTaskUseCase(tasksRepository = tasksRepository)
+    }
+    @Provides
+    fun provideUpdateTaskUseCase(tasksRepository: TasksRepository) : UpdateTaskUseCase {
+        return UpdateTaskUseCase(tasksRepository = tasksRepository)
     }
 }

@@ -48,13 +48,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
@@ -163,7 +160,8 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
             Button(
                 onClick = {
                     if (state.titleText.isNotBlank() && state.descriptionText.isNotBlank() && state.targetPointsText > 0) {
-                        vm.addTask()
+                        if (id == 0) vm.addTask()
+                        else vm.updateTask()
                         toastAdded.show()
                     } else {
                         toastNotAdded.show()

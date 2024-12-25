@@ -4,8 +4,13 @@ import ru.sergey.domain.models.Task
 import ru.sergey.domain.repository.TasksRepository
 
 class UpdateTaskUseCase(private val tasksRepository: TasksRepository) {
-    suspend fun exectute(task: Task)
+    suspend fun execute(task: Task)
     {
-        tasksRepository.updateTaskPoints(task)
+        tasksRepository.updateTask(task)
+
+        SavePointUseCase(tasksRepository).execute(
+            taskId = task.id,
+            taskPoint = task.points
+        )
     }
 }
