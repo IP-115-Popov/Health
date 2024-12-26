@@ -42,9 +42,10 @@
 - **Запись рекордов и достижений пользователей**: пользователи могут отслеживать свои достижения и рекорды.
 
 ## Скриншоты
-![Alt text](https://github.com/user-attachments/assets/b8eb9258-856e-4138-8885-8015b7c34006?raw=true)
+![photo_2024-12-26_16-08-51](https://github.com/user-attachments/assets/321dd504-3078-4a9d-8e76-2857d67201f0)
+![photo_2024-12-26_00-30-00](https://github.com/user-attachments/assets/cb1188db-df81-478e-b279-9eabd716c195)
+![photo_2024-12-26_00-30-00 (2)](https://github.com/user-attachments/assets/aae6323a-d939-4239-9658-79e79b6ce2d7)
 
-![Alt text](https://github.com/user-attachments/assets/c831d3fa-72d1-4ce0-b810-58ff6e0293c3?raw=true)
 
 ## Диаграмма Use Case
 
