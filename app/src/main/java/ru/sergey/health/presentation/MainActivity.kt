@@ -8,6 +8,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -22,9 +24,11 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.sergey.health.presentation.screens.AddTasksScreen
+import ru.sergey.health.presentation.screens.GraphScreen
 import ru.sergey.health.presentation.screens.TasksScreen
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
+import ru.sergey.health.presentation.viewmodel.GraphViewModel
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 
 @AndroidEntryPoint
@@ -32,19 +36,20 @@ class MainActivity : ComponentActivity() {
 
     private val tasksViewModel: TasksViewModel by viewModels()
     private val addTasksViewModel: AddTasksViewModel by viewModels()
+    private val graphViewModel: GraphViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             HealthTheme {
-                Main(tasksViewModel, addTasksViewModel)
+                Main(tasksViewModel, addTasksViewModel, graphViewModel)
             }
         }
     }
 }
 
 @Composable
-fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel) {
+fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel, graphViewModel: GraphViewModel) {
     val navController = rememberNavController()
     Column {
         NavHost(
@@ -59,6 +64,11 @@ fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel) {
                 val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
                 AddTasksScreen(addTasksViewModel, navController, taskId)
             }
+            composable(NavRoutes.GraphScreen.route) { backStackEntry ->
+                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
+                GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
+            }
+
         }
         BottomNavigationBar(
             navController = navController, modifier = Modifier.fillMaxHeight()
@@ -111,10 +121,14 @@ object NavBarItems {
         BarItem(
             title = "TaskScreen", image = Icons.Filled.Home, route = NavRoutes.TasksScreen.route
         ),
+        BarItem(
+            title = "GraphScreen", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
+        ),
     )
 }
 
 sealed class NavRoutes(val route: String) {
     object TasksScreen : NavRoutes("TasksScreen")
     object AddTasksScreen : NavRoutes("AddTasksScreen/{taskId}")
+    object GraphScreen : NavRoutes("GraphScreen/{taskId}")
 }
