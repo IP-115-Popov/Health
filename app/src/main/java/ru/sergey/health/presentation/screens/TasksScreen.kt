@@ -1,77 +1,238 @@
 package ru.sergey.health.presentation.screens
 
-import androidx.compose.animation.core.spring
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import ru.sergey.domain.models.Task
-import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Surface
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.List
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import ru.sergey.health.presentation.theme.ui.Purple80
-import kotlin.random.Random
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavHostController
+import ru.sergey.domain.models.Task
+import ru.sergey.health.R
+import ru.sergey.health.presentation.NavRoutes
+import ru.sergey.health.presentation.theme.ui.HealthTheme
+import ru.sergey.health.presentation.viewmodel.TasksViewModel
 
 @Composable
-fun TasksScreen(vm : TasksViewModel) {
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(3),  // 3 столбца
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Purple80),
-        contentPadding = PaddingValues(8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalItemSpacing = 8.dp
-    ) {
-        items(vm.tasks) {item ->
-            TaskView(item)
+fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {
+val tasks = vm.tasksUiState.collectAsState()
+
+    Scaffold(
+        topBar = { TaskTopBar(navController)},
+    ) { innerPadding ->
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(HealthTheme.colors.background)
+                .padding(innerPadding),
+            contentPadding = PaddingValues(8.dp),
+        ) {
+            items(tasks.value.tasks) { item ->
+                TaskView(item, vm,
+                    edit = {
+                        val navRoute: String =
+                            NavRoutes.AddTasksScreen.route.replace("{taskId}", "${item.id}")
+                        navController.navigate(navRoute)
+                    }
+                )
+            }
         }
     }
 }
-@Preview(showSystemUi = true)
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskView(task: Task = Task(1,"a,j,f","dsgpsdkgpoksdkg"))
-{
-    Surface(modifier = Modifier
-        .shadow(5.dp)
-        .clip(RoundedCornerShape(10.dp))) {
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .background(
-                    Color(
-                        Random.nextInt(255),
-                        Random.nextInt(255),
-                        Random.nextInt(255),
-                        255
-                    ), RoundedCornerShape(10.dp)
-                )
-                .padding(10.dp)
-                .height(Random.nextInt(50, 200).dp)
+fun TaskTopBar(navController: NavHostController) {
+    CenterAlignedTopAppBar(title = {
+        Box(
+            modifier = Modifier.fillMaxHeight(),
         ) {
-            val textModifier = Modifier.padding(5.dp)
-            Text(text = task.title, textModifier)
-            Text(text = task.description, textModifier)
-            Text(text = task.points.toString()+" / "+task.targetPoints.toString(), textModifier)
+            Text(
+                text = stringResource(R.string.tasks),
+                style = HealthTheme.typography.h1,
+                modifier = Modifier.align(Alignment.Center),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+    }, navigationIcon = {
+        Box(
+            modifier = Modifier.fillMaxHeight(),
+        ) {
+            IconButton(
+                onClick = {},
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_24),
+                    contentDescription = "Back"
+                )
+            }
+        }
+    },actions = {
+        Box(
+            modifier = Modifier.fillMaxHeight(),
+        ) {
+            IconButton(
+                onClick = {
+                    val navRoute: String =
+                        NavRoutes.AddTasksScreen.route.replace("{taskId}", "0")
+                    navController.navigate(navRoute)
+                          },
+                modifier = Modifier.align(Alignment.CenterStart)
+            ) {
+                Icon(
+                    imageVector =  ImageVector.vectorResource(R.drawable.ic_add_24),
+                    contentDescription = "Add"
+                )
+            }
+        }
+    },
+    colors = TopAppBarDefaults.topAppBarColors(
+        containerColor = HealthTheme.colors.primary,
+        titleContentColor = HealthTheme.colors.primary,
+        navigationIconContentColor = HealthTheme.colors.iconColor,
+        actionIconContentColor = HealthTheme.colors.iconColor,
+    ), modifier = Modifier.height(56.dp)
+    )
+}
+
+@Composable
+fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
+{
+    val textModifier = Modifier.padding(5.dp)
+
+    var expanded by remember { mutableStateOf(false) }
+
+    ConstraintLayout(
+        modifier = Modifier
+            .padding(4.dp)
+            .background(
+                HealthTheme.colors.card,
+                RoundedCornerShape(10.dp)
+            )
+            .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
+            .height(142.dp)
+            .fillMaxWidth()
+    ) {
+        val (tvTitle, tvDescription, tvPoint, bthEdit, dthAddPoint, dropdownMenu) = createRefs()
+
+        Text(
+            text = task.title,
+            style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+            modifier = textModifier.then(Modifier.constrainAs(tvTitle){
+            top.linkTo(parent.top)
+            start.linkTo(parent.start, margin = 20.dp)
+        }))
+        Text(
+            text = task.description,
+            style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+            modifier = textModifier.then(Modifier.constrainAs(tvDescription){
+            top.linkTo(bthEdit.bottom)
+            start.linkTo(parent.start, margin = 20.dp)
+            end.linkTo(bthEdit.start, margin = 8.dp)
+            }),
+            maxLines = 3, // Установите максимальное количество строк
+            overflow = TextOverflow.Ellipsis // Если текст превышает, будет добавлено
+        )
+        Text(
+            text = task.points.toString() + "/" + task.targetPoints + "   " + task.measureUnit,
+            style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+            modifier = textModifier.then(Modifier.constrainAs(tvPoint){
+            bottom.linkTo(parent.bottom)
+            start.linkTo(parent.start, margin = 20.dp)
+        }))
+
+        IconButton(onClick = {
+            expanded = true
+            //vm.addPointsToTask(task.id)
+            //vm.updateTasks()
+        },
+            modifier = Modifier
+                .size(40.dp)
+                .padding()
+                .constrainAs(bthEdit) {
+                    top.linkTo(parent.top)
+                    end.linkTo(parent.end)
+                }
+        ){
+            Icon(imageVector = Icons.Filled.List, contentDescription = "Меню задач")
+        }
+        IconButton(onClick = {
+            vm.addPointsToTask(task.id)
+            //vm.updateTasks()
+        },
+            modifier = Modifier
+                .size(40.dp)
+                .padding()
+                .constrainAs(dthAddPoint) {
+                    bottom.linkTo(parent.bottom)
+                    end.linkTo(parent.end)
+                }
+        ){
+            Image(
+                imageVector = Icons.Filled.Add,
+                contentDescription = "Значок редактирования задачи",
+            )
+        }
+
+        Box(modifier = Modifier.constrainAs(dropdownMenu) {
+            top.linkTo(bthEdit.bottom)
+            end.linkTo(parent.end)
+        }) {
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false },
+
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        edit()
+                    },
+                    text = { Text("Редактировать") }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        expanded = false
+                        vm.deleteTaskById(task.id)
+                    },
+                    text = { Text("Удалить") }
+                )
+            }
         }
     }
 }

@@ -10,7 +10,8 @@ class DataTaskDomainTaskConverter {
                 title = title,
                 description = description,
                 points = points,
-                targetPoints = targetPoints
+                targetPoints = targetPoints,
+                measureUnit = measureUnit
             )
         }
     }
@@ -21,7 +22,8 @@ class DataTaskDomainTaskConverter {
                 title = title,
                 description = description,
                 points = points,
-                targetPoints = targetPoints
+                targetPoints = targetPoints,
+                measureUnit = measureUnit
             )
         }
     }

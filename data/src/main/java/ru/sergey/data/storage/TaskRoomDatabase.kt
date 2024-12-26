@@ -1,12 +1,12 @@
 package ru.sergey.data.storage
 
+import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import android.content.Context
 
 @Database(
-    entities = [(TaskStorage::class)], version = 1
+    entities = [TaskStorage::class, TaskPointsEntity::class], version = 1
 )
 abstract class TaskRoomDatabase: RoomDatabase() {
 

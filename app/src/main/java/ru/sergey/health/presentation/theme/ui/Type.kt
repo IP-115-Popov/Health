@@ -1,34 +1,48 @@
 package ru.sergey.health.presentation.theme.ui
 
-import androidx.compose.material3.Typography
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import ru.sergey.health.R
 
-// Set of Material typography styles to start with
-val Typography = Typography(
-    bodyLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        lineHeight = 24.sp,
-        letterSpacing = 0.5.sp
-    )
-    /* Other default text styles to override
-    titleLarge = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Normal,
-        fontSize = 22.sp,
-        lineHeight = 28.sp,
-        letterSpacing = 0.sp
+
+val SimpleTypography = HealthTypography(
+    h1 = TextStyle(
+        color = White,
+        fontSize = 18.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        //fontWeight = FontWeight(500),
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.15.sp,
+        lineHeight = 22.sp,
     ),
-    labelSmall = TextStyle(
-        fontFamily = FontFamily.Default,
-        fontWeight = FontWeight.Medium,
-        fontSize = 11.sp,
-        lineHeight = 16.sp,
-        letterSpacing = 0.5.sp
-    )
-    */
+    body1 = TextStyle(
+        color = White,
+        fontSize = 16.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight(500),
+        letterSpacing = 0.15.sp,
+        lineHeight = 22.sp,
+    ),
+    button= TextStyle(
+        color = White,
+        fontSize = 18.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        //fontWeight = FontWeight(500),
+        fontWeight = FontWeight.Bold,
+        letterSpacing = 0.15.sp,
+        lineHeight = 22.sp,
+    ),
+    navigation = TextStyle(
+       color = White,
+       fontSize = 10.sp,
+       fontFamily = FontFamily(Font(R.font.roboto_regular)),
+       fontWeight = FontWeight(500),
+       letterSpacing = 0.15.sp,
+       lineHeight = 22.sp,
+   ),
+
 )

@@ -4,4 +4,11 @@
     <string name="description">Description</string>
     <string name="TargetPoints">TargetPoints</string>
     <string name="addTask">Add</string>
+    <string name="measure_unit">Measure Unit</string>
+    <string name="tasks">Tasks</string>
+    <string name="add_task">Add Task</string>
+    <string name="Save">Сохранить</string>
+    <string name="points">points</string>
+    <string name="graph">Graph</string>
+    <string name="no_data">No Data</string>
 </resources>
