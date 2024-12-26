@@ -10,4 +10,5 @@
     <string name="Save">Сохранить</string>
     <string name="points">points</string>
     <string name="graph">Graph</string>
+    <string name="no_data">No Data</string>
 </resources>

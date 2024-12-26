@@ -100,7 +100,11 @@ fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: Tas
                         .fillMaxHeight(0.8f)
                         .background(HealthTheme.colors.card)
                 ) {
-                    PointsGraph(graphState.value.pointsList.map { it.date.toMillis() to it.points })
+                    if (graphState.value.pointsList.size <= 1){
+                        Text(text = stringResource(R.string.no_data), style = HealthTheme.typography.h1)
+                    } else {
+                        PointsGraph(graphState.value.pointsList.map { it.date.toMillis() to it.points })
+                    }
                 }
                 Box(
                     Modifier
