@@ -15,6 +15,6 @@ class DataModule {
     @Provides
     @Singleton
     fun provideTasksRepository(@ApplicationContext context: Context) : TasksRepository {
-        return TaskRepositoryImp(context = context)
+        return TaskRepositoryImp(context)
     }
 }

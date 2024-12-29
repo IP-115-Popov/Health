@@ -11,13 +11,16 @@ import ru.sergey.domain.models.Points
 import ru.sergey.domain.models.Task
 import ru.sergey.domain.repository.TasksRepository
 
-class TaskRepositoryImp(context: Context) : TasksRepository {
+class TaskRepositoryImp(val context: Context) : TasksRepository {
 
-    private val database: TaskRoomDatabase = TaskRoomDatabase.buildDatabase(context, DATABASE_NAME)
+    private val database: TaskRoomDatabase = TaskRoomDatabase.getInstance(context)
 
     private val taskDao: TaskDao = database.TaskDao()
 
+
     val dataTaskDomainTaskConverter = DataTaskDomainTaskConverter()
+
+
 
     override suspend fun saveTask(task: Task) : Int {
        return taskDao.insertTask(dataTaskDomainTaskConverter.DomainTaskToDataTask(task)).toInt()
@@ -51,9 +54,5 @@ class TaskRepositoryImp(context: Context) : TasksRepository {
        return  taskDao.getTaskPoints(idTask).map {it ->
            it.map { points -> TaskPointsEntity.fromEntity(points) }
        }
-    }
-
-    companion object {
-        private const val DATABASE_NAME = "task_database_1.db"
     }
 }
