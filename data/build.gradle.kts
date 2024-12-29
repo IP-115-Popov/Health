@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.devtoolsKsp)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -53,4 +54,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.datastore)
+
+    implementation(libs.kotlinx.serialization.json)
 }

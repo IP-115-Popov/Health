@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -66,12 +67,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 .fillMaxWidth()
                 .height(50.dp)
             ) {
-                Text(
-                    text = player.value.player.level.toString(),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                    modifier = Modifier.align(Alignment.Center)
-                )
+                Button(onClick = {viewModel.savePlayer()}) { Text("Save")}
             }
         }
     }
