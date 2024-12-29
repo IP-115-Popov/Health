@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -25,10 +25,12 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.sergey.health.presentation.screens.AddTasksScreen
 import ru.sergey.health.presentation.screens.GraphScreen
+import ru.sergey.health.presentation.screens.ProfileScreen
 import ru.sergey.health.presentation.screens.TasksScreen
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
 import ru.sergey.health.presentation.viewmodel.GraphViewModel
+import ru.sergey.health.presentation.viewmodel.ProfileViewModel
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 
 @AndroidEntryPoint
@@ -37,19 +39,25 @@ class MainActivity : ComponentActivity() {
     private val tasksViewModel: TasksViewModel by viewModels()
     private val addTasksViewModel: AddTasksViewModel by viewModels()
     private val graphViewModel: GraphViewModel by viewModels()
+    private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             HealthTheme {
-                Main(tasksViewModel, addTasksViewModel, graphViewModel)
+                Main(tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
             }
         }
     }
 }
 
 @Composable
-fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel, graphViewModel: GraphViewModel) {
+fun Main(
+    tasksViewModel: TasksViewModel,
+    addTasksViewModel: AddTasksViewModel,
+    graphViewModel: GraphViewModel,
+    profileViewModel: ProfileViewModel
+) {
     val navController = rememberNavController()
     Column {
         NavHost(
@@ -59,6 +67,9 @@ fun Main(tasksViewModel: TasksViewModel, addTasksViewModel: AddTasksViewModel, g
         ) {
             composable(NavRoutes.TasksScreen.route) {
                 TasksScreen(tasksViewModel, navController)
+            }
+            composable(NavRoutes.ProfileScreen.route) {
+                ProfileScreen(profileViewModel, navController)
             }
             composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
                 val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
@@ -124,6 +135,9 @@ object NavBarItems {
         BarItem(
             title = "GraphScreen", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
         ),
+        BarItem(
+            title = "ProfileScreen", image = Icons.Filled.Person, route = NavRoutes.ProfileScreen.route
+        ),
     )
 }
 
@@ -131,4 +145,5 @@ sealed class NavRoutes(val route: String) {
     object TasksScreen : NavRoutes("TasksScreen")
     object AddTasksScreen : NavRoutes("AddTasksScreen/{taskId}")
     object GraphScreen : NavRoutes("GraphScreen/{taskId}")
+    object ProfileScreen : NavRoutes("ProfileScreen")
 }

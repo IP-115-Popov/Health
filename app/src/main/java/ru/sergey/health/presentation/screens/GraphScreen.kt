@@ -11,10 +11,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -42,14 +40,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import ru.sergey.domain.models.Task
 import ru.sergey.health.R
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.viewmodel.GraphViewModel
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.random.Random
+
 fun String.toMillis(): Long {
     val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     return format.parse(this)?.time ?: 0L

@@ -12,8 +12,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sergey.domain.UseCase.GetPointsUseCase
-import ru.sergey.domain.models.Points
-import ru.sergey.domain.models.Task
 import javax.inject.Inject
 
 @HiltViewModel
