@@ -66,13 +66,15 @@ class MainActivity : ComponentActivity() {
                 description = "Your channel description"
             }
 
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
 
         // Проверка разрешений для уведомлений для Android 13 и выше
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            val notificationManager =
+                getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             if (!notificationManager.areNotificationsEnabled()) {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
                     putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
@@ -86,23 +88,26 @@ class MainActivity : ComponentActivity() {
                 val p = remember { mutableStateOf(false) }
                 GetPermission(p)
                 if (p.value) {
-                   Main(this, tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
+                    Main(this, tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
                 }
             }
         }
     }
 }
+
 @Composable
-fun GetPermission(p: MutableState<Boolean>){
-    val louncher =  rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()) { isPermissionGranded ->
-            p.value = isPermissionGranded
-        }
+fun GetPermission(p: MutableState<Boolean>) {
+    val louncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { isPermissionGranded ->
+        p.value = isPermissionGranded
+    }
 
     SideEffect {
         louncher.launch(READ_EXTERNAL_STORAGE)
     }
 }
+
 @Composable
 fun Main(
     context: Context,
@@ -111,33 +116,33 @@ fun Main(
     graphViewModel: GraphViewModel,
     profileViewModel: ProfileViewModel
 ) {
-        val navController = rememberNavController()
-        Column {
-            NavHost(
-                navController = navController,
-                startDestination = NavRoutes.TasksScreen.route,
-                modifier = Modifier.fillMaxHeight(0.9f)
-            ) {
-                composable(NavRoutes.TasksScreen.route) {
-                    TasksScreen(tasksViewModel, navController)
-                }
-                composable(NavRoutes.ProfileScreen.route) {
-                    ProfileScreen(context = context,profileViewModel, navController)
-                }
-                composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
-                    val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
-                    AddTasksScreen(addTasksViewModel, navController, taskId)
-                }
-                composable(NavRoutes.GraphScreen.route) { backStackEntry ->
-                    val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
-                    GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
-                }
+    val navController = rememberNavController()
+    Column {
+        NavHost(
+            navController = navController,
+            startDestination = NavRoutes.TasksScreen.route,
+            modifier = Modifier.fillMaxHeight(0.9f)
+        ) {
+            composable(NavRoutes.TasksScreen.route) {
+                TasksScreen(tasksViewModel, navController)
             }
-
-            BottomNavigationBar(
-                navController = navController, modifier = Modifier.fillMaxHeight()
-            )
+            composable(NavRoutes.ProfileScreen.route) {
+                ProfileScreen(context = context, profileViewModel, navController)
+            }
+            composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
+                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
+                AddTasksScreen(addTasksViewModel, navController, taskId)
+            }
+            composable(NavRoutes.GraphScreen.route) { backStackEntry ->
+                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
+                GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
+            }
         }
+
+        BottomNavigationBar(
+            navController = navController, modifier = Modifier.fillMaxHeight()
+        )
+    }
 }
 
 @Composable
@@ -150,28 +155,23 @@ fun BottomNavigationBar(navController: NavController, modifier: Modifier = Modif
         val currentRoute = backStackEntry.value?.destination?.route
 
         NavBarItems.BarItems.forEach { navItem ->
-            NavigationBarItem(
-                selected = currentRoute == navItem.route,
-                onClick = {
-                    navController.navigate(navItem.route)
-                },
-                icon = {
-                    Icon(
-                        imageVector = navItem.image,
-                        contentDescription = navItem.title,
-                        tint =
-                        if (currentRoute == navItem.route) HealthTheme.colors.iconColor
-                        else HealthTheme.colors.placeholderText
-                    )
-                }, label = {
-                    Text(
-                        text = navItem.title,
-                        style = HealthTheme.typography.navigation, // Используем стиль из темы
-                        color = if (currentRoute == navItem.route) HealthTheme.colors.iconColor else HealthTheme.colors.placeholderText
-                    )
+            NavigationBarItem(selected = currentRoute == navItem.route, onClick = {
+                navController.navigate(navItem.route)
+            }, icon = {
+                Icon(
+                    imageVector = navItem.image,
+                    contentDescription = navItem.title,
+                    tint = if (currentRoute == navItem.route) HealthTheme.colors.iconColor
+                    else HealthTheme.colors.placeholderText
+                )
+            }, label = {
+                Text(
+                    text = navItem.title,
+                    style = HealthTheme.typography.navigation, // Используем стиль из темы
+                    color = if (currentRoute == navItem.route) HealthTheme.colors.iconColor else HealthTheme.colors.placeholderText
+                )
 
-                }
-            )
+            })
         }
     }
 }
@@ -189,7 +189,9 @@ object NavBarItems {
             title = "GraphScreen", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
         ),
         BarItem(
-            title = "ProfileScreen", image = Icons.Filled.Person, route = NavRoutes.ProfileScreen.route
+            title = "ProfileScreen",
+            image = Icons.Filled.Person,
+            route = NavRoutes.ProfileScreen.route
         ),
     )
 }
