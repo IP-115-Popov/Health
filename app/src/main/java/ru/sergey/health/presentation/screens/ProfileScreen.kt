@@ -2,8 +2,6 @@ package ru.sergey.health.presentation.screens
 
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
@@ -53,7 +51,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -61,13 +58,9 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import coil.compose.rememberAsyncImagePainter
-import coil.compose.rememberImagePainter
-import coil.request.ImageRequest
 import ru.sergey.health.R
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.viewmodel.ProfileViewModel
-import java.io.File
 
 @Composable
 fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: NavHostController) {
@@ -80,11 +73,9 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
         contract = ActivityResultContracts.GetContent(),
         onResult = { uri: Uri? ->
             uri?.let {
-                // Сохраняем изображение в локальное хранилище
-                val savedPath = viewModel.saveImageToInternalStorage(context, it)
-                savedPath?.let { path ->
-                    viewModel.setAvatar(path)  // Сохраняем путь к локальному изображению в состоянии
-                }
+                // Преобразуем URI в ImageBitmap
+                val imageBitmap = viewModel.uriToImageBitmap(context, it)
+                viewModel.setAvatar(imageBitmap)
             }
         }
     )
@@ -109,11 +100,7 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
                     .background(Color.Gray)
                     .clickable {if (isEditable.value) { imagePickerLauncher.launch("image/*")} } // Открыть галерею
             ) {
-
-                val uri = player.value.player.avatar
-                val imageBitmap = viewModel.loadImageFromStorage(context)
-
-                imageBitmap?.let {
+                player.value.imgAvatar?.let {
                     Image(
                         bitmap = it,
                         contentDescription = "Profile Image",

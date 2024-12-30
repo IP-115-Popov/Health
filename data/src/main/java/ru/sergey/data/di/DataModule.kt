@@ -6,10 +6,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import ru.sergey.data.repository.AvatarRepositoryImp
 import ru.sergey.data.repository.ProfileRepositoryImp
 import ru.sergey.data.repository.TaskRepositoryImp
 import ru.sergey.data.storage.TaskDao
 import ru.sergey.data.storage.TaskRoomDatabase
+import ru.sergey.domain.repository.AvatarRepository
 import ru.sergey.domain.repository.ProfileRepository
 import ru.sergey.domain.repository.TasksRepository
 import javax.inject.Singleton
@@ -33,5 +35,11 @@ class DataModule {
     @Singleton
     fun provideProfileRepository(@ApplicationContext context: Context): ProfileRepository {
         return ProfileRepositoryImp(context)
+    }
+
+    @Provides
+    @Singleton
+    fun provideAvatarRepository(@ApplicationContext context: Context): AvatarRepository {
+        return AvatarRepositoryImp(context)
     }
 }

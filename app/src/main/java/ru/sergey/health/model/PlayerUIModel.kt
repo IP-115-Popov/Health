@@ -1,8 +1,7 @@
 package ru.sergey.health.model
 
-import ru.sergey.data.storage.PlayerStorage
-import ru.sergey.domain.models.Player
 import android.net.Uri
+import ru.sergey.domain.models.Player
 
 data class PlayerUIModel(
     val name : String = "",
