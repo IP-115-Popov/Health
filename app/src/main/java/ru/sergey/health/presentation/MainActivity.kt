@@ -1,5 +1,7 @@
 package ru.sergey.health.presentation
 
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -17,6 +19,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,6 +36,26 @@ import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
 import ru.sergey.health.presentation.viewmodel.GraphViewModel
 import ru.sergey.health.presentation.viewmodel.ProfileViewModel
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
+import android.Manifest.permission.READ_MEDIA_IMAGES
+import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.PermissionStatus
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
+import android.provider.Settings
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -43,48 +67,88 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Создаем канал уведомлений, если это необходимо
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "your_channel_id"
+            val channelName = "Your Channel Name"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = "Your channel description"
+            }
+
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        // Проверка разрешений для уведомлений для Android 13 и выше
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            if (!notificationManager.areNotificationsEnabled()) {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS).apply {
+                    putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(intent)
+            }
+        }
         setContent {
             HealthTheme {
-                Main(tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
+                val p = remember { mutableStateOf(false) }
+                GetPermission(p)
+                if (p.value) {
+                   Main(this, tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
+                }
             }
         }
     }
 }
+@Composable
+fun GetPermission(p: MutableState<Boolean>){
+    val louncher =  rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()) { isPermissionGranded ->
+            p.value = isPermissionGranded
+        }
 
+    SideEffect {
+        louncher.launch(READ_EXTERNAL_STORAGE)
+    }
+}
 @Composable
 fun Main(
+    context: Context,
     tasksViewModel: TasksViewModel,
     addTasksViewModel: AddTasksViewModel,
     graphViewModel: GraphViewModel,
     profileViewModel: ProfileViewModel
 ) {
-    val navController = rememberNavController()
-    Column {
-        NavHost(
-            navController = navController,
-            startDestination = NavRoutes.TasksScreen.route,
-            modifier = Modifier.fillMaxHeight(0.9f)
-        ) {
-            composable(NavRoutes.TasksScreen.route) {
-                TasksScreen(tasksViewModel, navController)
-            }
-            composable(NavRoutes.ProfileScreen.route) {
-                ProfileScreen(profileViewModel, navController)
-            }
-            composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
-                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
-                AddTasksScreen(addTasksViewModel, navController, taskId)
-            }
-            composable(NavRoutes.GraphScreen.route) { backStackEntry ->
-                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
-                GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
+        val navController = rememberNavController()
+        Column {
+            NavHost(
+                navController = navController,
+                startDestination = NavRoutes.TasksScreen.route,
+                modifier = Modifier.fillMaxHeight(0.9f)
+            ) {
+                composable(NavRoutes.TasksScreen.route) {
+                    TasksScreen(tasksViewModel, navController)
+                }
+                composable(NavRoutes.ProfileScreen.route) {
+                    ProfileScreen(context = context,profileViewModel, navController)
+                }
+                composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
+                    val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
+                    AddTasksScreen(addTasksViewModel, navController, taskId)
+                }
+                composable(NavRoutes.GraphScreen.route) { backStackEntry ->
+                    val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
+                    GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
+                }
             }
 
+            BottomNavigationBar(
+                navController = navController, modifier = Modifier.fillMaxHeight()
+            )
         }
-        BottomNavigationBar(
-            navController = navController, modifier = Modifier.fillMaxHeight()
-        )
-    }
 }
 
 @Composable
