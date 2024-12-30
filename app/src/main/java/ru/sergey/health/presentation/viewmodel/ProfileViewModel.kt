@@ -22,14 +22,7 @@ class ProfileViewModel @Inject constructor(
 )
     : ViewModel()
 {
-    private val _state = MutableStateFlow(ProfileUiState(Player(
-        name = "abober",
-        avatar = "a[sfl[al",
-        level = 5,
-        ex = 1009,
-        closeTasksId = listOf(1,2,3),
-        openTasksId = listOf(1,2,3)
-    )))
+    private val _state = MutableStateFlow(ProfileUiState(Player()))
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
 
     init {
@@ -47,6 +40,13 @@ class ProfileViewModel @Inject constructor(
             saveProfileUseCase.execute(state.value.player)
         }
     }
+
+    fun setName(value: String) {
+        _state.update {
+            it.copy(player = it.player.copy(name = value))
+        }
+    }
+
 
     override fun onCleared() {
         savePlayer()

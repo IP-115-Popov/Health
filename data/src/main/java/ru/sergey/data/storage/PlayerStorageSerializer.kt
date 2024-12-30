@@ -11,10 +11,11 @@ object PlayerStorageSerializer : Serializer<PlayerStorage> {
     override val defaultValue: PlayerStorage = PlayerStorage()
 
     override suspend fun readFrom(input: InputStream): PlayerStorage {
+        val t = input.readBytes().toString(Charsets.UTF_8)
         return try{
             Json.decodeFromString(
                 deserializer = PlayerStorage.serializer(),
-                string = input.readBytes().toString()
+                string = t
             )
         } catch (e: Exception) {
             e.printStackTrace()
@@ -23,12 +24,14 @@ object PlayerStorageSerializer : Serializer<PlayerStorage> {
     }
 
     override suspend fun writeTo(t: PlayerStorage, output: OutputStream) {
+        val jsonString = Json.encodeToString(
+            serializer = PlayerStorage.serializer(),
+            value = t
+        )
+        val ByteArray = jsonString.toByteArray(Charsets.UTF_8)
         withContext(Dispatchers.IO) {
             output.write(
-                Json.encodeToString(
-                    serializer = PlayerStorage.serializer(),
-                    value = t
-                ).encodeToByteArray()
+                ByteArray
             )
         }
     }
