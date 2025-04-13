@@ -9,9 +9,12 @@ import ru.sergey.data.profile.serializer.PlayerStorageSerializer
 import ru.sergey.domain.profile.models.Player
 import ru.sergey.domain.task.repository.ProfileRepository
 
-private val Context.protoDataStore by dataStore("Profile.json", serializer = PlayerStorageSerializer)
+private val Context.protoDataStore by dataStore(
+    "Profile.json",
+    serializer = PlayerStorageSerializer
+)
 
-class ProfileRepositoryImp(val context: Context): ProfileRepository {
+class ProfileRepositoryImp(val context: Context) : ProfileRepository {
 
     override suspend fun save(player: Player) {
         context.protoDataStore.updateData {
@@ -19,7 +22,7 @@ class ProfileRepositoryImp(val context: Context): ProfileRepository {
         }
     }
 
-    override suspend fun get() : Flow<Player> {
-        return context.protoDataStore.data.map { it.toPlayer()}
+    override suspend fun get(): Flow<Player> {
+        return context.protoDataStore.data.map { it.toPlayer() }
     }
 }

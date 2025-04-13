@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.map
 import ru.sergey.data.task.db.DataTaskDomainTaskConverter
 import ru.sergey.data.task.db.TaskDao
 import ru.sergey.data.task.db.TaskPointsEntity
+import ru.sergey.domain.profile.repository.TasksRepository
 import ru.sergey.domain.task.models.Points
 import ru.sergey.domain.task.models.Task
-import ru.sergey.domain.profile.repository.TasksRepository
 
 class TaskRepositoryImp(val taskDao: TaskDao) : TasksRepository {
 

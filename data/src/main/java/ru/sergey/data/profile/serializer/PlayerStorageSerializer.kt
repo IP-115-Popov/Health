@@ -13,7 +13,7 @@ object PlayerStorageSerializer : Serializer<PlayerStorage> {
 
     override suspend fun readFrom(input: InputStream): PlayerStorage {
         val t = input.readBytes().toString(Charsets.UTF_8)
-        return try{
+        return try {
             Json.decodeFromString(
                 deserializer = PlayerStorage.serializer(),
                 string = t

@@ -13,10 +13,10 @@ interface TaskDao {
     fun getTasks(): Flow<List<TaskStorage>>
 
     @Upsert
-    fun updateTask(taskStorage : TaskStorage)
+    fun updateTask(taskStorage: TaskStorage)
 
     @Insert
-    fun insertTask(taskStorage : TaskStorage): Long
+    fun insertTask(taskStorage: TaskStorage): Long
 
     @Query("SELECT * FROM ${TaskStorage.TABLE_NAME} WHERE taskId = :taskId LIMIT 1")
     fun getTaskById(taskId: Int): TaskStorage?

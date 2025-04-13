@@ -1,6 +1,5 @@
 package ru.sergey.data.task.db
 
-import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
@@ -20,10 +19,10 @@ import ru.sergey.domain.task.models.Points
             childColumns = [TASK_ID],  // Указываем столбец taskId в дочерней таблице
             onDelete = ForeignKey.CASCADE // Указываем, что делать при удалении задачи
         )
-    ])
+    ]
+)
 class TaskPointsEntity(
     @PrimaryKey(autoGenerate = true)
-    @NonNull
     @ColumnInfo(name = POINT_ID)
     val pointId: Int = 0,
 
@@ -44,13 +43,14 @@ class TaskPointsEntity(
         const val POINTS = "points"
 
         fun toEntity(points: Points): TaskPointsEntity {
-           return TaskPointsEntity(
-               pointId = points.pointId,
-               taskId = points.taskId,
-               date = points.date,
-               points = points.points
+            return TaskPointsEntity(
+                pointId = points.pointId,
+                taskId = points.taskId,
+                date = points.date,
+                points = points.points
             )
         }
+
         fun fromEntity(taskPointsEntity: TaskPointsEntity): Points {
             return Points(
                 pointId = taskPointsEntity.pointId,

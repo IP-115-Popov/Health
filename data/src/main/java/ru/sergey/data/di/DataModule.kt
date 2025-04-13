@@ -8,12 +8,12 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import ru.sergey.data.profile.repository.AvatarRepositoryImp
 import ru.sergey.data.profile.repository.ProfileRepositoryImp
-import ru.sergey.data.task.repository.TaskRepositoryImp
 import ru.sergey.data.task.db.TaskDao
 import ru.sergey.data.task.db.TaskRoomDatabase
+import ru.sergey.data.task.repository.TaskRepositoryImp
+import ru.sergey.domain.profile.repository.TasksRepository
 import ru.sergey.domain.task.repository.AvatarRepository
 import ru.sergey.domain.task.repository.ProfileRepository
-import ru.sergey.domain.profile.repository.TasksRepository
 import javax.inject.Singleton
 
 @Module
