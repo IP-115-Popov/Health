@@ -2,7 +2,7 @@ package ru.sergey.data.storage
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import ru.sergey.domain.models.Player
+import ru.sergey.domain.profile.models.Player
 
 @Serializable
 data class PlayerStorage(

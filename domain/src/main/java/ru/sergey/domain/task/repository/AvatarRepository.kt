@@ -1,4 +1,4 @@
-package ru.sergey.domain.repository
+package ru.sergey.domain.task.repository
 
 interface AvatarRepository {
     fun save(byteArray: ByteArray)

@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 import ru.sergey.data.storage.TaskPointsEntity.Companion.TABLE_NAME
 import ru.sergey.data.storage.TaskPointsEntity.Companion.TASK_ID
 import ru.sergey.data.storage.TaskStorage.Companion.ID
-import ru.sergey.domain.models.Points
+import ru.sergey.domain.task.models.Points
 
 
 @Entity(

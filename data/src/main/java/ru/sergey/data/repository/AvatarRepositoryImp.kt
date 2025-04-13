@@ -1,7 +1,7 @@
 package ru.sergey.data.repository
 
 import android.content.Context
-import ru.sergey.domain.repository.AvatarRepository
+import ru.sergey.domain.task.repository.AvatarRepository
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream

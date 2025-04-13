@@ -1,4 +1,4 @@
-package ru.sergey.domain.models
+package ru.sergey.domain.task.models
 
 data class Points(
     val pointId: Int,

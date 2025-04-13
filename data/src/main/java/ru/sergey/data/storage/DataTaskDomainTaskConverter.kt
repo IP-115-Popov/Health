@@ -1,6 +1,6 @@
 package ru.sergey.data.storage
 
-import ru.sergey.domain.models.Task
+import ru.sergey.domain.task.models.Task
 
 class DataTaskDomainTaskConverter {
     fun DataTaskToDomainTask(task : TaskStorage) : Task {

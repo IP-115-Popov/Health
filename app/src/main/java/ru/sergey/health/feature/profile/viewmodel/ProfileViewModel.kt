@@ -17,11 +17,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import ru.sergey.domain.UseCase.GetAvatarUseCase
-import ru.sergey.domain.UseCase.GetProfileUseCase
-import ru.sergey.domain.UseCase.SaveAvatarUseCase
-import ru.sergey.domain.UseCase.SaveProfileUseCase
-import ru.sergey.domain.models.Player
+import ru.sergey.domain.profile.usecase.GetAvatarUseCase
+import ru.sergey.domain.profile.usecase.GetProfileUseCase
+import ru.sergey.domain.profile.usecase.SaveAvatarUseCase
+import ru.sergey.domain.profile.usecase.SaveProfileUseCase
+import ru.sergey.domain.profile.models.Player
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 

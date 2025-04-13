@@ -40,7 +40,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
-import ru.sergey.domain.models.Task
+import ru.sergey.domain.task.models.Task
 import ru.sergey.health.R
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 import ru.sergey.health.ui.NavRoutes

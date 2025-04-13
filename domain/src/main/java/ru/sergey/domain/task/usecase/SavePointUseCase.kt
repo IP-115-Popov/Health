@@ -1,15 +1,14 @@
-package ru.sergey.domain.UseCase
+package ru.sergey.domain.task.usecase
 
 import kotlinx.coroutines.flow.first
-import ru.sergey.domain.models.Points
-import ru.sergey.domain.repository.TasksRepository
+import ru.sergey.domain.profile.repository.TasksRepository
+import ru.sergey.domain.task.models.Points
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class SavePointUseCase (private val tasksRepository: TasksRepository) {
-    suspend fun execute(taskId: Int, taskPoint: Int)
-    {
+class SavePointUseCase(private val tasksRepository: TasksRepository) {
+    suspend fun execute(taskId: Int, taskPoint: Int) {
         val pointsList = tasksRepository.getPointByTaskId(taskId)
 
         val currentDate = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Date())

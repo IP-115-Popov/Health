@@ -11,9 +11,9 @@ import ru.sergey.data.repository.ProfileRepositoryImp
 import ru.sergey.data.repository.TaskRepositoryImp
 import ru.sergey.data.storage.TaskDao
 import ru.sergey.data.storage.TaskRoomDatabase
-import ru.sergey.domain.repository.AvatarRepository
-import ru.sergey.domain.repository.ProfileRepository
-import ru.sergey.domain.repository.TasksRepository
+import ru.sergey.domain.task.repository.AvatarRepository
+import ru.sergey.domain.task.repository.ProfileRepository
+import ru.sergey.domain.profile.repository.TasksRepository
 import javax.inject.Singleton
 
 @Module
