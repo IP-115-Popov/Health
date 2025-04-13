@@ -1,13 +1,13 @@
-package ru.sergey.data.storage
+package ru.sergey.data.task.db
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import ru.sergey.data.storage.TaskPointsEntity.Companion.TABLE_NAME
-import ru.sergey.data.storage.TaskPointsEntity.Companion.TASK_ID
-import ru.sergey.data.storage.TaskStorage.Companion.ID
+import ru.sergey.data.task.db.TaskPointsEntity.Companion.TABLE_NAME
+import ru.sergey.data.task.db.TaskPointsEntity.Companion.TASK_ID
+import ru.sergey.data.task.db.TaskStorage.Companion.ID
 import ru.sergey.domain.task.models.Points
 
 

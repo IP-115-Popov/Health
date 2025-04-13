@@ -1,10 +1,10 @@
-package ru.sergey.data.repository
+package ru.sergey.data.task.repository
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import ru.sergey.data.storage.DataTaskDomainTaskConverter
-import ru.sergey.data.storage.TaskDao
-import ru.sergey.data.storage.TaskPointsEntity
+import ru.sergey.data.task.db.DataTaskDomainTaskConverter
+import ru.sergey.data.task.db.TaskDao
+import ru.sergey.data.task.db.TaskPointsEntity
 import ru.sergey.domain.task.models.Points
 import ru.sergey.domain.task.models.Task
 import ru.sergey.domain.profile.repository.TasksRepository
@@ -15,23 +15,23 @@ class TaskRepositoryImp(val taskDao: TaskDao) : TasksRepository {
 
 
     override suspend fun saveTask(task: Task): Int {
-        return taskDao.insertTask(dataTaskDomainTaskConverter.DomainTaskToDataTask(task)).toInt()
+        return taskDao.insertTask(dataTaskDomainTaskConverter.domainTaskToDataTask(task)).toInt()
     }
 
     override suspend fun updateTask(task: Task) {
-        taskDao.updateTask(dataTaskDomainTaskConverter.DomainTaskToDataTask(task))
+        taskDao.updateTask(dataTaskDomainTaskConverter.domainTaskToDataTask(task))
     }
 
     override suspend fun downloadTasks(): Flow<List<Task>> {
         val res = taskDao.getTasks().map {
-            it.map { task -> dataTaskDomainTaskConverter.DataTaskToDomainTask(task) }
+            it.map { task -> dataTaskDomainTaskConverter.dataTaskToDomainTask(task) }
         }
         return res
     }
 
     override suspend fun downloadTask(id: Int): Task? {
         val res =
-            taskDao.getTaskById(id)?.let { dataTaskDomainTaskConverter.DataTaskToDomainTask(it) }
+            taskDao.getTaskById(id)?.let { dataTaskDomainTaskConverter.dataTaskToDomainTask(it) }
         return res
     }
 

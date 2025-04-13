@@ -1,11 +1,11 @@
-package ru.sergey.data.repository
+package ru.sergey.data.profile.repository
 
 import android.content.Context
 import androidx.datastore.dataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import ru.sergey.data.storage.PlayerStorage
-import ru.sergey.data.storage.PlayerStorageSerializer
+import ru.sergey.data.profile.model.PlayerStorage
+import ru.sergey.data.profile.serializer.PlayerStorageSerializer
 import ru.sergey.domain.profile.models.Player
 import ru.sergey.domain.task.repository.ProfileRepository
 

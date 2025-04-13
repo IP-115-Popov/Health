@@ -1,4 +1,4 @@
-package ru.sergey.data.storage
+package ru.sergey.data.profile.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

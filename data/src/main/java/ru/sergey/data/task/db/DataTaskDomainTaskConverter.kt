@@ -1,9 +1,9 @@
-package ru.sergey.data.storage
+package ru.sergey.data.task.db
 
 import ru.sergey.domain.task.models.Task
 
 class DataTaskDomainTaskConverter {
-    fun DataTaskToDomainTask(task : TaskStorage) : Task {
+    fun dataTaskToDomainTask(task : TaskStorage) : Task {
         return with(task) {
             Task(
                 id = id,
@@ -15,7 +15,7 @@ class DataTaskDomainTaskConverter {
             )
         }
     }
-    fun DomainTaskToDataTask(task : Task) : TaskStorage {
+    fun domainTaskToDataTask(task : Task) : TaskStorage {
         return with(task) {
             TaskStorage(
                 id = id,

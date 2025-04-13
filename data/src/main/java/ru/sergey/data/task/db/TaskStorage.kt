@@ -1,10 +1,10 @@
-package ru.sergey.data.storage
+package ru.sergey.data.task.db
 
 import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.sergey.data.storage.TaskStorage.Companion.TABLE_NAME
+import ru.sergey.data.task.db.TaskStorage.Companion.TABLE_NAME
 
 @Entity(tableName = TABLE_NAME)
 class TaskStorage (

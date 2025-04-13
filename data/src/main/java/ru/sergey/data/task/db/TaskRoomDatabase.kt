@@ -1,4 +1,4 @@
-package ru.sergey.data.storage
+package ru.sergey.data.task.db
 
 import android.content.Context
 import androidx.room.Database

@@ -1,4 +1,4 @@
-package ru.sergey.data.storage
+package ru.sergey.data.task.db
 
 import androidx.room.Dao
 import androidx.room.Insert

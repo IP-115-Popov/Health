@@ -1,4 +1,4 @@
-package ru.sergey.data.repository
+package ru.sergey.data.profile.repository
 
 import android.content.Context
 import ru.sergey.domain.task.repository.AvatarRepository
