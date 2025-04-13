@@ -1,7 +1,6 @@
 package ru.sergey.health.presentation.screens
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -11,10 +10,8 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
@@ -42,34 +39,40 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
-import ru.sergey.domain.models.Task
 import ru.sergey.health.R
 import ru.sergey.health.presentation.theme.ui.HealthTheme
 import ru.sergey.health.presentation.viewmodel.GraphViewModel
 import ru.sergey.health.presentation.viewmodel.TasksViewModel
 import java.text.SimpleDateFormat
 import java.util.Locale
-import kotlin.random.Random
+
 fun String.toMillis(): Long {
     val format = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault())
     return format.parse(this)?.time ?: 0L
 }
-@OptIn(ExperimentalFoundationApi::class)
+
 @Composable
-fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: TasksViewModel, navController: NavHostController) {
+fun GraphScreen(
+    taskId: Int,
+    graphViewModel: GraphViewModel,
+    tasksViewModel: TasksViewModel,
+    navController: NavHostController
+) {
     val graphState = graphViewModel.state.collectAsState()
     val tasksState = tasksViewModel.tasksUiState.collectAsState()
 
-    val initialPage = 0//tasksState.value.tasks.indexOfFirst { task: Task -> task.id == taskId }
+    val initialPage = 0
 
-    val pagerState = rememberPagerState(initialPage = initialPage){ tasksState.value.tasks.size }
+    val pagerState = rememberPagerState(initialPage = initialPage) { tasksState.value.tasks.size }
 
     val coroutineScope = rememberCoroutineScope()
 
 // LaunchedEffect для загрузки данных при изменении текущей страницы
     LaunchedEffect(pagerState.currentPage) {
-        val task = tasksState.value.tasks[pagerState.currentPage]
-        graphViewModel.loadData(task.id) // Загрузка данных для текущей страницы
+        if (tasksState.value.tasks.size > 0) {
+            val task = tasksState.value.tasks[pagerState.currentPage]
+            graphViewModel.loadData(task.id) // Загрузка данных для текущей страницы
+        }
     }
 
     Scaffold(
@@ -77,7 +80,9 @@ fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: Tas
     ) { innerPadding ->
 
 
-        HorizontalPager(state = pagerState, Modifier.fillMaxHeight(), contentPadding = innerPadding) { page ->
+        HorizontalPager(
+            state = pagerState, Modifier.fillMaxHeight(), contentPadding = innerPadding
+        ) { page ->
             Column(Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
                 val product = tasksState.value.tasks[page]
                 Box(
@@ -86,12 +91,9 @@ fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: Tas
                         .fillMaxHeight(0.1f)
                 ) {
                     Text(
-                        product.title,
-                        style = HealthTheme.typography.h1.copy(
-                            color = HealthTheme.colors.text,
-                            fontSize = 42.sp
-                        ),
-                        modifier = Modifier.align(Alignment.Center)
+                        product.title, style = HealthTheme.typography.h1.copy(
+                            color = HealthTheme.colors.text, fontSize = 42.sp
+                        ), modifier = Modifier.align(Alignment.Center)
                     )
                 }
                 Box(
@@ -100,24 +102,26 @@ fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: Tas
                         .fillMaxHeight(0.8f)
                         .background(HealthTheme.colors.card)
                 ) {
-                    if (graphState.value.pointsList.size <= 1){
-                        Text(text = stringResource(R.string.no_data), style = HealthTheme.typography.h1)
+                    if (graphState.value.pointsList.size <= 1) {
+                        Text(
+                            text = stringResource(R.string.no_data),
+                            style = HealthTheme.typography.h1
+                        )
                     } else {
                         PointsGraph(graphState.value.pointsList.map { it.date.toMillis() to it.points })
                     }
                 }
                 Box(
-                    Modifier
-                        .fillMaxWidth(0.9f)){
+                    Modifier.fillMaxWidth(0.9f)
+                ) {
                     Text(
-                        text = product.description,
-                        style = HealthTheme.typography.h1.copy(color = HealthTheme.colors.text, fontSize = 28.sp),
-                        modifier = Modifier.align(Alignment.Center)
+                        text = product.description, style = HealthTheme.typography.h1.copy(
+                            color = HealthTheme.colors.text, fontSize = 28.sp
+                        ), modifier = Modifier.align(Alignment.Center)
                     )
                 }
                 Row {
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowLeft,
+                    Icon(imageVector = Icons.Default.KeyboardArrowLeft,
                         contentDescription = "Next Page",
                         modifier = Modifier
                             .size(75.dp)
@@ -125,10 +129,8 @@ fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: Tas
                                 coroutineScope.launch {
                                     pagerState.animateScrollToPage(pagerState.currentPage - 1)
                                 }
-                            }
-                    )
-                    Icon(
-                        imageVector = Icons.Default.KeyboardArrowRight,
+                            })
+                    Icon(imageVector = Icons.Default.KeyboardArrowRight,
                         contentDescription = "Next Page",
                         modifier = Modifier
                             .size(75.dp)
@@ -136,8 +138,7 @@ fun GraphScreen(taskId: Int, graphViewModel: GraphViewModel, tasksViewModel: Tas
                                 coroutineScope.launch {
                                     pagerState.animateScrollToPage(pagerState.currentPage + 1)
                                 }
-                            }
-                    )
+                            })
                 }
             }
         }
@@ -169,10 +170,8 @@ fun PointsGraph(points: List<Pair<Long, Int>>) {
 
         // Ось Y (баллы)
         drawLine(
-            color = Color.Black,
-            start = Offset(30f, 0f), // Ось Y начинается с нижнего левого угла
-            end = Offset(30f, canvasHeight),
-            strokeWidth = 3f
+            color = Color.Black, start = Offset(30f, 0f), // Ось Y начинается с нижнего левого угла
+            end = Offset(30f, canvasHeight), strokeWidth = 3f
         )
 
         // Масштабирование по оси X (время)
@@ -188,9 +187,7 @@ fun PointsGraph(points: List<Pair<Long, Int>>) {
             val y = canvasHeight - 30f - (point.second - minPoints) * yScale // Сдвиг Y на 30f
 
             drawCircle(
-                color = Color.Blue,
-                radius = 7f,
-                center = Offset(x, y)
+                color = Color.Blue, radius = 7f, center = Offset(x, y)
             )
         }
 
@@ -203,10 +200,7 @@ fun PointsGraph(points: List<Pair<Long, Int>>) {
             val y2 = canvasHeight - 30f - (next.second - minPoints) * yScale // Сдвиг Y на 30f
 
             drawLine(
-                color = Color.Red,
-                start = Offset(x1, y1),
-                end = Offset(x2, y2),
-                strokeWidth = 3f
+                color = Color.Red, start = Offset(x1, y1), end = Offset(x2, y2), strokeWidth = 3f
             )
         }
     }

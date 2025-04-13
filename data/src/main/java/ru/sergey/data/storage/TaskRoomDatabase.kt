@@ -8,13 +8,27 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [TaskStorage::class, TaskPointsEntity::class], version = 1
 )
-abstract class TaskRoomDatabase: RoomDatabase() {
+abstract class TaskRoomDatabase : RoomDatabase() {
 
     abstract fun TaskDao(): TaskDao
 
     companion object {
-        fun buildDatabase(context: Context, dbName: String) : TaskRoomDatabase {
-            return Room.databaseBuilder(context, TaskRoomDatabase::class.java , dbName).build()
+        const val DATABASE_NAME = "task_database_1.db"
+
+        @Volatile
+        private var INSTANCE: TaskRoomDatabase? = null
+
+        fun getInstance(context: Context): TaskRoomDatabase {
+            INSTANCE?.let { return it }
+            val application = context.applicationContext
+            synchronized(this) {
+                INSTANCE?.let { return it }
+                val appDb =
+                    Room.databaseBuilder(application, TaskRoomDatabase::class.java, DATABASE_NAME)
+                        .fallbackToDestructiveMigration().build()
+                INSTANCE = appDb
+                return appDb
+            }
         }
     }
 }

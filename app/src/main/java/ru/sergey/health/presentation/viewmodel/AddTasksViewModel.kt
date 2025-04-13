@@ -82,7 +82,7 @@ class AddTasksViewModel @Inject constructor(
         val state = _tasksUiState.value
         if (state.titleText.isNotBlank() && state.descriptionText.isNotBlank() && state.targetPointsText > 0) {
             viewModelScope.launch(Dispatchers.IO) {
-                addTaskUseCase.exectute(
+                addTaskUseCase.execute(
                     Task(
                         id = state.id,
                         title = state.titleText,

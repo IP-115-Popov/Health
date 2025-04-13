@@ -30,7 +30,7 @@ class TasksViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            downloadTasksUseCase.exectute().onEach { tasks: List<Task> ->
+            downloadTasksUseCase.execute().onEach { tasks: List<Task> ->
                 withContext(Dispatchers.Main) {
                     _tasksUiState.update {
                         it.copy(tasks = tasks)

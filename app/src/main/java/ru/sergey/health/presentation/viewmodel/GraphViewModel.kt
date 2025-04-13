@@ -12,12 +12,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.sergey.domain.UseCase.GetPointsUseCase
-import ru.sergey.domain.models.Points
-import ru.sergey.domain.models.Task
 import javax.inject.Inject
 
 @HiltViewModel
-class GraphViewModel@Inject constructor(
+class GraphViewModel @Inject constructor(
     val getPointsUseCase: GetPointsUseCase,
 ) : ViewModel() {
 
@@ -25,8 +23,6 @@ class GraphViewModel@Inject constructor(
     val state: StateFlow<GraphUiState> = _state.asStateFlow()
 
     fun loadData(taskId: Int) {
-        //_state.update { it.copy(task = task) }
-
 //        _state.update {
 //                    it.copy(pointsList = listOf(
 //                        Points(0,0,"10.10.2024", 5),

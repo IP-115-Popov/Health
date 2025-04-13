@@ -1,7 +1,9 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.devtoolsKsp)
+    alias(libs.plugins.serialization)
 }
 
 android {
@@ -36,6 +38,10 @@ android {
 dependencies {
     implementation(project(":domain"))
 
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.compiler)
+    ksp(libs.hilt.compiler)
+
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     implementation (libs.androidx.runtime.livedata)
@@ -48,4 +54,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    implementation(libs.androidx.datastore)
+
+    implementation(libs.kotlinx.serialization.json)
 }

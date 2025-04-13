@@ -7,9 +7,15 @@ import dagger.hilt.android.components.ViewModelComponent
 import ru.sergey.domain.UseCase.AddTaskUseCase
 import ru.sergey.domain.UseCase.DeleteTaskUseCase
 import ru.sergey.domain.UseCase.DownloadTasksUseCase
+import ru.sergey.domain.UseCase.GetAvatarUseCase
 import ru.sergey.domain.UseCase.GetPointsUseCase
+import ru.sergey.domain.UseCase.GetProfileUseCase
 import ru.sergey.domain.UseCase.GetTaskUseCase
+import ru.sergey.domain.UseCase.SaveAvatarUseCase
+import ru.sergey.domain.UseCase.SaveProfileUseCase
 import ru.sergey.domain.UseCase.UpdateTaskUseCase
+import ru.sergey.domain.repository.AvatarRepository
+import ru.sergey.domain.repository.ProfileRepository
 import ru.sergey.domain.repository.TasksRepository
 
 @Module
@@ -38,5 +44,21 @@ class DomainModule {
     @Provides
     fun provideGetPointsUseCase(tasksRepository: TasksRepository) : GetPointsUseCase {
         return GetPointsUseCase(tasksRepository = tasksRepository)
+    }
+    @Provides
+    fun provideGetProfileUseCase(profileRepository: ProfileRepository) : GetProfileUseCase {
+        return GetProfileUseCase(profileRepository = profileRepository)
+    }
+    @Provides
+    fun provideSaveProfileUseCase(profileRepository: ProfileRepository) : SaveProfileUseCase {
+        return SaveProfileUseCase(profileRepository = profileRepository)
+    }
+    @Provides
+    fun provideSaveAvatarUseCase(avatarRepository: AvatarRepository) : SaveAvatarUseCase {
+        return SaveAvatarUseCase(avatarRepository = avatarRepository)
+    }
+    @Provides
+    fun provideGetAvatarUseCase(avatarRepository: AvatarRepository) : GetAvatarUseCase {
+        return GetAvatarUseCase(avatarRepository = avatarRepository)
     }
 }
