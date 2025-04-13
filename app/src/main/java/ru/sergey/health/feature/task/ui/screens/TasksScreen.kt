@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.screens
+package ru.sergey.health.feature.task.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -42,16 +42,16 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.domain.models.Task
 import ru.sergey.health.R
-import ru.sergey.health.presentation.NavRoutes
-import ru.sergey.health.presentation.theme.ui.HealthTheme
-import ru.sergey.health.presentation.viewmodel.TasksViewModel
+import ru.sergey.health.feature.task.viewmodel.TasksViewModel
+import ru.sergey.health.ui.NavRoutes
+import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
-fun TasksScreen(vm : TasksViewModel, navController: NavHostController) {
-val tasks = vm.tasksUiState.collectAsState()
+fun TasksScreen(vm: TasksViewModel, navController: NavHostController) {
+    val tasks = vm.tasksUiState.collectAsState()
 
     Scaffold(
-        topBar = { TaskTopBar(navController)},
+        topBar = { TaskTopBar(navController) },
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
@@ -102,7 +102,7 @@ fun TaskTopBar(navController: NavHostController) {
                 )
             }
         }
-    },actions = {
+    }, actions = {
         Box(
             modifier = Modifier.fillMaxHeight(),
         ) {
@@ -111,28 +111,27 @@ fun TaskTopBar(navController: NavHostController) {
                     val navRoute: String =
                         NavRoutes.AddTasksScreen.route.replace("{taskId}", "0")
                     navController.navigate(navRoute)
-                          },
+                },
                 modifier = Modifier.align(Alignment.CenterStart)
             ) {
                 Icon(
-                    imageVector =  ImageVector.vectorResource(R.drawable.ic_add_24),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_add_24),
                     contentDescription = "Add"
                 )
             }
         }
     },
-    colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = HealthTheme.colors.primary,
-        titleContentColor = HealthTheme.colors.primary,
-        navigationIconContentColor = HealthTheme.colors.iconColor,
-        actionIconContentColor = HealthTheme.colors.iconColor,
-    ), modifier = Modifier.height(56.dp)
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = HealthTheme.colors.primary,
+            titleContentColor = HealthTheme.colors.primary,
+            navigationIconContentColor = HealthTheme.colors.iconColor,
+            actionIconContentColor = HealthTheme.colors.iconColor,
+        ), modifier = Modifier.height(56.dp)
     )
 }
 
 @Composable
-fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
-{
+fun TaskView(task: Task, vm: TasksViewModel, edit: () -> Unit) {
     val textModifier = Modifier.padding(5.dp)
 
     var expanded by remember { mutableStateOf(false) }
@@ -153,17 +152,18 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
         Text(
             text = task.title,
             style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
-            modifier = textModifier.then(Modifier.constrainAs(tvTitle){
-            top.linkTo(parent.top)
-            start.linkTo(parent.start, margin = 20.dp)
-        }))
+            modifier = textModifier.then(Modifier.constrainAs(tvTitle) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start, margin = 20.dp)
+            })
+        )
         Text(
             text = task.description,
             style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
-            modifier = textModifier.then(Modifier.constrainAs(tvDescription){
-            top.linkTo(bthEdit.bottom)
-            start.linkTo(parent.start, margin = 20.dp)
-            end.linkTo(bthEdit.start, margin = 8.dp)
+            modifier = textModifier.then(Modifier.constrainAs(tvDescription) {
+                top.linkTo(bthEdit.bottom)
+                start.linkTo(parent.start, margin = 20.dp)
+                end.linkTo(bthEdit.start, margin = 8.dp)
             }),
             maxLines = 3, // Установите максимальное количество строк
             overflow = TextOverflow.Ellipsis // Если текст превышает, будет добавлено
@@ -171,10 +171,11 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
         Text(
             text = task.points.toString() + "/" + task.targetPoints + "   " + task.measureUnit,
             style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
-            modifier = textModifier.then(Modifier.constrainAs(tvPoint){
-            bottom.linkTo(parent.bottom)
-            start.linkTo(parent.start, margin = 20.dp)
-        }))
+            modifier = textModifier.then(Modifier.constrainAs(tvPoint) {
+                bottom.linkTo(parent.bottom)
+                start.linkTo(parent.start, margin = 20.dp)
+            })
+        )
 
         IconButton(onClick = {
             expanded = true
@@ -188,7 +189,7 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
                     top.linkTo(parent.top)
                     end.linkTo(parent.end)
                 }
-        ){
+        ) {
             Icon(imageVector = Icons.Filled.List, contentDescription = "Меню задач")
         }
         IconButton(onClick = {
@@ -202,7 +203,7 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
                     bottom.linkTo(parent.bottom)
                     end.linkTo(parent.end)
                 }
-        ){
+        ) {
             Image(
                 imageVector = Icons.Filled.Add,
                 contentDescription = "Значок редактирования задачи",
@@ -217,7 +218,7 @@ fun TaskView(task: Task, vm : TasksViewModel, edit: ()->Unit)
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
 
-            ) {
+                ) {
                 DropdownMenuItem(
                     onClick = {
                         expanded = false

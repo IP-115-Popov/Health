@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.viewmodel
+package ru.sergey.health.feature.newtask.viewmodel
 
 data class AddTaskUIState(
     val id: Int = 0,

@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.viewmodel
+package ru.sergey.health.feature.profile.viewmodel
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -67,7 +67,7 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun saveAvatar() {
-        state.value.imgAvatar?.let { data: ImageBitmap->
+        state.value.imgAvatar?.let { data: ImageBitmap ->
             val byteArray = imageBitmapToByteArray(data)
 
             saveAvatarUseCase.execute(byteArray)
@@ -79,7 +79,7 @@ class ProfileViewModel @Inject constructor(
         val data = byteArrayToImageBitmap(byteArray)
 
         _state.update {
-         it.copy(imgAvatar = data)
+            it.copy(imgAvatar = data)
         }
     }
 
@@ -98,12 +98,14 @@ class ProfileViewModel @Inject constructor(
         val bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
         return bitmap.asImageBitmap()
     }
+
     // Преобразуем URI в ImageBitmap
     fun uriToImageBitmap(context: Context, uri: Uri): ImageBitmap {
         val inputStream = context.contentResolver.openInputStream(uri)
         val bitmap = BitmapFactory.decodeStream(inputStream)
         return bitmap.asImageBitmap()
     }
+
     override fun onCleared() {
         savePlayer()
     }

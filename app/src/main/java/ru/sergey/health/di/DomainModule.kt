@@ -22,43 +22,52 @@ import ru.sergey.domain.repository.TasksRepository
 @InstallIn(ViewModelComponent::class)
 class DomainModule {
     @Provides
-    fun provideAddTaskUseCase(tasksRepository: TasksRepository) : AddTaskUseCase {
+    fun provideAddTaskUseCase(tasksRepository: TasksRepository): AddTaskUseCase {
         return AddTaskUseCase(tasksRepository = tasksRepository)
     }
+
     @Provides
-    fun provideDownloadTasksUseCase(tasksRepository: TasksRepository) : DownloadTasksUseCase {
+    fun provideDownloadTasksUseCase(tasksRepository: TasksRepository): DownloadTasksUseCase {
         return DownloadTasksUseCase(tasksRepository = tasksRepository)
     }
+
     @Provides
-    fun provideGetTaskUseCase(tasksRepository: TasksRepository) : GetTaskUseCase {
+    fun provideGetTaskUseCase(tasksRepository: TasksRepository): GetTaskUseCase {
         return GetTaskUseCase(tasksRepository = tasksRepository)
     }
+
     @Provides
-    fun provideDeleteTaskUseCase(tasksRepository: TasksRepository) : DeleteTaskUseCase {
+    fun provideDeleteTaskUseCase(tasksRepository: TasksRepository): DeleteTaskUseCase {
         return DeleteTaskUseCase(tasksRepository = tasksRepository)
     }
+
     @Provides
-    fun provideUpdateTaskUseCase(tasksRepository: TasksRepository) : UpdateTaskUseCase {
+    fun provideUpdateTaskUseCase(tasksRepository: TasksRepository): UpdateTaskUseCase {
         return UpdateTaskUseCase(tasksRepository = tasksRepository)
     }
+
     @Provides
-    fun provideGetPointsUseCase(tasksRepository: TasksRepository) : GetPointsUseCase {
+    fun provideGetPointsUseCase(tasksRepository: TasksRepository): GetPointsUseCase {
         return GetPointsUseCase(tasksRepository = tasksRepository)
     }
+
     @Provides
-    fun provideGetProfileUseCase(profileRepository: ProfileRepository) : GetProfileUseCase {
+    fun provideGetProfileUseCase(profileRepository: ProfileRepository): GetProfileUseCase {
         return GetProfileUseCase(profileRepository = profileRepository)
     }
+
     @Provides
-    fun provideSaveProfileUseCase(profileRepository: ProfileRepository) : SaveProfileUseCase {
+    fun provideSaveProfileUseCase(profileRepository: ProfileRepository): SaveProfileUseCase {
         return SaveProfileUseCase(profileRepository = profileRepository)
     }
+
     @Provides
-    fun provideSaveAvatarUseCase(avatarRepository: AvatarRepository) : SaveAvatarUseCase {
+    fun provideSaveAvatarUseCase(avatarRepository: AvatarRepository): SaveAvatarUseCase {
         return SaveAvatarUseCase(avatarRepository = avatarRepository)
     }
+
     @Provides
-    fun provideGetAvatarUseCase(avatarRepository: AvatarRepository) : GetAvatarUseCase {
+    fun provideGetAvatarUseCase(avatarRepository: AvatarRepository): GetAvatarUseCase {
         return GetAvatarUseCase(avatarRepository = avatarRepository)
     }
 }

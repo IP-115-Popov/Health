@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.theme.ui
+package ru.sergey.health.ui.theme.ui
 
 import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.text.TextStyle
@@ -27,7 +27,7 @@ val SimpleTypography = HealthTypography(
         letterSpacing = 0.15.sp,
         lineHeight = 22.sp,
     ),
-    button= TextStyle(
+    button = TextStyle(
         color = White,
         fontSize = 18.sp,
         fontFamily = FontFamily(Font(R.font.roboto_regular)),
@@ -37,12 +37,12 @@ val SimpleTypography = HealthTypography(
         lineHeight = 22.sp,
     ),
     navigation = TextStyle(
-       color = White,
-       fontSize = 10.sp,
-       fontFamily = FontFamily(Font(R.font.roboto_regular)),
-       fontWeight = FontWeight(500),
-       letterSpacing = 0.15.sp,
-       lineHeight = 22.sp,
-   ),
+        color = White,
+        fontSize = 10.sp,
+        fontFamily = FontFamily(Font(R.font.roboto_regular)),
+        fontWeight = FontWeight(500),
+        letterSpacing = 0.15.sp,
+        lineHeight = 22.sp,
+    ),
 
-)
+    )

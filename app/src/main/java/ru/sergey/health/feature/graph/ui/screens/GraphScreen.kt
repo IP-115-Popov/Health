@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.screens
+package ru.sergey.health.feature.graph.ui.screens
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
@@ -40,9 +40,9 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import ru.sergey.health.R
-import ru.sergey.health.presentation.theme.ui.HealthTheme
-import ru.sergey.health.presentation.viewmodel.GraphViewModel
-import ru.sergey.health.presentation.viewmodel.TasksViewModel
+import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
+import ru.sergey.health.feature.task.viewmodel.TasksViewModel
+import ru.sergey.health.ui.theme.ui.HealthTheme
 import java.text.SimpleDateFormat
 import java.util.Locale
 

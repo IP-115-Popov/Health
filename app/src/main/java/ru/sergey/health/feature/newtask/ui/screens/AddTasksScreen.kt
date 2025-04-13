@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.screens
+package ru.sergey.health.feature.newtask.ui.screens
 
 import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
@@ -55,8 +55,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
-import ru.sergey.health.presentation.theme.ui.HealthTheme
-import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
+import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
+import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
 fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: Int = 0) {
@@ -245,7 +245,8 @@ fun StyledTextField(
 
     val keyboardController = LocalSoftwareKeyboardController.current
 
-    OutlinedTextField(value = text,
+    OutlinedTextField(
+        value = text,
         onValueChange = { newText ->
             if (newText != text) {
                 onValueChange(newText)

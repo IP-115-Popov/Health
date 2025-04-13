@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.viewmodel
+package ru.sergey.health.feature.graph.viewmodel
 
 import ru.sergey.domain.models.Points
 

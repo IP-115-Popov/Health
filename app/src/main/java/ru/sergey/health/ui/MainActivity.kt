@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation
+package ru.sergey.health.ui
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.app.NotificationChannel
@@ -36,15 +36,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
-import ru.sergey.health.presentation.screens.AddTasksScreen
-import ru.sergey.health.presentation.screens.GraphScreen
-import ru.sergey.health.presentation.screens.ProfileScreen
-import ru.sergey.health.presentation.screens.TasksScreen
-import ru.sergey.health.presentation.theme.ui.HealthTheme
-import ru.sergey.health.presentation.viewmodel.AddTasksViewModel
-import ru.sergey.health.presentation.viewmodel.GraphViewModel
-import ru.sergey.health.presentation.viewmodel.ProfileViewModel
-import ru.sergey.health.presentation.viewmodel.TasksViewModel
+import ru.sergey.health.feature.graph.ui.screens.GraphScreen
+import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
+import ru.sergey.health.feature.newtask.ui.screens.AddTasksScreen
+import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
+import ru.sergey.health.feature.profile.ui.screens.ProfileScreen
+import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
+import ru.sergey.health.feature.task.ui.screens.TasksScreen
+import ru.sergey.health.feature.task.viewmodel.TasksViewModel
+import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.theme.ui
+package ru.sergey.health.ui.theme.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.staticCompositionLocalOf

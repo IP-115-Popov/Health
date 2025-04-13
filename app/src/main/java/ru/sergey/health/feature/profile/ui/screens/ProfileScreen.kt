@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.screens
+package ru.sergey.health.feature.profile.ui.screens
 
 import android.content.Context
 import android.net.Uri
@@ -59,8 +59,8 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
-import ru.sergey.health.presentation.theme.ui.HealthTheme
-import ru.sergey.health.presentation.viewmodel.ProfileViewModel
+import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
+import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
 fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: NavHostController) {
@@ -82,11 +82,13 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
 
     Scaffold(
         topBar = { ProfileTopBar(navController, expanded, isEditable) }
-    ) { innerPadding->
-        ConstraintLayout(modifier = Modifier
-            .background(HealthTheme.colors.background)
-            .fillMaxSize()
-            .padding(innerPadding)) {
+    ) { innerPadding ->
+        ConstraintLayout(
+            modifier = Modifier
+                .background(HealthTheme.colors.background)
+                .fillMaxSize()
+                .padding(innerPadding)
+        ) {
             val (avatar, name, level, exp, bthEdit, tasksCount) = createRefs()
 
             // Показываем фото профиля
@@ -98,7 +100,11 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
                     }
                     .size(100.dp)
                     .background(Color.Gray)
-                    .clickable {if (isEditable.value) { imagePickerLauncher.launch("image/*")} } // Открыть галерею
+                    .clickable {
+                        if (isEditable.value) {
+                            imagePickerLauncher.launch("image/*")
+                        }
+                    } // Открыть галерею
             ) {
                 player.value.imgAvatar?.let {
                     Image(
@@ -121,21 +127,23 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
                     Icon(
                         imageVector = Icons.Default.Create,
                         contentDescription = "Edit photo",
-                        modifier = Modifier.size(30.dp).padding(top = 4.dp, end = 4.dp)
+                        modifier = Modifier
+                            .size(30.dp)
+                            .padding(top = 4.dp, end = 4.dp)
                             .align(Alignment.TopEnd)
                     )
                 }
             }
 
             StyledEditableTextField(
-                text =  player.value.player.name,
+                text = player.value.player.name,
                 placeholderText = "Name",
                 enabled = isEditable.value,
                 modifier = Modifier.constrainAs(name) {
                     top.linkTo(avatar.bottom)
                     centerHorizontallyTo(parent)
                 },
-                onValueChange = {viewModel.setName(it)}
+                onValueChange = { viewModel.setName(it) }
             )
 
             Column(modifier = Modifier
@@ -162,7 +170,7 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
                 )
             }
 
-            Column (modifier = Modifier
+            Column(modifier = Modifier
                 .constrainAs(exp) {
                     top.linkTo(level.bottom, margin = 16.dp)
                     start.linkTo(parent.start)
@@ -198,12 +206,12 @@ fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: 
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Closed Tasks" ,
+                    text = "Closed Tasks",
                     style = HealthTheme.typography.h1
                         .copy(color = HealthTheme.colors.text),
                 )
                 Text(
-                    text = player.value.player.closeTasksId.size.toString() + "/" + player.value.player.openTasksId.size.toString() ,
+                    text = player.value.player.closeTasksId.size.toString() + "/" + player.value.player.openTasksId.size.toString(),
                     style = HealthTheme.typography.h1
                         .copy(color = HealthTheme.colors.text),
                 )
@@ -360,29 +368,29 @@ fun ProfileTopBar(
             }
         }
     },
-    actions = {
-        Box(
-            modifier = Modifier.fillMaxHeight(),
-        ) {
-            IconButton(
-                onClick = {
-                    expanded.value = true
-                },
-                modifier = Modifier.align(Alignment.CenterStart)
+        actions = {
+            Box(
+                modifier = Modifier.fillMaxHeight(),
             ) {
-                Icon(
-                    imageVector =  Icons.Default.Menu,
-                    contentDescription = "Add"
-                )
+                IconButton(
+                    onClick = {
+                        expanded.value = true
+                    },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Add"
+                    )
+                }
             }
-        }
-    },
-    colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = HealthTheme.colors.primary,
-        titleContentColor = HealthTheme.colors.primary,
-        navigationIconContentColor = HealthTheme.colors.iconColor,
-        actionIconContentColor = HealthTheme.colors.iconColor,
-    ),
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = HealthTheme.colors.primary,
+            titleContentColor = HealthTheme.colors.primary,
+            navigationIconContentColor = HealthTheme.colors.iconColor,
+            actionIconContentColor = HealthTheme.colors.iconColor,
+        ),
         modifier = Modifier.height(56.dp)
     )
 }

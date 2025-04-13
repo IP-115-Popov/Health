@@ -1,4 +1,4 @@
-package ru.sergey.health.presentation.viewmodel
+package ru.sergey.health.feature.newtask.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -95,6 +95,7 @@ class AddTasksViewModel @Inject constructor(
             }
         }
     }
+
     fun updateTask() {
         val state = _tasksUiState.value
         if (state.titleText.isNotBlank() && state.descriptionText.isNotBlank() && state.targetPointsText > 0) {

@@ -1,7 +1,7 @@
-package ru.sergey.health.presentation.viewmodel
+package ru.sergey.health.feature.task.viewmodel
 
 import ru.sergey.domain.models.Task
 
-data class TasksUIState (
+data class TasksUIState(
     val tasks: List<Task> = emptyList()
 )
