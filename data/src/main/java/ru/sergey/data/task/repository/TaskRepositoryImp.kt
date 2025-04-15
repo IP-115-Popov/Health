@@ -9,7 +9,7 @@ import ru.sergey.domain.profile.repository.TasksRepository
 import ru.sergey.domain.task.models.Points
 import ru.sergey.domain.task.models.Task
 
-class TaskRepositoryImp(val taskDao: TaskDao) : TasksRepository {
+class TaskRepositoryImp(private val taskDao: TaskDao) : TasksRepository {
 
     val dataTaskDomainTaskConverter = DataTaskDomainTaskConverter()
 
