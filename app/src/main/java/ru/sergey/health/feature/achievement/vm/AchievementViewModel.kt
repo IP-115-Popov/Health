@@ -1,30 +1,37 @@
 package ru.sergey.health.feature.achievement.vm
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import ru.sergey.domain.achievement.models.Achievement
-import ru.sergey.domain.achievement.models.AchievementContext
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import ru.sergey.domain.achievement.usecase.GetAchievementsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class AchievementViewModel @Inject constructor() : ViewModel() {
-    private val _state = MutableStateFlow(
-        AchievementState(
-            achievements = listOf(
-                Achievement(
-                    id = 0,
-                    title = "title",
-                    description = "title",
-                    isUnlocked = false,
-                    context = AchievementContext.TotalPoints(pointsRequired = 2),
-                    progress = 0,
-                    progressMaxValue = 10,
-                )
-            )
-        )
-    )
+class AchievementViewModel @Inject constructor(
+    private val getAchievementsUseCase: GetAchievementsUseCase
+) : ViewModel() {
+    private val _state = MutableStateFlow(AchievementState())
     val state: StateFlow<AchievementState> = _state.asStateFlow()
+
+    init {
+        getAchievement()
+    }
+
+    private fun getAchievement() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAchievementsUseCase().collect { updated ->
+                _state.update {
+                    it.copy(
+                        achievements = updated
+                    )
+                }
+            }
+        }
+    }
 }

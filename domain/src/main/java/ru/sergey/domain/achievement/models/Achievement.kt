@@ -6,8 +6,8 @@ data class Achievement(
     val description: String,
     val isUnlocked: Boolean = false,
     val context: AchievementContext,
-    val progress: Int = 0, // Текущий прогресс достижения (например, количество очков)
-    val progressMaxValue: Int, // Максимальное значение прогресса (для отображения прогресса)
+    val progress: Int = 0,
+    val progressMaxValue: Int,
 )
 
 sealed class AchievementContext {
