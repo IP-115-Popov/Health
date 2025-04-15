@@ -53,13 +53,13 @@ private data class BarItem(
 private object NavBarItems {
     val BarItems = listOf(
         BarItem(
-            title = "TaskScreen", image = Icons.Filled.Home, route = NavRoutes.TasksScreen.route
+            title = "Задачи", image = Icons.Filled.Home, route = NavRoutes.TasksScreen.route
         ),
         BarItem(
-            title = "GraphScreen", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
+            title = "Графы", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
         ),
         BarItem(
-            title = "ProfileScreen",
+            title = "Профиль",
             image = Icons.Filled.Person,
             route = NavRoutes.ProfileScreen.route
         ),

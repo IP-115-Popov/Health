@@ -139,7 +139,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
 
             StyledEditableTextField(
                 text = player.value.player.name,
-                placeholderText = "Name",
+                placeholderText = stringResource(R.string.name),
                 enabled = isEditable.value,
                 modifier = Modifier.constrainAs(name) {
                     top.linkTo(avatar.bottom)
@@ -161,7 +161,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "level",
+                    text = stringResource(R.string.level),
                     style = HealthTheme.typography.h1
                         .copy(color = HealthTheme.colors.text),
                 )
@@ -185,7 +185,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "exp",
+                    text = stringResource(R.string.exp),
                     style = HealthTheme.typography.h1
                         .copy(color = HealthTheme.colors.text),
                 )
@@ -208,7 +208,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Closed Tasks",
+                    text = stringResource(R.string.closed_tasks),
                     style = HealthTheme.typography.h1
                         .copy(color = HealthTheme.colors.text),
                 )
@@ -239,7 +239,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Сохранить")
+                        Text(stringResource(R.string.save))
                     }
                 }
             }
@@ -261,7 +261,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                         expanded.value = false
                         isEditable.value = true
                     },
-                    text = { Text("Редактировать") }
+                    text = { Text(stringResource(R.string.edit)) }
                 )
             }
         }

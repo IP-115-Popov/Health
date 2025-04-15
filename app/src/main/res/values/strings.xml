@@ -12,4 +12,12 @@
     <string name="graph">Граф</string>
     <string name="no_data">Нет Данных</string>
     <string name="profile">Профиль</string>
+    <string name="name">Имя</string>
+    <string name="level">Уровень</string>
+    <string name="exp">Опыт</string>
+    <string name="closed_tasks">Закрытые задачи</string>
+    <string name="save">Сохранить</string>
+    <string name="edit">Редактировать</string>
+    <string name="entry_added">Запись добавлена</string>
+    <string name="fill_in_the_fields">Заполните поля</string>
 </resources>

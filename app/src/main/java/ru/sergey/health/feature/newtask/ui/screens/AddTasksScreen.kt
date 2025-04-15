@@ -64,10 +64,10 @@ fun AddTasksScreen(vm: AddTasksViewModel, navController: NavHostController, id: 
 
     // Toasts
     val toastAdded = Toast.makeText(
-        LocalContext.current, "Запись добавлена", Toast.LENGTH_SHORT
+        LocalContext.current, stringResource(R.string.entry_added), Toast.LENGTH_SHORT
     )
     val toastNotAdded = Toast.makeText(
-        LocalContext.current, "Заполните поля", Toast.LENGTH_SHORT
+        LocalContext.current, stringResource(R.string.fill_in_the_fields), Toast.LENGTH_SHORT
     )
 
     LaunchedEffect(id) {
