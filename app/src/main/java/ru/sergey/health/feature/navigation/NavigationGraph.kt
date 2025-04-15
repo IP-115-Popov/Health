@@ -6,6 +6,8 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.sergey.health.feature.achievement.ui.screen.AchievementScreen
+import ru.sergey.health.feature.achievement.vm.AchievementViewModel
 import ru.sergey.health.feature.graph.ui.screens.GraphScreen
 import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
 import ru.sergey.health.feature.newtask.ui.screens.AddTasksScreen
@@ -22,6 +24,7 @@ fun NavigationGraph(
     addTasksViewModel: AddTasksViewModel,
     graphViewModel: GraphViewModel,
     profileViewModel: ProfileViewModel,
+    achievementViewModel: AchievementViewModel,
 ) {
     NavHost(
     navController = navController,
@@ -41,6 +44,9 @@ fun NavigationGraph(
         composable(NavRoutes.GraphScreen.route) { backStackEntry ->
             val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
             GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
+        }
+        composable(NavRoutes.AchievementScreen.route) {
+            AchievementScreen(navController = navController, achievementViewModel = achievementViewModel)
         }
     }
 }

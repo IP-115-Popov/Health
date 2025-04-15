@@ -1,6 +1,7 @@
 package ru.sergey.health.feature.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Star
@@ -56,12 +57,17 @@ private object NavBarItems {
             title = "Задачи", image = Icons.Filled.Home, route = NavRoutes.TasksScreen.route
         ),
         BarItem(
-            title = "Графы", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
+            title = "Графы", image = Icons.Filled.Done, route = NavRoutes.GraphScreen.route
         ),
         BarItem(
             title = "Профиль",
             image = Icons.Filled.Person,
             route = NavRoutes.ProfileScreen.route
+        ),
+        BarItem(
+            title = "Достижения",
+            image = Icons.Filled.Star,
+            route = NavRoutes.AchievementScreen.route
         ),
     )
 }

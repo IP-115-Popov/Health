@@ -36,6 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import ru.sergey.health.feature.achievement.vm.AchievementViewModel
 import ru.sergey.health.feature.graph.ui.screens.GraphScreen
 import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
 import ru.sergey.health.feature.navigation.BottomNavigationBar
@@ -56,6 +57,7 @@ class MainActivity : ComponentActivity() {
     private val addTasksViewModel: AddTasksViewModel by viewModels()
     private val graphViewModel: GraphViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
+    private val achievementViewModel: AchievementViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,7 +93,13 @@ class MainActivity : ComponentActivity() {
                 val p = remember { mutableStateOf(false) }
                 GetPermission(p)
                 if (p.value) {
-                    Main(tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
+                    Main(
+                        tasksViewModel = tasksViewModel,
+                        addTasksViewModel = addTasksViewModel,
+                        graphViewModel = graphViewModel,
+                        profileViewModel = profileViewModel,
+                        achievementViewModel = achievementViewModel
+                    )
                 }
             }
         }
@@ -115,7 +123,8 @@ fun Main(
     tasksViewModel: TasksViewModel,
     addTasksViewModel: AddTasksViewModel,
     graphViewModel: GraphViewModel,
-    profileViewModel: ProfileViewModel
+    profileViewModel: ProfileViewModel,
+    achievementViewModel: AchievementViewModel,
 ) {
     val navController = rememberNavController()
     Column {
@@ -125,6 +134,7 @@ fun Main(
             addTasksViewModel = addTasksViewModel,
             graphViewModel = graphViewModel,
             profileViewModel = profileViewModel,
+            achievementViewModel = achievementViewModel
         )
 
         BottomNavigationBar(
