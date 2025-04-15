@@ -51,6 +51,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -63,7 +64,8 @@ import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
-fun ProfileScreen(context: Context, viewModel: ProfileViewModel, navController: NavHostController) {
+fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController) {
+    val context = LocalContext.current
     val player = viewModel.state.collectAsState()
     val isEditable = remember { mutableStateOf(false) }
     val expanded = remember { mutableStateOf(false) }

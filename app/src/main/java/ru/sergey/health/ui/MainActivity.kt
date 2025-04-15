@@ -38,6 +38,9 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.sergey.health.feature.graph.ui.screens.GraphScreen
 import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
+import ru.sergey.health.feature.navigation.BottomNavigationBar
+import ru.sergey.health.feature.navigation.NavRoutes
+import ru.sergey.health.feature.navigation.NavigationGraph
 import ru.sergey.health.feature.newtask.ui.screens.AddTasksScreen
 import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
 import ru.sergey.health.feature.profile.ui.screens.ProfileScreen
@@ -88,7 +91,7 @@ class MainActivity : ComponentActivity() {
                 val p = remember { mutableStateOf(false) }
                 GetPermission(p)
                 if (p.value) {
-                    Main(this, tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
+                    Main(tasksViewModel, addTasksViewModel, graphViewModel, profileViewModel)
                 }
             }
         }
@@ -102,7 +105,6 @@ fun GetPermission(p: MutableState<Boolean>) {
     ) { isPermissionGranded ->
         p.value = isPermissionGranded
     }
-
     SideEffect {
         louncher.launch(READ_EXTERNAL_STORAGE)
     }
@@ -110,7 +112,6 @@ fun GetPermission(p: MutableState<Boolean>) {
 
 @Composable
 fun Main(
-    context: Context,
     tasksViewModel: TasksViewModel,
     addTasksViewModel: AddTasksViewModel,
     graphViewModel: GraphViewModel,
@@ -118,26 +119,13 @@ fun Main(
 ) {
     val navController = rememberNavController()
     Column {
-        NavHost(
+        NavigationGraph(
             navController = navController,
-            startDestination = NavRoutes.TasksScreen.route,
-            modifier = Modifier.fillMaxHeight(0.9f)
-        ) {
-            composable(NavRoutes.TasksScreen.route) {
-                TasksScreen(tasksViewModel, navController)
-            }
-            composable(NavRoutes.ProfileScreen.route) {
-                ProfileScreen(context = context, profileViewModel, navController)
-            }
-            composable(NavRoutes.AddTasksScreen.route) { backStackEntry ->
-                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
-                AddTasksScreen(addTasksViewModel, navController, taskId)
-            }
-            composable(NavRoutes.GraphScreen.route) { backStackEntry ->
-                val taskId = backStackEntry.arguments?.getString("taskId")?.toIntOrNull() ?: 0
-                GraphScreen(taskId, graphViewModel, tasksViewModel, navController)
-            }
-        }
+            tasksViewModel = tasksViewModel,
+            addTasksViewModel = addTasksViewModel,
+            graphViewModel = graphViewModel,
+            profileViewModel = profileViewModel,
+        )
 
         BottomNavigationBar(
             navController = navController, modifier = Modifier.fillMaxHeight()
@@ -145,60 +133,4 @@ fun Main(
     }
 }
 
-@Composable
-fun BottomNavigationBar(navController: NavController, modifier: Modifier = Modifier) {
-    NavigationBar(
-        modifier = modifier,
-        containerColor = HealthTheme.colors.primary,
-    ) {
-        val backStackEntry = navController.currentBackStackEntryAsState()
-        val currentRoute = backStackEntry.value?.destination?.route
 
-        NavBarItems.BarItems.forEach { navItem ->
-            NavigationBarItem(selected = currentRoute == navItem.route, onClick = {
-                navController.navigate(navItem.route)
-            }, icon = {
-                Icon(
-                    imageVector = navItem.image,
-                    contentDescription = navItem.title,
-                    tint = if (currentRoute == navItem.route) HealthTheme.colors.iconColor
-                    else HealthTheme.colors.placeholderText
-                )
-            }, label = {
-                Text(
-                    text = navItem.title,
-                    style = HealthTheme.typography.navigation, // Используем стиль из темы
-                    color = if (currentRoute == navItem.route) HealthTheme.colors.iconColor else HealthTheme.colors.placeholderText
-                )
-
-            })
-        }
-    }
-}
-
-data class BarItem(
-    val title: String, val image: ImageVector, val route: String
-)
-
-object NavBarItems {
-    val BarItems = listOf(
-        BarItem(
-            title = "TaskScreen", image = Icons.Filled.Home, route = NavRoutes.TasksScreen.route
-        ),
-        BarItem(
-            title = "GraphScreen", image = Icons.Filled.Star, route = NavRoutes.GraphScreen.route
-        ),
-        BarItem(
-            title = "ProfileScreen",
-            image = Icons.Filled.Person,
-            route = NavRoutes.ProfileScreen.route
-        ),
-    )
-}
-
-sealed class NavRoutes(val route: String) {
-    object TasksScreen : NavRoutes("TasksScreen")
-    object AddTasksScreen : NavRoutes("AddTasksScreen/{taskId}")
-    object GraphScreen : NavRoutes("GraphScreen/{taskId}")
-    object ProfileScreen : NavRoutes("ProfileScreen")
-}

@@ -2,14 +2,14 @@
     <string name="app_name">Health</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
-    <string name="TargetPoints">TargetPoints</string>
-    <string name="addTask">Add</string>
-    <string name="measure_unit">Measure Unit</string>
-    <string name="tasks">Tasks</string>
-    <string name="add_task">Add Task</string>
+    <string name="TargetPoints">Цель</string>
+    <string name="addTask">Добавить</string>
+    <string name="measure_unit">Еденица измерения</string>
+    <string name="tasks">Задачи</string>
+    <string name="add_task">Добавить задачу</string>
     <string name="Save">Сохранить</string>
-    <string name="points">points</string>
-    <string name="graph">Graph</string>
-    <string name="no_data">No Data</string>
-    <string name="profile">Profile</string>
+    <string name="points">Очки</string>
+    <string name="graph">Граф</string>
+    <string name="no_data">Нет Данных</string>
+    <string name="profile">Профиль</string>
 </resources>
