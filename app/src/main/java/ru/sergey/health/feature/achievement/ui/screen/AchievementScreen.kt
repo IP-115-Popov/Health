@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import ru.sergey.health.feature.achievement.ui.components.AchievementTopBar
 import ru.sergey.health.feature.achievement.ui.components.AchievementUiModel
 import ru.sergey.health.feature.achievement.vm.AchievementViewModel
+import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
 fun AchievementScreen(
@@ -25,6 +26,7 @@ fun AchievementScreen(
 
     Scaffold(
         topBar = { AchievementTopBar(navController) },
+        containerColor = HealthTheme.colors.background,
     ) { innerPadding ->
         LazyColumn(modifier = Modifier.padding(innerPadding).fillMaxSize().padding(16.dp)) {
             items(state.value.achievements, key = {it.id}) { achievement ->

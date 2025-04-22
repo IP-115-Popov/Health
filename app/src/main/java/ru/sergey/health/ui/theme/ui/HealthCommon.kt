@@ -13,6 +13,8 @@ data class HealthColors(
     val text: Color,
     val card: Color,
     val green: Color,
+    val yellow: Color,
+    val iconColorOff: Color,
 )
 
 data class HealthTypography(

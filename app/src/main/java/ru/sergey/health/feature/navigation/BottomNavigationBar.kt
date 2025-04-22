@@ -33,13 +33,14 @@ fun BottomNavigationBar(navController: NavController, modifier: Modifier = Modif
                     imageVector = navItem.image,
                     contentDescription = navItem.title,
                     tint = if (currentRoute == navItem.route) HealthTheme.colors.iconColor
-                    else HealthTheme.colors.placeholderText
+                    else HealthTheme.colors.iconColorOff
                 )
             }, label = {
                 Text(
                     text = navItem.title,
                     style = HealthTheme.typography.navigation, // Используем стиль из темы
-                    color = if (currentRoute == navItem.route) HealthTheme.colors.iconColor else HealthTheme.colors.placeholderText
+                    color = if (currentRoute == navItem.route) HealthTheme.colors.iconColor
+                    else HealthTheme.colors.iconColorOff
                 )
 
             })

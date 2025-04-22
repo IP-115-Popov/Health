@@ -77,6 +77,7 @@ fun GraphScreen(
 
     Scaffold(
         topBar = { GraphTopBar(navController) },
+        containerColor = HealthTheme.colors.background,
     ) { innerPadding ->
 
 
@@ -122,7 +123,8 @@ fun GraphScreen(
                 }
                 Row {
                     Icon(imageVector = Icons.Default.KeyboardArrowLeft,
-                        contentDescription = "Next Page",
+                        contentDescription = "Previous Page",
+                        tint = HealthTheme.colors.iconColor,
                         modifier = Modifier
                             .size(75.dp)
                             .clickable {
@@ -132,6 +134,7 @@ fun GraphScreen(
                             })
                     Icon(imageVector = Icons.Default.KeyboardArrowRight,
                         contentDescription = "Next Page",
+                        tint = HealthTheme.colors.iconColor,
                         modifier = Modifier
                             .size(75.dp)
                             .clickable {
