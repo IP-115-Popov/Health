@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -40,6 +41,8 @@ class AchievementViewModel @Inject constructor(
                 achievements.map { achievement ->
                     updateAchievement(achievement, gameController)
                 }
+            }.map {
+                it.sortedBy { !it.isUnlocked }
             }.catch { e ->
                 Log.e("AchievementViewModel","Error during achievements update: ${e.message}")
             }.collect { updatedAchievements ->

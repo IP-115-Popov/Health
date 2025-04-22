@@ -11,7 +11,8 @@ data class HealthColors(
     val primary: Color,
     val placeholderText: Color,
     val text: Color,
-    val card: Color
+    val card: Color,
+    val green: Color,
 )
 
 data class HealthTypography(

@@ -28,7 +28,7 @@ fun AchievementUiModel(achievement: Achievement) {
         modifier = Modifier
             .fillMaxWidth()
             .height(60.dp)
-            .background(color = HealthTheme.colors.card, shape = RoundedCornerShape(16.dp))
+            .background(color = if(achievement.isUnlocked)  HealthTheme.colors.green else HealthTheme.colors.card, shape = RoundedCornerShape(16.dp))
             .padding(8.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
@@ -59,17 +59,30 @@ fun AchievementUiModel(achievement: Achievement) {
 @Composable
 fun AchievementUiModelPreview() {
     HealthTheme {
-        AchievementUiModel(
-            achievement = Achievement(
-                id = 0,
-                title = "title",
-                description = "title",
-                isUnlocked = false,
-                context = AchievementContext.TotalPoints(pointsRequired = 2),
-                progress = 10,
-                progressMaxValue = 10,
+        Column {
+            AchievementUiModel(
+                achievement = Achievement(
+                    id = 0,
+                    title = "title",
+                    description = "title",
+                    isUnlocked = false,
+                    context = AchievementContext.TotalPoints(pointsRequired = 2),
+                    progress = 10,
+                    progressMaxValue = 10,
+                )
             )
-        )
-    }
+            AchievementUiModel(
+                achievement = Achievement(
+                    id = 0,
+                    title = "title",
+                    description = "title",
+                    isUnlocked = true,
+                    context = AchievementContext.TotalPoints(pointsRequired = 2),
+                    progress = 10,
+                    progressMaxValue = 10,
+                )
+            )
+        }
 
+    }
 }
