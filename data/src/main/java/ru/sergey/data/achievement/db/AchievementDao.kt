@@ -2,6 +2,7 @@ package ru.sergey.data.achievement.db
 
 import androidx.room.Dao
 import androidx.room.Query
+import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 import ru.sergey.data.achievement.model.AchievementEntity
 
@@ -9,6 +10,6 @@ import ru.sergey.data.achievement.model.AchievementEntity
 interface AchievementDao {
     @Query("SELECT * FROM ${AchievementEntity.TABLE_NAME}")
     fun getAchievements(): Flow<List<AchievementEntity>>
-//    @Query("UPDATE ${AchievementEntity.TABLE_NAME} SET isUnlocked = 1 WHERE id = :id")
-//    suspend fun setUnlockedAchievement(id: Long)
+    @Update
+    fun updateAchievement(achievementEntity: AchievementEntity)
 }

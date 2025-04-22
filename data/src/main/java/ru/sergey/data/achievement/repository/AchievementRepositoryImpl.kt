@@ -28,4 +28,12 @@ class AchievementRepositoryImpl @Inject constructor (private val achievementDao:
                 Log.e("AchievementRepository", "Error fetching achievements: ${e.message}")
                 emit(emptyList())
             }
+
+    override suspend fun updateAchievement(achievement: Achievement) {
+        try {
+            achievementDao.updateAchievement(AchievementEntity.toEntity(achievement))
+        } catch (e: Exception) {
+            Log.e("AchievementRepositoryImpl", "Error update Achievement ${e.message}")
+        }
+    }
 }

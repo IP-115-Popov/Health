@@ -23,8 +23,8 @@ import ru.sergey.domain.profile.repository.TasksRepository
 @InstallIn(ViewModelComponent::class)
 class DomainModule {
     @Provides
-    fun provideAddTaskUseCase(tasksRepository: TasksRepository, gameControllerRepository: GameControllerRepository): AddTaskUseCase {
-        return AddTaskUseCase(tasksRepository = tasksRepository, gameControllerRepository = gameControllerRepository)
+    fun provideAddTaskUseCase(tasksRepository: TasksRepository): AddTaskUseCase {
+        return AddTaskUseCase(tasksRepository = tasksRepository)
     }
 
     @Provides

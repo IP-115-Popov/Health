@@ -5,4 +5,5 @@ import ru.sergey.domain.achievement.models.Achievement
 
 interface AchievementRepository {
     suspend fun getAchievements(): Flow<List<Achievement>>
+    suspend fun updateAchievement(achievement: Achievement)
 }
