@@ -55,4 +55,8 @@ dependencies {
     implementation(libs.androidx.datastore)
 
     implementation(libs.kotlinx.serialization.json)
+    //datastore
+    implementation("androidx.datastore:datastore-preferences:1.0.0") // Или более новая версия
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
 }

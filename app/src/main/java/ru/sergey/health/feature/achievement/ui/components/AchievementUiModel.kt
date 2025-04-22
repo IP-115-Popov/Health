@@ -66,7 +66,7 @@ fun AchievementUiModelPreview() {
                 description = "title",
                 isUnlocked = false,
                 context = AchievementContext.TotalPoints(pointsRequired = 2),
-                progress = 0,
+                progress = 10,
                 progressMaxValue = 10,
             )
         )

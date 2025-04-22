@@ -4,6 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ViewModelComponent
+import ru.sergey.domain.gamecontroller.GameControllerRepository
 import ru.sergey.domain.task.usecase.AddTaskUseCase
 import ru.sergey.domain.task.usecase.DeleteTaskUseCase
 import ru.sergey.domain.task.usecase.DownloadTasksUseCase
@@ -22,8 +23,8 @@ import ru.sergey.domain.profile.repository.TasksRepository
 @InstallIn(ViewModelComponent::class)
 class DomainModule {
     @Provides
-    fun provideAddTaskUseCase(tasksRepository: TasksRepository): AddTaskUseCase {
-        return AddTaskUseCase(tasksRepository = tasksRepository)
+    fun provideAddTaskUseCase(tasksRepository: TasksRepository, gameControllerRepository: GameControllerRepository): AddTaskUseCase {
+        return AddTaskUseCase(tasksRepository = tasksRepository, gameControllerRepository = gameControllerRepository)
     }
 
     @Provides
@@ -42,8 +43,8 @@ class DomainModule {
     }
 
     @Provides
-    fun provideUpdateTaskUseCase(tasksRepository: TasksRepository): UpdateTaskUseCase {
-        return UpdateTaskUseCase(tasksRepository = tasksRepository)
+    fun provideUpdateTaskUseCase(tasksRepository: TasksRepository, gameControllerRepository: GameControllerRepository): UpdateTaskUseCase {
+        return UpdateTaskUseCase(tasksRepository = tasksRepository, gameControllerRepository = gameControllerRepository)
     }
 
     @Provides

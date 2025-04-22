@@ -22,7 +22,7 @@ import javax.inject.Inject
 class TasksViewModel @Inject constructor(
     val downloadTasksUseCase: DownloadTasksUseCase,
     val updateTaskUseCase: UpdateTaskUseCase,
-    val deleteTaskUseCase: DeleteTaskUseCase
+    val deleteTaskUseCase: DeleteTaskUseCase,
 ) : ViewModel() {
 
     private val _tasksUiState = MutableStateFlow(TasksUIState())
