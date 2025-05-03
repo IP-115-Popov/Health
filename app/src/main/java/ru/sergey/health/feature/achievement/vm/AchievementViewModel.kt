@@ -4,13 +4,11 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.update
@@ -43,21 +41,19 @@ class AchievementViewModel @Inject constructor(
             }.map {
                 it.sortedBy { !it.isUnlocked }
             }.catch { e ->
-                Log.e("AchievementViewModel","Error during achievements update: ${e.message}")
+                Log.e("AchievementViewModel", "Error during achievements update: ${e.message}")
             }.collect { updatedAchievements ->
                 withContext(Dispatchers.Main.immediate) {
                     _state.update {
                         it.copy(achievements = updatedAchievements)
                     }
                 }
-                saveAchievements(this, updatedAchievements, this@AchievementViewModel)
             }
         }
     }
 
     private fun updateAchievement(
-        achievement: Achievement,
-        gameController: GameController
+        achievement: Achievement, gameController: GameController
     ): Achievement = if (achievement.isUnlocked) {
         achievement.copy(progress = achievement.progressMaxValue)
     } else {
@@ -86,19 +82,19 @@ class AchievementViewModel @Inject constructor(
         }
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        saveAchievements()
+    }
+
     private fun saveAchievements(
-        coroutineScope: CoroutineScope,
-        updatedAchievements: List<Achievement>,
-        achievementViewModel: AchievementViewModel
-    ) {
-        coroutineScope.launch {
-            updatedAchievements.forEach {
-                achievementViewModel.updateAchievementUseCase(
-                    it.copy(
-                        isUnlocked = (it.progress >= it.progressMaxValue)
-                    )
+    ) = viewModelScope.launch(Dispatchers.IO) {
+        state.value.achievements.forEach { updateAchievement ->
+            updateAchievementUseCase(
+                updateAchievement.copy(
+                    isUnlocked = (updateAchievement.progress >= updateAchievement.progressMaxValue)
                 )
-            }
+            )
         }
     }
 }
