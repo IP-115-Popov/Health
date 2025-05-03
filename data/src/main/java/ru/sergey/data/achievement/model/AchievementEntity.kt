@@ -34,6 +34,7 @@ data class AchievementEntity(
                 isUnlocked = isUnlocked,
                 progress = progress,
                 progressMaxValue = progressMaxValue,
+                exp = exp
             )
             when (val con = context) {
                 is AchievementContext.StreakDays -> {
@@ -70,7 +71,8 @@ data class AchievementEntity(
             isUnlocked = isUnlocked,
             progress = progress,
             progressMaxValue = progressMaxValue,
-            context = context
+            exp = exp,
+            context = context,
         )
     }
 }

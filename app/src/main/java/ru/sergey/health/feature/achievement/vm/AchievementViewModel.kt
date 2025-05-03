@@ -32,21 +32,34 @@ class AchievementViewModel @Inject constructor(
     val state: StateFlow<AchievementState> = _state.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            getGameControllerUseCase().map { gameController ->
+        viewModelScope.launch {
+            launch(Dispatchers.IO) {
                 val achievements = getAchievementsUseCase().first()
-                achievements.map { achievement ->
-                    updateAchievement(achievement, gameController)
-                }
-            }.map {
-                it.sortedBy { !it.isUnlocked }
-            }.catch { e ->
-                Log.e("AchievementViewModel", "Error during achievements update: ${e.message}")
-            }.collect { updatedAchievements ->
                 withContext(Dispatchers.Main.immediate) {
                     _state.update {
-                        it.copy(achievements = updatedAchievements)
+                        it.copy(
+                            achievements = achievements
+                        )
                     }
+                }
+            }.join()
+
+            launch(Dispatchers.IO) {
+                getGameControllerUseCase().map { gameController ->
+                    state.value.achievements.map { achievement ->
+                        updateAchievement(achievement, gameController)
+                    }
+                }.map {
+                    it.sortedBy { !it.isUnlocked }
+                }.catch { e ->
+                    Log.e("AchievementViewModel", "Error during achievements update: ${e.message}")
+                }.collect { updatedAchievements ->
+                    withContext(Dispatchers.Main.immediate) {
+                        _state.update {
+                            it.copy(achievements = updatedAchievements)
+                        }
+                    }
+                    saveAchievements()
                 }
             }
         }
@@ -75,7 +88,9 @@ class AchievementViewModel @Inject constructor(
                         isUnlocked = gameController.totalPoints >= pointsRequired,
                         progress = gameController.totalPoints
                     )
-                } else achievement
+                } else {
+                    achievement
+                }
             }
         }
     }
@@ -85,7 +100,7 @@ class AchievementViewModel @Inject constructor(
         saveAchievements()
     }
 
-    private fun saveAchievements(
+    fun saveAchievements(
     ) = viewModelScope.launch(Dispatchers.IO) {
         state.value.achievements.forEach { updateAchievement ->
             updateAchievementUseCase(

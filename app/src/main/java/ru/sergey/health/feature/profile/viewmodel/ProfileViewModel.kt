@@ -10,6 +10,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -17,20 +18,23 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.sergey.domain.achievement.usecase.GetAchievementsUseCase
+import ru.sergey.domain.profile.models.Player
 import ru.sergey.domain.profile.usecase.GetAvatarUseCase
 import ru.sergey.domain.profile.usecase.GetProfileUseCase
 import ru.sergey.domain.profile.usecase.SaveAvatarUseCase
 import ru.sergey.domain.profile.usecase.SaveProfileUseCase
-import ru.sergey.domain.profile.models.Player
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    val getProfileUseCase: GetProfileUseCase,
-    val saveProfileUseCase: SaveProfileUseCase,
-    val saveAvatarUseCase: SaveAvatarUseCase,
-    val getAvatarUseCase: GetAvatarUseCase,
+    private val getProfileUseCase: GetProfileUseCase,
+    private val saveProfileUseCase: SaveProfileUseCase,
+    private val saveAvatarUseCase: SaveAvatarUseCase,
+    private val getAvatarUseCase: GetAvatarUseCase,
+    private val getAchievementsUseCase: GetAchievementsUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProfileUiState(Player()))
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
@@ -44,13 +48,36 @@ class ProfileViewModel @Inject constructor(
             }.launchIn(viewModelScope)
         }
         loadAvatar()
+        collectAchievement()
     }
 
-    fun savePlayer() {
-        viewModelScope.launch {
-            saveProfileUseCase.execute(state.value.player)
+    private fun collectAchievement() {
+        viewModelScope.launch(Dispatchers.IO) {
+            getAchievementsUseCase().collect {
+                var exp = 0
+                it.forEach {
+                    if (it.isUnlocked) exp += it.exp
+                }
+                val level = exp / 10
+                withContext(Dispatchers.Main.immediate) {
+                    _state.update {
+                        it.copy(
+                            player = it.player.copy(
+                                ex = exp,
+                                level = level
+                            )
+                        )
+                    }
+                }
+                savePlayer()
+            }
         }
     }
+
+    fun savePlayer() = viewModelScope.launch(Dispatchers.IO) {
+            saveProfileUseCase.execute(state.value.player)
+        }
+
 
     fun setName(value: String) {
         _state.update {
