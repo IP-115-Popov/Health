@@ -1,6 +1,5 @@
 package ru.sergey.health.feature.profile.ui.screens
 
-import android.content.Context
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -91,7 +90,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            val (avatar, name, level, exp, bthEdit, tasksCount) = createRefs()
+            val (avatar, name, level, exp, bthEdit, tasksCount, achievementCount) = createRefs()
 
             // Показываем фото профиля
             Box(
@@ -214,6 +213,31 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 )
                 Text(
                     text = player.value.player.closeTasksId.size.toString() + "/" + player.value.player.openTasksId.size.toString(),
+                    style = HealthTheme.typography.h1
+                        .copy(color = HealthTheme.colors.text),
+                )
+            }
+
+            Column(modifier = Modifier
+                .constrainAs(achievementCount) {
+                    top.linkTo(tasksCount.bottom, margin = 16.dp)
+                    start.linkTo(parent.start)
+                }
+                .padding(8.dp)
+                .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                .fillMaxWidth(0.5f)
+                .height(80.dp),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.unlocked_achievements),
+                    style = HealthTheme.typography.h1
+                        .copy(color = HealthTheme.colors.text),
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+                Text(
+                    text = player.value.closeAchievementsCount.toString() + "/" + player.value.achievementsCount.toString(),
                     style = HealthTheme.typography.h1
                         .copy(color = HealthTheme.colors.text),
                 )

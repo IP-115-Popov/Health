@@ -77,9 +77,9 @@ class ProfileViewModel @Inject constructor(
 
     private fun collectAchievement() {
         viewModelScope.launch(Dispatchers.IO) {
-            getAchievementsUseCase().collect {
+            getAchievementsUseCase().collect { achievements ->
                 var exp = 0
-                it.forEach {
+                achievements.forEach {
                     if (it.isUnlocked) exp += it.exp
                 }
                 val level = exp / 10
@@ -89,7 +89,9 @@ class ProfileViewModel @Inject constructor(
                             player = it.player.copy(
                                 ex = exp,
                                 level = level
-                            )
+                            ),
+                            closeAchievementsCount = achievements.count { it.isUnlocked || it.progress >= it.progressMaxValue },
+                            achievementsCount = achievements.size,
                         )
                     }
                 }
