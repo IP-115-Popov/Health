@@ -8,10 +8,10 @@ data class Achievement(
     val context: AchievementContext,
     val progress: Int = 0,
     val progressMaxValue: Int,
+    val exp: Int = 0,
 )
 
 sealed class AchievementContext {
-    data class PointsOnTime(val pointsRequired: Int, val timePeriodDays: Int) : AchievementContext()
     data class TotalPoints(val pointsRequired: Int) : AchievementContext()
     data class StreakDays(val daysRequired: Int) : AchievementContext()
 }

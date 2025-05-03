@@ -58,8 +58,6 @@ class AchievementViewModel @Inject constructor(
         achievement.copy(progress = achievement.progressMaxValue)
     } else {
         when (val con = achievement.context) {
-            is AchievementContext.PointsOnTime -> achievement
-
             is AchievementContext.StreakDays -> {
                 val daysRequired = con.daysRequired
                 if (!achievement.isUnlocked) {

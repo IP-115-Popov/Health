@@ -15,10 +15,7 @@ data class AchievementEntity(
     val isUnlocked: Boolean = false,
     val progress: Int = 0,
     val progressMaxValue: Int,
-
-    // Данные для PointsOnTime
-    val pointsOnTime_pointsRequired: Int? = null,
-    val pointsOnTime_timePeriodDays: Int? = null,
+    val exp: Int = 0,
 
     // Данные для TotalPoints
     val totalPoints_pointsRequired: Int? = null,
@@ -39,12 +36,6 @@ data class AchievementEntity(
                 progressMaxValue = progressMaxValue,
             )
             when (val con = context) {
-                is AchievementContext.PointsOnTime -> {
-                    res.copy(
-                        pointsOnTime_pointsRequired = con.pointsRequired,
-                        pointsOnTime_timePeriodDays = con.timePeriodDays
-                    )
-                }
                 is AchievementContext.StreakDays -> {
                     res.copy(
                         totalPoints_pointsRequired = con.daysRequired
@@ -60,12 +51,6 @@ data class AchievementEntity(
     }
     fun fromEntity(): Achievement {
         val context = when {
-            pointsOnTime_pointsRequired != null && pointsOnTime_timePeriodDays != null -> {
-                AchievementContext.PointsOnTime(
-                    pointsRequired = pointsOnTime_pointsRequired,
-                    timePeriodDays = pointsOnTime_timePeriodDays
-                )
-            }
             totalPoints_pointsRequired != null -> {
                 AchievementContext.TotalPoints(
                     pointsRequired = totalPoints_pointsRequired
