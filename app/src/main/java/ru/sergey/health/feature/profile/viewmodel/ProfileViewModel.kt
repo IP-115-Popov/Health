@@ -25,6 +25,7 @@ import ru.sergey.domain.profile.usecase.GetAvatarUseCase
 import ru.sergey.domain.profile.usecase.GetProfileUseCase
 import ru.sergey.domain.profile.usecase.SaveAvatarUseCase
 import ru.sergey.domain.profile.usecase.SaveProfileUseCase
+import ru.sergey.domain.task.usecase.DownloadTasksUseCase
 import java.io.ByteArrayOutputStream
 import javax.inject.Inject
 
@@ -35,11 +36,36 @@ class ProfileViewModel @Inject constructor(
     private val saveAvatarUseCase: SaveAvatarUseCase,
     private val getAvatarUseCase: GetAvatarUseCase,
     private val getAchievementsUseCase: GetAchievementsUseCase,
+    private val downloadTasksUseCase: DownloadTasksUseCase,
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProfileUiState(Player()))
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
 
     init {
+        collectProfile()
+        loadAvatar()
+        collectAchievement()
+        collectTasks()
+    }
+
+    private fun collectTasks() = viewModelScope.launch(Dispatchers.IO) {
+        downloadTasksUseCase.execute().collect { tsaks ->
+            withContext(Dispatchers.Main.immediate) {
+                _state.update {
+                    it.copy(
+                        player = it.player.copy(
+                            openTasksId = tsaks.map { it.id },
+                            closeTasksId = tsaks.filter { it.points >= it.targetPoints }
+                                .map { it.id },
+                        )
+                    )
+                }
+            }
+            savePlayer()
+        }
+    }
+
+    private fun collectProfile() {
         viewModelScope.launch {
             getProfileUseCase.execute().onEach { player: Player ->
                 _state.update { it ->
@@ -47,8 +73,6 @@ class ProfileViewModel @Inject constructor(
                 }
             }.launchIn(viewModelScope)
         }
-        loadAvatar()
-        collectAchievement()
     }
 
     private fun collectAchievement() {
