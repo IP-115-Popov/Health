@@ -320,7 +320,7 @@ fun StyledEditableTextField(
             )
         },
         singleLine = true,
-        textStyle = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
+        textStyle = HealthTheme.typography.body1.copy(color = Color.Black),
         trailingIcon = {
             if (enabled) {
                 Icon(

@@ -255,12 +255,12 @@ fun StyledTextField(
         placeholder = {
             Text(
                 placeholderText,
-                style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.placeholderText),// TextStyle(color = HealthTheme.colors.placeholderText, fontSize = 18.sp)
+                style = HealthTheme.typography.body1.copy(color = Color.Black),// TextStyle(color = HealthTheme.colors.placeholderText, fontSize = 18.sp)
             )
         },
         keyboardOptions = keyboardOptions,
         singleLine = true,
-        textStyle = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),//TextStyle(fontSize = 18.sp, color = HealthTheme.colors.text),
+        textStyle = HealthTheme.typography.body1.copy(color = Color.Black),//TextStyle(fontSize = 18.sp, color = HealthTheme.colors.text),
         leadingIcon = {
             Icon(
                 imageVector = Icons.Filled.Check,
