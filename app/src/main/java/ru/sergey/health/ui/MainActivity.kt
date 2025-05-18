@@ -1,10 +1,14 @@
 package ru.sergey.health.ui
 
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
+import android.Manifest.permission.READ_MEDIA_AUDIO
+import android.Manifest.permission.READ_MEDIA_IMAGES
+import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -15,38 +19,23 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Icon
-import androidx.compose.material3.NavigationBar
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.ContextCompat
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.sergey.health.feature.achievement.vm.AchievementViewModel
-import ru.sergey.health.feature.graph.ui.screens.GraphScreen
 import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
 import ru.sergey.health.feature.navigation.BottomNavigationBar
-import ru.sergey.health.feature.navigation.NavRoutes
 import ru.sergey.health.feature.navigation.NavigationGraph
-import ru.sergey.health.feature.newtask.ui.screens.AddTasksScreen
 import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
-import ru.sergey.health.feature.profile.ui.screens.ProfileScreen
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
-import ru.sergey.health.feature.task.ui.screens.TasksScreen
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
@@ -91,7 +80,9 @@ class MainActivity : ComponentActivity() {
         setContent {
             HealthTheme {
                 val p = remember { mutableStateOf(false) }
-                GetPermission(p)
+                GetMediaPermission {
+                    p.value = it
+                }
                 if (p.value) {
                     Main(
                         tasksViewModel = tasksViewModel,
@@ -100,6 +91,9 @@ class MainActivity : ComponentActivity() {
                         profileViewModel = profileViewModel,
                         achievementViewModel = achievementViewModel
                     )
+                } else {
+                    // Optionally, show a message to the user explaining why the permission is needed
+                    Text("Permission required to access storage.")
                 }
             }
         }
@@ -107,14 +101,62 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun GetPermission(p: MutableState<Boolean>) {
-    val louncher = rememberLauncherForActivityResult(
+fun GetPermission(onPermissionResult: (Boolean) -> Unit) {
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
-    ) { isPermissionGranded ->
-        p.value = isPermissionGranded
+    ) { isGranted ->
+        onPermissionResult(isGranted)
     }
+
+    val permissionCheckResult = rememberUpdatedState(
+        ContextCompat.checkSelfPermission(
+            context,
+            READ_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    )
+
     SideEffect {
-        louncher.launch(READ_EXTERNAL_STORAGE)
+        if (permissionCheckResult.value) {
+            onPermissionResult(true) // Permission already granted
+        } else {
+            launcher.launch(READ_EXTERNAL_STORAGE) // Request the permission
+        }
+    }
+}
+
+@Composable
+fun GetMediaPermission(onPermissionResult: (Boolean) -> Unit) {
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.all { it.value }
+        onPermissionResult(allGranted)
+    }
+
+    val permissionsToRequest = mutableListOf<String>()
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        permissionsToRequest.apply {
+            add(READ_MEDIA_IMAGES)
+            add(READ_MEDIA_VIDEO)
+            add(READ_MEDIA_AUDIO)
+        }
+    } else {
+        permissionsToRequest.add(READ_EXTERNAL_STORAGE)
+    }
+
+    val allPermissionsAlreadyGranted = rememberUpdatedState(permissionsToRequest.all {
+        ContextCompat.checkSelfPermission(context, it) == PackageManager.PERMISSION_GRANTED
+    })
+
+    SideEffect {
+        if (allPermissionsAlreadyGranted.value) {
+            onPermissionResult(true)
+        } else {
+            launcher.launch(permissionsToRequest.toTypedArray())
+        }
     }
 }
 
