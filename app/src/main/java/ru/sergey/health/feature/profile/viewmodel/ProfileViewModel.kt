@@ -119,7 +119,7 @@ class ProfileViewModel @Inject constructor(
         loadAvatar()
     }
 
-    fun saveAvatar() {
+    fun saveAvatar() = viewModelScope.launch(Dispatchers.IO) {
         state.value.imgAvatar?.let { data: ImageBitmap ->
             val byteArray = imageBitmapToByteArray(data)
 
@@ -127,12 +127,14 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun loadAvatar() {
+    fun loadAvatar() = viewModelScope.launch(Dispatchers.IO) {
         val byteArray = getAvatarUseCase.execute()
         val data = byteArrayToImageBitmap(byteArray)
 
-        _state.update {
-            it.copy(imgAvatar = data)
+        withContext(Dispatchers.IO) {
+            _state.update {
+                it.copy(imgAvatar = data)
+            }
         }
     }
 

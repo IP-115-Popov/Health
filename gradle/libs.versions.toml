@@ -1,4 +1,5 @@
 [versions]
+accompanistPermissions = "0.28.0"
 agp = "8.5.2"
 coilCompose = "2.3.0"
 constraintlayoutCompose = "1.1.0"
@@ -23,6 +24,7 @@ runtimeLivedata = "1.7.6"
 kotlinxSerializationJson = "1.7.3"
 
 [libraries]
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
 androidx-constraintlayout-compose = { module = "androidx.constraintlayout:constraintlayout-compose", version.ref = "constraintlayoutCompose" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 

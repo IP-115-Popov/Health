@@ -24,13 +24,19 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("Boolean", "DEBUG", "true")
+            isDebuggable = true
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
+            buildConfigField("Boolean", "DEBUG", "false")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -40,6 +46,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -76,5 +83,5 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.coil.compose)
-    implementation( "com.google.accompanist:accompanist-permissions:0.28.0")
+    implementation(libs.accompanist.permissions)
 }
