@@ -22,4 +22,8 @@
     <string name="fill_in_the_fields">Заполните поля</string>
     <string name="achievement">Достижения</string>
     <string name="unlocked_achievements">Разблокированные ачивки</string>
+    <string name="growth_rate">Скорость роста</string>
+    <string name="total_number_of_points">Общее число очков</string>
+    <string name="total_number_of_points_with_missed_days">Общее число очков с пропущенными днями</string>
+    <string name="daily_points_growth">Дневной рост очков</string>
 </resources>

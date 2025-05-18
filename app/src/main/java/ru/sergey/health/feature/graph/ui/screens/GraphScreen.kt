@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
@@ -16,7 +17,10 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,7 +29,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,6 +47,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import kotlinx.coroutines.launch
 import ru.sergey.health.R
+import ru.sergey.health.feature.graph.viewmodel.GraphMode
 import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
@@ -67,6 +75,8 @@ fun GraphScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
+    val expanded = remember { mutableStateOf(false) }
+
     LaunchedEffect(pagerState.currentPage) {
         if (tasksState.value.tasks.size > 0) {
             val task = tasksState.value.tasks[pagerState.currentPage]
@@ -75,7 +85,7 @@ fun GraphScreen(
     }
 
     Scaffold(
-        topBar = { GraphTopBar(navController) },
+        topBar = { GraphTopBar(navController = navController, expanded = expanded) },
         containerColor = HealthTheme.colors.background,
     ) { innerPadding ->
 
@@ -177,7 +187,74 @@ fun GraphScreen(
             }
         }
     }
+
+    Box(
+        Modifier.fillMaxSize(),
+        contentAlignment = Alignment.TopEnd,
+    ) {
+        Box(
+            Modifier.offset(y = 50.dp)
+        ) {
+            DropdownMenu(
+                expanded = expanded.value,
+                onDismissRequest = { expanded.value = false },
+            ) {
+                DropdownMenuItem(
+                    onClick = {
+                        expanded.value = false
+                        graphViewModel.setGraphMode(GraphMode.DailyPointsGrowth)
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.daily_points_growth),
+                            color = if (graphState.value.graphMode != GraphMode.DailyPointsGrowth) HealthTheme.colors.background else HealthTheme.colors.green
+                        )
+                    },
+                )
+
+                DropdownMenuItem(
+                    onClick = {
+                        expanded.value = false
+                        graphViewModel.setGraphMode(GraphMode.GrowthRate)
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.growth_rate),
+                            color = if (graphState.value.graphMode != GraphMode.GrowthRate) HealthTheme.colors.background else HealthTheme.colors.green
+                        )
+                    }
+                )
+
+                DropdownMenuItem(
+                    onClick = {
+                        expanded.value = false
+                        graphViewModel.setGraphMode(GraphMode.TotalNumberOfPoints)
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.total_number_of_points),
+                            color = if (graphState.value.graphMode != GraphMode.TotalNumberOfPoints) HealthTheme.colors.background else HealthTheme.colors.green
+                        )
+                    }
+                )
+
+                DropdownMenuItem(
+                    onClick = {
+                        expanded.value = false
+                        graphViewModel.setGraphMode(GraphMode.TotalNumberOfPointsWithMissedDays)
+                    },
+                    text = {
+                        Text(
+                            text = stringResource(R.string.total_number_of_points_with_missed_days),
+                            color = if (graphState.value.graphMode != GraphMode.TotalNumberOfPointsWithMissedDays) HealthTheme.colors.background else HealthTheme.colors.green
+                        )
+                    }
+                )
+            }
+        }
+    }
 }
+
 
 @Composable
 fun PointsGraph(points: List<Pair<Long, Int>>) {
@@ -242,38 +319,62 @@ fun PointsGraph(points: List<Pair<Long, Int>>) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GraphTopBar(navController: NavHostController) {
-    CenterAlignedTopAppBar(title = {
-        Box(
-            modifier = Modifier.fillMaxHeight(),
-        ) {
-            Text(
-                text = stringResource(R.string.graph),
-                style = HealthTheme.typography.h1,
-                modifier = Modifier.align(Alignment.Center),
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-    }, navigationIcon = {
-        Box(
-            modifier = Modifier.fillMaxHeight(),
-        ) {
-            IconButton(
-                onClick = { navController.navigateUp() },
-                modifier = Modifier.align(Alignment.CenterStart)
+fun GraphTopBar(
+    navController: NavHostController,
+    expanded: MutableState<Boolean>,
+) {
+    CenterAlignedTopAppBar(
+        title = {
+            Box(
+                modifier = Modifier.fillMaxHeight(),
             ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_24),
-                    contentDescription = "Back"
+                Text(
+                    text = stringResource(R.string.graph),
+                    style = HealthTheme.typography.h1,
+                    modifier = Modifier.align(Alignment.Center),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
                 )
             }
-        }
-    }, colors = TopAppBarDefaults.topAppBarColors(
-        containerColor = HealthTheme.colors.primary,
-        titleContentColor = HealthTheme.colors.primary,
-        navigationIconContentColor = HealthTheme.colors.iconColor,
-        actionIconContentColor = HealthTheme.colors.iconColor,
-    ), modifier = Modifier.height(56.dp)
+        },
+        navigationIcon = {
+            Box(
+                modifier = Modifier.fillMaxHeight(),
+            ) {
+                IconButton(
+                    onClick = { navController.navigateUp() },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_back_24),
+                        contentDescription = "Back"
+                    )
+                }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = HealthTheme.colors.primary,
+            titleContentColor = HealthTheme.colors.primary,
+            navigationIconContentColor = HealthTheme.colors.iconColor,
+            actionIconContentColor = HealthTheme.colors.iconColor,
+        ),
+        modifier = Modifier.height(56.dp),
+        actions = {
+            Box(
+                modifier = Modifier.fillMaxHeight(),
+            ) {
+                IconButton(
+                    onClick = {
+                        expanded.value = true
+                    },
+                    modifier = Modifier.align(Alignment.CenterStart)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Menu,
+                        contentDescription = "Add"
+                    )
+                }
+            }
+        },
     )
 }

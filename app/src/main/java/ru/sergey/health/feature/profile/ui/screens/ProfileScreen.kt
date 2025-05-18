@@ -269,6 +269,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
             }
         }
     }
+
     Box(
         Modifier.fillMaxSize(),
         contentAlignment = Alignment.TopEnd,
