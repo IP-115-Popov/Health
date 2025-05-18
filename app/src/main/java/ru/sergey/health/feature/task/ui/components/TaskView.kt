@@ -3,7 +3,6 @@ package ru.sergey.health.feature.task.ui.components
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -57,8 +56,8 @@ fun TaskView(
         modifier = Modifier
             .padding(4.dp)
             .background(
-                HealthTheme.colors.card,
-                RoundedCornerShape(10.dp)
+                color = if (task.points >= task.targetPoints) HealthTheme.colors.green else HealthTheme.colors.card,
+                shape = RoundedCornerShape(10.dp)
             )
             .padding(top = 8.dp, bottom = 8.dp, end = 8.dp)
             .height(142.dp)
@@ -70,9 +69,9 @@ fun TaskView(
             .background(color = HealthTheme.colors.yellow, shape = RoundedCornerShape(12.dp))
             .padding(horizontal = 16.dp)
             .then(Modifier.constrainAs(tvTitle) {
-            top.linkTo(parent.top)
-            start.linkTo(parent.start, margin = 20.dp)
-        })) {
+                top.linkTo(parent.top)
+                start.linkTo(parent.start, margin = 20.dp)
+            })) {
             Text(
                 text = task.title,
                 color = HealthTheme.colors.background,
@@ -83,10 +82,12 @@ fun TaskView(
         Text(
             text = task.description,
             style = HealthTheme.typography.body1.copy(color = HealthTheme.colors.text),
-            modifier = textModifier.then(Modifier.constrainAs(tvDescription) {
-                top.linkTo(bthEdit.bottom)
-                start.linkTo(parent.start, margin = 20.dp)
-            }).padding(end = 16.dp),
+            modifier = textModifier
+                .then(Modifier.constrainAs(tvDescription) {
+                    top.linkTo(bthEdit.bottom)
+                    start.linkTo(parent.start, margin = 20.dp)
+                })
+                .padding(end = 16.dp),
             color = HealthTheme.colors.text,
             maxLines = 3,
             overflow = TextOverflow.Ellipsis
@@ -172,7 +173,7 @@ private fun Preview() {
                 id = 0,
                 title = "run",
                 description = "rundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaarundoigjaaaaaaaaaaaaaaaaaa",
-                points = 10,
+                points = 1000,
                 targetPoints = 1000,
                 measureUnit = "km"
             ),

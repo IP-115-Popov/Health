@@ -5,11 +5,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -67,7 +67,6 @@ fun GraphScreen(
 
     val coroutineScope = rememberCoroutineScope()
 
-// LaunchedEffect для загрузки данных при изменении текущей страницы
     LaunchedEffect(pagerState.currentPage) {
         if (tasksState.value.tasks.size > 0) {
             val task = tasksState.value.tasks[pagerState.currentPage]
@@ -90,17 +89,23 @@ fun GraphScreen(
                     Modifier
                         .fillMaxWidth()
                         .fillMaxHeight(0.1f)
+                        .padding(horizontal = 16.dp)
                 ) {
                     Text(
-                        product.title, style = HealthTheme.typography.h1.copy(
+                        product.title,
+                        style = HealthTheme.typography.h1.copy(
                             color = HealthTheme.colors.text, fontSize = 42.sp
-                        ), modifier = Modifier.align(Alignment.Center)
+                        ),
+                        modifier = Modifier.align(Alignment.Center),
+                        overflow = TextOverflow.Ellipsis,
+                        maxLines = 1
                     )
                 }
+
                 Box(
                     Modifier
                         .fillMaxWidth(0.9f)
-                        .fillMaxHeight(0.8f)
+                        .fillMaxHeight(0.9f)
                         .background(HealthTheme.colors.card)
                 ) {
                     if (graphState.value.pointsList.size <= 1) {
@@ -111,37 +116,63 @@ fun GraphScreen(
                     } else {
                         PointsGraph(graphState.value.pointsList.map { it.date.toMillis() to it.points })
                     }
-                }
-                Box(
-                    Modifier.fillMaxWidth(0.9f)
-                ) {
+
                     Text(
-                        text = product.description, style = HealthTheme.typography.h1.copy(
-                            color = HealthTheme.colors.text, fontSize = 28.sp
-                        ), modifier = Modifier.align(Alignment.Center)
+                        text = "time",
+                        style = HealthTheme.typography.h1,
+                        color = HealthTheme.colors.primary,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd)
+                            .padding(16.dp)
                     )
-                }
-                Row {
-                    Icon(imageVector = Icons.Default.KeyboardArrowLeft,
-                        contentDescription = "Previous Page",
-                        tint = HealthTheme.colors.iconColor,
+
+                    Text(
+                        text = "point",
+                        style = HealthTheme.typography.h1,
+                        color = HealthTheme.colors.primary,
                         modifier = Modifier
-                            .size(75.dp)
-                            .clickable {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                                }
-                            })
-                    Icon(imageVector = Icons.Default.KeyboardArrowRight,
-                        contentDescription = "Next Page",
-                        tint = HealthTheme.colors.iconColor,
+                            .align(Alignment.TopStart)
+                            .padding(16.dp)
+                    )
+
+                    Text(
+                        text = "0",
+                        style = HealthTheme.typography.h1,
+                        color = HealthTheme.colors.primary,
                         modifier = Modifier
-                            .size(75.dp)
-                            .clickable {
-                                coroutineScope.launch {
-                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            .align(Alignment.BottomStart)
+                            .padding(16.dp)
+                    )
+
+                    if (page != 0) {
+                        Icon(imageVector = Icons.Default.KeyboardArrowLeft,
+                            contentDescription = "Previous Page",
+                            tint = HealthTheme.colors.iconColor.copy(alpha = 0.3f),
+                            modifier = Modifier
+                                .size(75.dp)
+                                .clickable {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                    }
                                 }
-                            })
+                                .align(Alignment.CenterStart)
+                        )
+                    }
+
+                    if (page != tasksState.value.tasks.lastIndex) {
+                        Icon(imageVector = Icons.Default.KeyboardArrowRight,
+                            contentDescription = "Next Page",
+                            tint = HealthTheme.colors.iconColor.copy(alpha = 0.3f),
+                            modifier = Modifier
+                                .size(75.dp)
+                                .clickable {
+                                    coroutineScope.launch {
+                                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                    }
+                                }
+                                .align(Alignment.CenterEnd)
+                        )
+                    }
                 }
             }
         }
