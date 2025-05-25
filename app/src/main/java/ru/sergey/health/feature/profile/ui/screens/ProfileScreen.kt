@@ -55,12 +55,12 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
-import ru.sergey.health.feature.navigation.NavRoutes
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
@@ -243,6 +243,7 @@ fun ProfileScreen(
                             style = HealthTheme.typography.h1
                                 .copy(color = HealthTheme.colors.text),
                             modifier = Modifier.padding(horizontal = 16.dp),
+                            textAlign = TextAlign.Center
                         )
                         Text(
                             text = player.value.closeAchievementsCount.toString() + "/" + player.value.achievementsCount.toString(),
@@ -251,22 +252,21 @@ fun ProfileScreen(
                         )
                     }
                 }
-                Column(
-                    modifier = Modifier
-                        .padding(8.dp)
-                        .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+
+                Row(
+                    Modifier
                         .fillMaxWidth()
                         .height(100.dp)
-                        .clickable {
-                            navController.navigate(NavRoutes.StepsScreen.route)
-                        },
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row(
-                        Modifier
-                            .fillMaxHeight()
-                            .fillMaxWidth(0.5f)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                            .fillMaxWidth(0.5f)
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
                             text = "Бег",
                             style = HealthTheme.typography.h1
@@ -279,25 +279,34 @@ fun ProfileScreen(
                                 .copy(color = HealthTheme.colors.text),
                         )
                         Text(
-                            text = "Дистанция: ${"%.2f".format(player.value.distanceKm)} км",
+                            text = "Км: ${"%.2f".format(player.value.distanceKm)}",
                             style = HealthTheme.typography.h1
                                 .copy(color = HealthTheme.colors.text),
                         )
                     }
-                    Row(Modifier.fillMaxSize()) {
+
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         Text(
-                            text = "Бег",
+                            text = "Бег за день",
                             style = HealthTheme.typography.h1
                                 .copy(color = HealthTheme.colors.text),
                             modifier = Modifier.padding(horizontal = 16.dp),
                         )
                         Text(
-                            text = "Шаги за день: ${player.value.stepsToday}",
+                            text = "Шаги: ${player.value.stepsToday}",
                             style = HealthTheme.typography.h1
                                 .copy(color = HealthTheme.colors.text),
                         )
                         Text(
-                            text = "Дистанция за день: ${"%.2f".format(player.value.distanceKmToday)} км",
+                            text = "Км: ${"%.2f".format(player.value.distanceKmToday)}",
                             style = HealthTheme.typography.h1
                                 .copy(color = HealthTheme.colors.text),
                         )
