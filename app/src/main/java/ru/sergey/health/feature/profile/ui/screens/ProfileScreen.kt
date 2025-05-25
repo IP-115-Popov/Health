@@ -263,27 +263,45 @@ fun ProfileScreen(
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(
-                        text = "Бег",
-                        style = HealthTheme.typography.h1
-                            .copy(color = HealthTheme.colors.text),
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                    Text(
-                        text = "Шаги: ${player.value.steps}",
-                        style = HealthTheme.typography.h1
-                            .copy(color = HealthTheme.colors.text),
-                    )
-                    Text(
-                        text = "Дистанция: ${"%.2f".format(player.value.distanceKm)} км",
-                        style = HealthTheme.typography.h1
-                            .copy(color = HealthTheme.colors.text),
-                    )
-                    Text(
-                        text = "Шаги за день: ${player.value.stepsToday}",
-                        style = HealthTheme.typography.h1
-                            .copy(color = HealthTheme.colors.text),
-                    )
+                    Row(
+                        Modifier
+                            .fillMaxHeight()
+                            .fillMaxWidth(0.5f)) {
+                        Text(
+                            text = "Бег",
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                        Text(
+                            text = "Шаги: ${player.value.steps}",
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                        Text(
+                            text = "Дистанция: ${"%.2f".format(player.value.distanceKm)} км",
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                    }
+                    Row(Modifier.fillMaxSize()) {
+                        Text(
+                            text = "Бег",
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                        Text(
+                            text = "Шаги за день: ${player.value.stepsToday}",
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                        Text(
+                            text = "Дистанция за день: ${"%.2f".format(player.value.distanceKmToday)} км",
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                    }
                 }
             }
 

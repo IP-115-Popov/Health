@@ -73,6 +73,7 @@ class ProfileViewModel @Inject constructor(
                 steps = steps,
                 stepsToday = stepsToday,
                 distanceKm = steps * stepLengthMeters / 1000,
+                distanceKmToday = stepsToday * stepLengthMeters / 1000,
             )
         }
     }
