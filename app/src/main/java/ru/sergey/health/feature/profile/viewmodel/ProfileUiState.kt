@@ -10,4 +10,5 @@ data class ProfileUiState(
     val closeAchievementsCount: Int = 0,
     val steps: Long = 0L,
     val distanceKm: Double = .0,
+    val stepsToday: Long = 0L,
 )

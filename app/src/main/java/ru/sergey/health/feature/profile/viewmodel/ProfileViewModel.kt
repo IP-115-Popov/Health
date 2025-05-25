@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.sergey.data.step.StepRepositoryImpl
 import ru.sergey.domain.achievement.usecase.GetAchievementsUseCase
 import ru.sergey.domain.profile.models.Player
 import ru.sergey.domain.profile.usecase.GetAvatarUseCase
@@ -41,6 +42,9 @@ class ProfileViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProfileUiState(Player()))
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
 
+    @Inject
+    lateinit var stepRepositoryImpl: StepRepositoryImpl
+
     val stepLengthMeters = 0.75
 
     init {
@@ -51,10 +55,12 @@ class ProfileViewModel @Inject constructor(
     }
 
     fun updateSteps(steps: Long) {
+        val stepsToday = stepRepositoryImpl.getStepsForToday()
         _state.update {
             it.copy(
                 steps = steps,
-                distanceKm = steps * stepLengthMeters / 1000
+                stepsToday = stepsToday,
+                distanceKm = steps * stepLengthMeters / 1000,
             )
         }
     }

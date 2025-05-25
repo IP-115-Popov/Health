@@ -33,9 +33,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import ru.sergey.data.step.StepRepositoryImpl
 import ru.sergey.health.feature.achievement.vm.AchievementViewModel
 import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
 import ru.sergey.health.feature.navigation.BottomNavigationBar
@@ -45,9 +49,13 @@ import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.feature.step.RunningService
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var stepRepositoryImpl: StepRepositoryImpl
 
     private val tasksViewModel: TasksViewModel by viewModels()
     private val addTasksViewModel: AddTasksViewModel by viewModels()
@@ -126,6 +134,11 @@ class MainActivity : ComponentActivity() {
     private val stepReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val steps = intent?.getLongExtra("steps", 0L) ?: 0L
+
+            lifecycleScope.launch(Dispatchers.IO) {
+                stepRepositoryImpl.updateCurrentSteps(steps)
+            }
+
             profileViewModel.updateSteps(steps)
         }
     }

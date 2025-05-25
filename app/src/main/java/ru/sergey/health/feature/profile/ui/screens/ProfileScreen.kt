@@ -254,8 +254,8 @@ fun ProfileScreen(
                     modifier = Modifier
                         .padding(8.dp)
                         .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
-                        .fillMaxWidth(0.5f)
-                        .height(80.dp),
+                        .fillMaxWidth()
+                        .height(100.dp),
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -272,6 +272,11 @@ fun ProfileScreen(
                     )
                     Text(
                         text = "Дистанция: ${"%.2f".format(player.value.distanceKm)} км",
+                        style = HealthTheme.typography.h1
+                            .copy(color = HealthTheme.colors.text),
+                    )
+                    Text(
+                        text = "Шаги за день: ${player.value.stepsToday}",
                         style = HealthTheme.typography.h1
                             .copy(color = HealthTheme.colors.text),
                     )
