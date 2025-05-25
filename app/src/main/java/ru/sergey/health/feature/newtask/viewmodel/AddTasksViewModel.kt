@@ -10,10 +10,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ru.sergey.domain.task.models.Task
 import ru.sergey.domain.task.usecase.AddTaskUseCase
 import ru.sergey.domain.task.usecase.GetTaskUseCase
 import ru.sergey.domain.task.usecase.UpdateTaskUseCase
-import ru.sergey.domain.task.models.Task
 import javax.inject.Inject
 
 @HiltViewModel

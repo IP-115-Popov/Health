@@ -1,14 +1,17 @@
 package ru.sergey.health.ui
 
 import android.Manifest.permission.ACTIVITY_RECOGNITION
+import android.Manifest.permission.POST_NOTIFICATIONS
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.Manifest.permission.READ_MEDIA_IMAGES
 import android.Manifest.permission.READ_MEDIA_VIDEO
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
@@ -28,7 +31,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.sergey.health.feature.achievement.vm.AchievementViewModel
@@ -37,7 +42,7 @@ import ru.sergey.health.feature.navigation.BottomNavigationBar
 import ru.sergey.health.feature.navigation.NavigationGraph
 import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
-import ru.sergey.health.feature.profile.viewmodel.StepCounterViewModel
+import ru.sergey.health.feature.step.RunningService
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
@@ -49,10 +54,17 @@ class MainActivity : ComponentActivity() {
     private val graphViewModel: GraphViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val achievementViewModel: AchievementViewModel by viewModels()
-    private val stepCounterViewModel: StepCounterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val intent = Intent(this, RunningService::class.java)
+        ContextCompat.startForegroundService(this, intent)
+
+        // Регистрация ресивера
+        val filter = IntentFilter("com.example.STEP_COUNT_UPDATE")
+        LocalBroadcastManager.getInstance(this).registerReceiver(stepReceiver, filter)
+
+
         // Создаем канал уведомлений, если это необходимо
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val channelId = "your_channel_id"
@@ -96,7 +108,6 @@ class MainActivity : ComponentActivity() {
                         graphViewModel = graphViewModel,
                         profileViewModel = profileViewModel,
                         achievementViewModel = achievementViewModel,
-                        stepCounterViewModel = stepCounterViewModel,
                     )
                 } else {
                     // Optionally, show a message to the user explaining why the permission is needed
@@ -106,7 +117,27 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(stepReceiver)
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(stepReceiver)
+    }
+
+    private val stepReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            val steps = intent?.getLongExtra("steps", 0L) ?: 0L
+            profileViewModel.updateSteps(steps)
+        }
+    }
+
     private fun requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(POST_NOTIFICATIONS),
+                0
+            )
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             requestPermissions(arrayOf(ACTIVITY_RECOGNITION), 0)
         }
@@ -156,7 +187,6 @@ fun Main(
     graphViewModel: GraphViewModel,
     profileViewModel: ProfileViewModel,
     achievementViewModel: AchievementViewModel,
-    stepCounterViewModel: StepCounterViewModel
 ) {
     val navController = rememberNavController()
     Column {
@@ -167,7 +197,6 @@ fun Main(
             graphViewModel = graphViewModel,
             profileViewModel = profileViewModel,
             achievementViewModel = achievementViewModel,
-            stepCounterViewModel = stepCounterViewModel,
         )
 
         BottomNavigationBar(

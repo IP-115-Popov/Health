@@ -14,7 +14,6 @@ import ru.sergey.health.feature.newtask.ui.screens.AddTasksScreen
 import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
 import ru.sergey.health.feature.profile.ui.screens.ProfileScreen
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
-import ru.sergey.health.feature.profile.viewmodel.StepCounterViewModel
 import ru.sergey.health.feature.task.ui.screens.TasksScreen
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 
@@ -26,7 +25,6 @@ fun NavigationGraph(
     graphViewModel: GraphViewModel,
     profileViewModel: ProfileViewModel,
     achievementViewModel: AchievementViewModel,
-    stepCounterViewModel: StepCounterViewModel,
 ) {
     NavHost(
     navController = navController,
@@ -39,7 +37,6 @@ fun NavigationGraph(
         composable(NavRoutes.ProfileScreen.route) {
             ProfileScreen(
                 viewModel = profileViewModel,
-                stepCounterViewModel = stepCounterViewModel,
                 navController = navController
             )
         }

@@ -8,4 +8,6 @@ data class ProfileUiState(
     val imgAvatar: ImageBitmap? = null,
     val achievementsCount: Int = 0,
     val closeAchievementsCount: Int = 0,
+    val steps: Long = 0L,
+    val distanceKm: Double = .0,
 )

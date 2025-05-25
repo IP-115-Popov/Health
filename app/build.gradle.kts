@@ -86,5 +86,7 @@ dependencies {
     implementation(libs.accompanist.permissions)
 
     implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
+
 
 }

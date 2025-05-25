@@ -61,13 +61,11 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
-import ru.sergey.health.feature.profile.viewmodel.StepCounterViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
 fun ProfileScreen(
     viewModel: ProfileViewModel,
-    stepCounterViewModel: StepCounterViewModel,
     navController: NavHostController,
 ) {
     val context = LocalContext.current
@@ -267,7 +265,16 @@ fun ProfileScreen(
                             .copy(color = HealthTheme.colors.text),
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
-                    Running(viewModel = stepCounterViewModel)
+                    Text(
+                        text = "Шаги: ${player.value.steps}",
+                        style = HealthTheme.typography.h1
+                            .copy(color = HealthTheme.colors.text),
+                    )
+                    Text(
+                        text = "Дистанция: ${"%.2f".format(player.value.distanceKm)} км",
+                        style = HealthTheme.typography.h1
+                            .copy(color = HealthTheme.colors.text),
+                    )
                 }
             }
 

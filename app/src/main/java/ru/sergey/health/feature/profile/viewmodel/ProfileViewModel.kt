@@ -41,11 +41,22 @@ class ProfileViewModel @Inject constructor(
     private val _state = MutableStateFlow(ProfileUiState(Player()))
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
 
+    val stepLengthMeters = 0.75
+
     init {
         collectProfile()
         loadAvatar()
         collectAchievement()
         collectTasks()
+    }
+
+    fun updateSteps(steps: Long) {
+        _state.update {
+            it.copy(
+                steps = steps,
+                distanceKm = steps * stepLengthMeters / 1000
+            )
+        }
     }
 
     private fun collectTasks() = viewModelScope.launch(Dispatchers.IO) {

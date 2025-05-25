@@ -1,7 +1,6 @@
 package ru.sergey.health.ui.theme.ui
 
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Color.Companion.White
 
 val baseDarkPalette = HealthColors(
     background = Color(0xFF121212),
