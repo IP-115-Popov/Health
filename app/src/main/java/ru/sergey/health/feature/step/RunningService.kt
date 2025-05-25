@@ -8,7 +8,6 @@ import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.IBinder
-import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import ru.sergey.health.R
@@ -22,7 +21,6 @@ class RunningService : Service() {
                 // Обработка данных
                 val steps = event.values[0].toLong()
                 sendStepCount(steps)
-                updateNotification(steps)
             }
         }
 
@@ -32,7 +30,6 @@ class RunningService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onCreate() {
-        Log.i("myy", "RunningService onCreate")
         super.onCreate()
         start()
         sensorManager = getSystemService(SENSOR_SERVICE) as SensorManager
@@ -55,7 +52,6 @@ class RunningService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         sensorManager.unregisterListener(sensorListener)
-        Log.i("myy", "RunningService onDestroy")
     }
 
     private fun start() {
@@ -85,24 +81,11 @@ class RunningService : Service() {
         val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
         notificationManager.notify(1, notification)
 
-        // Запускаем foreground с этим уведомлением, чтобы сервис не был убит системой
         startForeground(1, notification)
-    }
-
-
-    private fun updateNotification(steps: Long) {
-        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setSmallIcon(R.drawable.heart)
-            .setContentTitle("Шагомер запущен")
-            .setContentText("Шаги: $steps")
-            .setOnlyAlertOnce(true) // чтобы не было звуков и вибраций при обновлении
-            .build()
-
-        val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
-        notificationManager.notify(1, notification)
     }
 
     companion object {
         const val CHANNEL_ID = "running_chanel"
+        const val STEP_MESSAGE_ID = "com.example.STEP_COUNT_UPDATE"
     }
 }
