@@ -101,13 +101,16 @@ fun StepsScreen(navController: NavHostController, profileViewModel: ProfileViewM
                     }
 
                     1 -> {
-                        Box(
-                            Modifier
-                                .fillMaxWidth(0.9f)
-                                .fillMaxHeight(0.9f)
-                                .background(HealthTheme.colors.card)
-                        ) {
-                            PointsGraph(points = stepsList.map { it.first.toMillis() to it.second.toInt() })
+                        Box(Modifier.fillMaxSize()) {
+                            Box(
+                                Modifier
+                                    .fillMaxSize(0.9f)
+                                    .align(Alignment.Center)
+                                    .background(HealthTheme.colors.card)
+                            ) {
+                                PointsGraph(points = stepsList.map { it.first.toMillis() to it.second.toInt() })
+                            }
+
                             Text(
                                 text = "time",
                                 style = HealthTheme.typography.h1,
@@ -118,7 +121,7 @@ fun StepsScreen(navController: NavHostController, profileViewModel: ProfileViewM
                             )
 
                             Text(
-                                text = "point",
+                                text = "step",
                                 style = HealthTheme.typography.h1,
                                 color = HealthTheme.colors.primary,
                                 modifier = Modifier

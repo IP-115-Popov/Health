@@ -62,6 +62,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import com.theapache64.rebugger.Rebugger
 import ru.sergey.health.R
+import ru.sergey.health.feature.navigation.NavRoutes
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
@@ -272,6 +273,9 @@ fun ProfileScreen(
                     Modifier
                         .fillMaxWidth()
                         .height(100.dp)
+                        .clickable {
+                            navController.navigate(NavRoutes.StepsScreen.route)
+                        },
                 ) {
                     Column(
                         modifier = Modifier
