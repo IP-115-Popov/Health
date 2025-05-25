@@ -88,5 +88,5 @@ dependencies {
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.localbroadcastmanager:localbroadcastmanager:1.1.0")
 
-
+    implementation("io.github.theapache64:rebugger:1.0.0-rc03")
 }

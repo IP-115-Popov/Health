@@ -60,6 +60,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
+import com.theapache64.rebugger.Rebugger
 import ru.sergey.health.R
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
@@ -73,6 +74,20 @@ fun ProfileScreen(
     val player = viewModel.state.collectAsState()
     val isEditable = remember { mutableStateOf(false) }
     val expanded = remember { mutableStateOf(false) }
+
+    Rebugger(
+        trackMap = mapOf(
+            "context" to context,
+            "player" to player,
+            "expanded" to expanded,
+            "player.steps" to player.value.steps,
+            "player.steps" to player.value.stepsToday,
+            "player.steps" to player.value.distanceKm,
+            "player.steps" to player.value.imgAvatar,
+            "player.steps" to player.value.stepsList,
+            "player.steps" to player.value.steps
+        ),
+    )
 
     // Лаунчер для выбора изображения
     val imagePickerLauncher = rememberLauncherForActivityResult(
