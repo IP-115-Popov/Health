@@ -1,8 +1,15 @@
 package ru.sergey.data.step
 
 import android.content.Context
-import android.content.SharedPreferences
+import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.preferencesDataStore
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -14,90 +21,76 @@ class StepRepositoryImpl @Inject constructor(
     @ApplicationContext
     private val context: Context
 ) {
+    private val repository = StepRepository(context)
 
-    private val PREFS_NAME = "step_prefs"
-    private val KEY_STEPS_START = "steps_start_of_day"
-    private val KEY_DATE = "date_of_start"
-
-    private val prefs: SharedPreferences by lazy {
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-    }
-
-    private var stepsAtStartOfDay: Long = 0
-    private var currentSteps: Long = 0
-
-    init {
-        loadStepsData()
-    }
-
-    /**
-     * Загружает сохранённые данные из SharedPreferences
-     * Проверяет дату и при необходимости сбрасывает шаги на начало дня
-     */
-    private fun loadStepsData() {
-        stepsAtStartOfDay = prefs.getLong(KEY_STEPS_START, 0L)
-        val savedDate = prefs.getString(KEY_DATE, "") ?: ""
-        val today = getTodayDateString()
-
-        if (savedDate != today) {
-            // Новый день — сбрасываем стартовые шаги
-            stepsAtStartOfDay = currentSteps
-            saveStepsData()
-        }
-    }
-
-    /**
-     * Сохраняет данные в SharedPreferences
-     */
-    private fun saveStepsData() {
-        prefs.edit()
-            .putLong(KEY_STEPS_START, stepsAtStartOfDay)
-            .putString(KEY_DATE, getTodayDateString())
-            .apply()
-    }
-
-    /**
-     * Возвращает текущую дату в формате yyyyMMdd
-     */
     private fun getTodayDateString(): String {
         val sdf = SimpleDateFormat("yyyyMMdd", Locale.getDefault())
         return sdf.format(Date())
     }
 
-    /**
-     * Обновляет текущее значение шагов, вызывается при получении новых данных с датчика
-     */
-    fun updateCurrentSteps(steps: Long) {
-        currentSteps = steps
-        checkDateAndResetIfNeeded()
+    suspend fun updateCurrentSteps(totalSteps: Long) {
+        repository.saveSteps(getTodayDateString(), totalSteps)
     }
 
-    /**
-     * Проверяет дату, если сменился день — обновляет стартовые шаги
-     */
-    private fun checkDateAndResetIfNeeded() {
-        val today = getTodayDateString()
-        val savedDate = prefs.getString(KEY_DATE, "") ?: ""
+    suspend fun getStepsForToday(): Long {
+        return repository.getStepsForDay(data = getTodayDateString())
+    }
 
-        if (savedDate != today) {
-            stepsAtStartOfDay = currentSteps
-            saveStepsData()
+    fun getStepsFlow() = repository.stepsMapFlow
+}
+
+private val Context.dataStore by preferencesDataStore(name = "step_stats_prefs")
+
+@Singleton
+class StepRepository @Inject constructor(
+    @ApplicationContext private val context: Context
+) {
+    private val STEPS_MAP_KEY = stringPreferencesKey("steps_map")
+
+    private val gson = Gson()
+
+    /**
+     * Flow с картой дата -> шаги
+     */
+    val stepsMapFlow: Flow<Map<String, Long>> = context.dataStore.data
+        .map { preferences ->
+            val json = preferences[STEPS_MAP_KEY] ?: ""
+            if (json.isEmpty()) emptyMap()
+            else deserializeMap(json)
+        }
+
+    /**
+     * Сохраняет количество шагов за дату
+     */
+    suspend fun saveSteps(date: String, totalSteps: Long) {
+        context.dataStore.edit { preferences ->
+            val currentMap = preferences[STEPS_MAP_KEY]?.let { deserializeMap(it) } ?: emptyMap()
+
+            val oldSteps = currentMap.map { it.value }.sum()
+            val deltaSteps = totalSteps - oldSteps
+
+            val newMap = currentMap.toMutableMap().apply {
+                this[date] = this.getOrDefault(date, 0L) + deltaSteps
+            }
+            preferences[STEPS_MAP_KEY] = serializeMap(newMap)
         }
     }
 
-    /**
-     * Возвращает количество шагов за текущий день
-     */
-    fun getStepsForToday(): Long {
-        val steps = currentSteps - stepsAtStartOfDay
-        return if (steps >= 0) steps else 0L
+    suspend fun getStepsForDay(data: String) =
+        context.dataStore.data
+            .map { preferences ->
+                val json = preferences[STEPS_MAP_KEY] ?: ""
+                if (json.isEmpty()) 0L
+                else deserializeMap(json).getOrDefault(data, 0L)
+            }.first()
+
+
+    private fun serializeMap(map: Map<String, Long>): String {
+        return gson.toJson(map)
     }
 
-    /**
-     * Сбрасывает статистику (например, по нажатию кнопки)
-     */
-    fun resetSteps() {
-        stepsAtStartOfDay = currentSteps
-        saveStepsData()
+    private fun deserializeMap(json: String): Map<String, Long> {
+        val type = object : TypeToken<Map<String, Long>>() {}.type
+        return gson.fromJson(json, type)
     }
 }

@@ -6,4 +6,5 @@ sealed class NavRoutes(val route: String) {
     object GraphScreen : NavRoutes("GraphScreen/{taskId}")
     object ProfileScreen : NavRoutes("ProfileScreen")
     object AchievementScreen : NavRoutes("AchievementScreen")
+    object StepsScreen : NavRoutes("StepsScreen")
 }

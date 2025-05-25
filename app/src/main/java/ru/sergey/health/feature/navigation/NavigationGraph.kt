@@ -13,6 +13,7 @@ import ru.sergey.health.feature.graph.viewmodel.GraphViewModel
 import ru.sergey.health.feature.newtask.ui.screens.AddTasksScreen
 import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
 import ru.sergey.health.feature.profile.ui.screens.ProfileScreen
+import ru.sergey.health.feature.profile.ui.screens.StepsScreen
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.feature.task.ui.screens.TasksScreen
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
@@ -50,6 +51,9 @@ fun NavigationGraph(
         }
         composable(NavRoutes.AchievementScreen.route) {
             AchievementScreen(navController = navController, achievementViewModel = achievementViewModel)
+        }
+        composable(NavRoutes.StepsScreen.route) {
+            StepsScreen(navController = navController, profileViewModel = profileViewModel)
         }
     }
 }

@@ -60,6 +60,7 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
+import ru.sergey.health.feature.navigation.NavRoutes
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
@@ -255,7 +256,10 @@ fun ProfileScreen(
                         .padding(8.dp)
                         .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
                         .fillMaxWidth()
-                        .height(100.dp),
+                        .height(100.dp)
+                        .clickable {
+                            navController.navigate(NavRoutes.StepsScreen.route)
+                        },
                     verticalArrangement = Arrangement.Center,
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {

@@ -11,4 +11,5 @@ data class ProfileUiState(
     val steps: Long = 0L,
     val distanceKm: Double = .0,
     val stepsToday: Long = 0L,
+    val stepsList: Map<String, Long> = emptyMap()
 )

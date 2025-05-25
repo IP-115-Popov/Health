@@ -38,12 +38,11 @@ class ProfileViewModel @Inject constructor(
     private val getAvatarUseCase: GetAvatarUseCase,
     private val getAchievementsUseCase: GetAchievementsUseCase,
     private val downloadTasksUseCase: DownloadTasksUseCase,
+    private val stepRepositoryImpl: StepRepositoryImpl,
 ) : ViewModel() {
     private val _state = MutableStateFlow(ProfileUiState(Player()))
     val state: StateFlow<ProfileUiState> = _state.asStateFlow()
 
-    @Inject
-    lateinit var stepRepositoryImpl: StepRepositoryImpl
 
     val stepLengthMeters = 0.75
 
@@ -52,9 +51,22 @@ class ProfileViewModel @Inject constructor(
         loadAvatar()
         collectAchievement()
         collectTasks()
+        collectSteps()
     }
 
-    fun updateSteps(steps: Long) {
+    private fun collectSteps() {
+        viewModelScope.launch {
+            stepRepositoryImpl.getStepsFlow().collect { steps ->
+                _state.update {
+                    it.copy(
+                        stepsList = steps
+                    )
+                }
+            }
+        }
+    }
+
+    fun updateSteps(steps: Long) = viewModelScope.launch {
         val stepsToday = stepRepositoryImpl.getStepsForToday()
         _state.update {
             it.copy(
@@ -64,6 +76,7 @@ class ProfileViewModel @Inject constructor(
             )
         }
     }
+
 
     private fun collectTasks() = viewModelScope.launch(Dispatchers.IO) {
         downloadTasksUseCase.execute().collect { tsaks ->
