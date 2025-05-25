@@ -1,5 +1,6 @@
 package ru.sergey.health.ui
 
+import android.Manifest.permission.ACTIVITY_RECOGNITION
 import android.Manifest.permission.READ_EXTERNAL_STORAGE
 import android.Manifest.permission.READ_MEDIA_AUDIO
 import android.Manifest.permission.READ_MEDIA_IMAGES
@@ -36,6 +37,7 @@ import ru.sergey.health.feature.navigation.BottomNavigationBar
 import ru.sergey.health.feature.navigation.NavigationGraph
 import ru.sergey.health.feature.newtask.viewmodel.AddTasksViewModel
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
+import ru.sergey.health.feature.profile.viewmodel.StepCounterViewModel
 import ru.sergey.health.feature.task.viewmodel.TasksViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
@@ -47,6 +49,7 @@ class MainActivity : ComponentActivity() {
     private val graphViewModel: GraphViewModel by viewModels()
     private val profileViewModel: ProfileViewModel by viewModels()
     private val achievementViewModel: AchievementViewModel by viewModels()
+    private val stepCounterViewModel: StepCounterViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,6 +80,9 @@ class MainActivity : ComponentActivity() {
                 startActivity(intent)
             }
         }
+
+        requestPermissions()
+
         setContent {
             HealthTheme {
                 val p = remember { mutableStateOf(false) }
@@ -89,7 +95,8 @@ class MainActivity : ComponentActivity() {
                         addTasksViewModel = addTasksViewModel,
                         graphViewModel = graphViewModel,
                         profileViewModel = profileViewModel,
-                        achievementViewModel = achievementViewModel
+                        achievementViewModel = achievementViewModel,
+                        stepCounterViewModel = stepCounterViewModel,
                     )
                 } else {
                     // Optionally, show a message to the user explaining why the permission is needed
@@ -98,31 +105,13 @@ class MainActivity : ComponentActivity() {
             }
         }
     }
-}
 
-@Composable
-fun GetPermission(onPermissionResult: (Boolean) -> Unit) {
-    val context = LocalContext.current
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        onPermissionResult(isGranted)
-    }
-
-    val permissionCheckResult = rememberUpdatedState(
-        ContextCompat.checkSelfPermission(
-            context,
-            READ_EXTERNAL_STORAGE
-        ) == PackageManager.PERMISSION_GRANTED
-    )
-
-    SideEffect {
-        if (permissionCheckResult.value) {
-            onPermissionResult(true) // Permission already granted
-        } else {
-            launcher.launch(READ_EXTERNAL_STORAGE) // Request the permission
+    private fun requestPermissions() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            requestPermissions(arrayOf(ACTIVITY_RECOGNITION), 0)
         }
     }
+
 }
 
 @Composable
@@ -167,6 +156,7 @@ fun Main(
     graphViewModel: GraphViewModel,
     profileViewModel: ProfileViewModel,
     achievementViewModel: AchievementViewModel,
+    stepCounterViewModel: StepCounterViewModel
 ) {
     val navController = rememberNavController()
     Column {
@@ -176,7 +166,8 @@ fun Main(
             addTasksViewModel = addTasksViewModel,
             graphViewModel = graphViewModel,
             profileViewModel = profileViewModel,
-            achievementViewModel = achievementViewModel
+            achievementViewModel = achievementViewModel,
+            stepCounterViewModel = stepCounterViewModel,
         )
 
         BottomNavigationBar(

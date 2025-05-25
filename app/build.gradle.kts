@@ -84,4 +84,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation(libs.coil.compose)
     implementation(libs.accompanist.permissions)
+
+    implementation("androidx.compose.foundation:foundation")
+
 }

@@ -10,6 +10,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -60,10 +61,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavHostController
 import ru.sergey.health.R
 import ru.sergey.health.feature.profile.viewmodel.ProfileViewModel
+import ru.sergey.health.feature.profile.viewmodel.StepCounterViewModel
 import ru.sergey.health.ui.theme.ui.HealthTheme
 
 @Composable
-fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController) {
+fun ProfileScreen(
+    viewModel: ProfileViewModel,
+    stepCounterViewModel: StepCounterViewModel,
+    navController: NavHostController,
+) {
     val context = LocalContext.current
     val player = viewModel.state.collectAsState()
     val isEditable = remember { mutableStateOf(false) }
@@ -90,7 +96,7 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
-            val (avatar, name, level, exp, bthEdit, tasksCount, achievementCount) = createRefs()
+            val (avatar, name, level, exp, bthEdit, tasksCount, achievementCount, running) = createRefs()
 
             // Показываем фото профиля
             Box(
@@ -147,100 +153,122 @@ fun ProfileScreen(viewModel: ProfileViewModel, navController: NavHostController)
                 onValueChange = { viewModel.setName(it) }
             )
 
-            Column(modifier = Modifier
-                .constrainAs(level) {
+            Column(
+                modifier = Modifier.constrainAs(level) {
                     top.linkTo(name.bottom, margin = 16.dp)
                     end.linkTo(parent.end)
                 }
-                .padding(8.dp)
-                .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth(0.5f)
-                .height(100.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = stringResource(R.string.level),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
-                Text(
-                    text = player.value.player.level.toString(),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
-            }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                            .fillMaxWidth(0.5f)
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.level),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                        Text(
+                            text = player.value.player.level.toString(),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                    }
 
-            Column(modifier = Modifier
-                .constrainAs(exp) {
-                    top.linkTo(level.bottom, margin = 16.dp)
-                    start.linkTo(parent.start)
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.exp),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                        Text(
+                            text = player.value.player.ex.toString(),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                    }
                 }
-                .padding(8.dp)
-                .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth(0.5f)
-                .height(50.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.exp),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
-                Text(
-                    text = player.value.player.ex.toString(),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
-            }
-            Column(modifier = Modifier
-                .constrainAs(tasksCount) {
-                    top.linkTo(exp.bottom, margin = 16.dp)
-                    end.linkTo(parent.end)
-                }
-                .padding(8.dp)
-                .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth(0.5f)
-                .height(50.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.closed_tasks),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
-                Text(
-                    text = player.value.player.closeTasksId.size.toString() + "/" + player.value.player.openTasksId.size.toString(),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
-            }
+                Row(
+                    Modifier
+                        .fillMaxWidth()
+                        .height(100.dp)) {
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                            .fillMaxWidth(0.5f)
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.closed_tasks),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                        Text(
+                            text = player.value.player.closeTasksId.size.toString() + "/" + player.value.player.openTasksId.size.toString(),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                    }
 
-            Column(modifier = Modifier
-                .constrainAs(achievementCount) {
-                    top.linkTo(tasksCount.bottom, margin = 16.dp)
-                    start.linkTo(parent.start)
+                    Column(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                            .fillMaxWidth()
+                            .fillMaxHeight(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = stringResource(R.string.unlocked_achievements),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                            modifier = Modifier.padding(horizontal = 16.dp),
+                        )
+                        Text(
+                            text = player.value.closeAchievementsCount.toString() + "/" + player.value.achievementsCount.toString(),
+                            style = HealthTheme.typography.h1
+                                .copy(color = HealthTheme.colors.text),
+                        )
+                    }
                 }
-                .padding(8.dp)
-                .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
-                .fillMaxWidth(0.5f)
-                .height(80.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.unlocked_achievements),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                )
-                Text(
-                    text = player.value.closeAchievementsCount.toString() + "/" + player.value.achievementsCount.toString(),
-                    style = HealthTheme.typography.h1
-                        .copy(color = HealthTheme.colors.text),
-                )
+                Column(
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .background(HealthTheme.colors.card, shape = RoundedCornerShape(8.dp))
+                        .fillMaxWidth(0.5f)
+                        .height(80.dp),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        text = "Бег",
+                        style = HealthTheme.typography.h1
+                            .copy(color = HealthTheme.colors.text),
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                    )
+                    Running(viewModel = stepCounterViewModel)
+                }
             }
 
             if (isEditable.value) {
